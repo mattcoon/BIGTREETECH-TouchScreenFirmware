@@ -11,8 +11,8 @@ const MENUITEMS homeItems = {
     {ICON_Y_HOME,                  LABEL_Y},
     {ICON_Z_HOME,                  LABEL_Z},
     {ICON_NULL,                    LABEL_NULL},
-    {ICON_NULL,                    LABEL_NULL},
-    {ICON_NULL,                    LABEL_NULL},
+    {ICON_HOME_MOVE,               LABEL_SET_POSITION},
+    {ICON_PROBE_OFFSET,            LABEL_TOUCHPLATE},
     {ICON_BACK,                    LABEL_BACK},
   }
 };
@@ -22,6 +22,7 @@ void menuHome(void)
   KEY_VALUES key_num = KEY_IDLE;
 
   menuDrawPage(&homeItems);
+  drawXYZ();
 
   while (MENU_IS(menuHome))
   {
@@ -32,6 +33,8 @@ void menuHome(void)
       case KEY_ICON_1: storeCmd("G28 X\n"); break;
       case KEY_ICON_2: storeCmd("G28 Y\n"); break;
       case KEY_ICON_3: storeCmd("G28 Z\n"); break;
+      case KEY_ICON_5: storeCmd("G92 X0 Y0 Z0.5\n"); break;
+      case KEY_ICON_6: storeCmd("G38.3 Z-10\n"); break;
       case KEY_ICON_7: CLOSE_MENU();      break;
       default: break;
     }

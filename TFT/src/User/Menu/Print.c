@@ -209,6 +209,7 @@ void menuPrintFromSource(void)
     {
       printIconItems.title.address = (uint8_t*)infoFile.path;
       menuDrawPage(&printIconItems);
+      drawXYZ();
     }
   }
   else
@@ -390,6 +391,7 @@ void menuPrint(void)
   }
 
   menuDrawPage(&sourceSelItems);
+  drawXYZ();
 
   while (MENU_IS(menuPrint))
   {

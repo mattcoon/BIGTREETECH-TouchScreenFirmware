@@ -9,12 +9,15 @@ void menuMain(void)
     LABEL_MAINMENU,
     // icon                          label
     {
-      {ICON_HEAT_FAN,                LABEL_UNIFIEDHEAT},
+      // {ICON_HEAT_FAN,                LABEL_UNIFIEDHEAT},
+      {ICON_HOME,                    LABEL_HOME},
       {ICON_HOME_MOVE,               LABEL_UNIFIEDMOVE},
       #ifdef LOAD_UNLOAD_M701_M702
         {ICON_EXTRUDE,                 LABEL_LOAD_UNLOAD_SHORT},
-      #else
+      #elif HOTEND_COUNT
         {ICON_EXTRUDE,                 LABEL_EXTRUDE},
+      #else
+        {ICON_NULL,                    LABEL_NULL},
       #endif
       {ICON_STOP,                    LABEL_EMERGENCYSTOP},
       {ICON_GCODE,                   LABEL_TERMINAL},
@@ -38,6 +41,7 @@ void menuMain(void)
   }
 
   menuDrawPage(&mainPageItems);
+  drawXYZ();
 
   while (MENU_IS(menuMain))
   {
@@ -45,7 +49,7 @@ void menuMain(void)
     switch (key_num)
     {
       case KEY_ICON_0:
-        OPEN_MENU(menuUnifiedHeat);
+        OPEN_MENU(menuHome);
         break;
 
       case KEY_ICON_1:
@@ -55,7 +59,7 @@ void menuMain(void)
       case KEY_ICON_2:
         #ifdef LOAD_UNLOAD_M701_M702
           OPEN_MENU(menuLoadUnload);
-        #else
+        #elif HOTEND_COUNT
           OPEN_MENU(menuExtrude);
         #endif
         break;
