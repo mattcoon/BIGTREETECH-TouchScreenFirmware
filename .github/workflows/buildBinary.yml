@@ -14,7 +14,7 @@ on:
 jobs:
   main:
     name: Build Binaries
-    if: github.repository == 'bigtreetech/BIGTREETECH-TouchScreenFirmware'
+    if: github.repository == 'mattcoon/BIGTREETECH-TouchScreenFirmware'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
