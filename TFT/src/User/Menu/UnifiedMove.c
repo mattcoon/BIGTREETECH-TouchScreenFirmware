@@ -79,5 +79,6 @@ void menuUnifiedMove(void)
     }
 
     loopProcess();
+    updateGantry();
   }
 }

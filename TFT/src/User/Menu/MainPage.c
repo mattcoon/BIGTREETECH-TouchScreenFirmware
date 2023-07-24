@@ -103,5 +103,6 @@ void menuMain(void)
     }
 
     loopProcess();
+    updateGantry();
   }
 }

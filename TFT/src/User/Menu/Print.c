@@ -343,6 +343,7 @@ void menuPrintFromSource(void)
     #endif
 
     loopProcess();
+    updateGantry();
   }
 }
 
@@ -467,6 +468,7 @@ void menuPrint(void)
     }
 
     loopProcess();
+    updateGantry();
   }
 
 selectEnd:

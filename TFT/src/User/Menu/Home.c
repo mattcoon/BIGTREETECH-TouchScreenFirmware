@@ -40,5 +40,6 @@ void menuHome(void)
     }
 
     loopProcess();
+    updateGantry();
   }
 }

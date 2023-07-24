@@ -611,6 +611,7 @@ void sendQueueCmd(void)
             // pause if printing from TFT media and purge M0/M1 command
             if (infoFile.source < FS_ONBOARD_MEDIA)
             {
+              // TODO: get message and display
               sendCmd(true, avoid_terminal);
               pausePrint(true, PAUSE_M0);
               return;
