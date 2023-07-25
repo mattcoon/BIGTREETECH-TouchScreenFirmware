@@ -624,7 +624,7 @@ bool pausePrint(bool isPause, PAUSE_TYPE pauseType)
   {
     case FS_TFT_SD:
     case FS_TFT_USB:
-      if (isPause == true && pauseType == PAUSE_M0)
+      if (isPause == true && ((pauseType != PAUSE_NORMAL) && (pauseType != PAUSE_EXTERNAL)))
         loopProcessToCondition(&isNotEmptyCmdQueue);  // wait for the communication to be clean
 
       static COORDINATE tmp;
@@ -633,32 +633,43 @@ bool pausePrint(bool isPause, PAUSE_TYPE pauseType)
 
       if (isPause)  // pause
       {
-        if (pauseType == PAUSE_M0)
-        {
-          popupReminder(DIALOG_TYPE_ALERT, LABEL_PAUSE, LABEL_PAUSE);
-        }
-        else if (pauseType == PAUSE_NORMAL)  // send command only for pause originated from TFT
-        {
-          coordinateGetAll(&tmp);
+        switch(pauseType) {
+          case PAUSE_M0:
+            popupReminder(DIALOG_TYPE_ALERT, LABEL_PAUSE, LABEL_PAUSE);
+            break;
+          case PAUSE_ATTACH_PROBE:
+            popupReminder(DIALOG_TYPE_ALERT, LABEL_PAUSE, LABEL_ATTACH_PROBE);
+            break;
+          case PAUSE_DETTACH_PROBE:
+            popupReminder(DIALOG_TYPE_ALERT, LABEL_PAUSE, LABEL_DETTACH_PROBE);
+            break;
+          case PAUSE_TOOL_ONOFF:
+            popupReminder(DIALOG_TYPE_ALERT, LABEL_PAUSE, LABEL_TOOL_ONOFF);
+            break;
+          case PAUSE_NORMAL:  // send command only for pause originated from TFT
+            coordinateGetAll(&tmp);
 
-          if (isCoorRelative == true)    mustStoreCmd("G90\n");
-          if (isExtrudeRelative == true) mustStoreCmd("M82\n");
+            if (isCoorRelative == true)    mustStoreCmd("G90\n");
+            if (isExtrudeRelative == true) mustStoreCmd("M82\n");
 
-          if (heatGetCurrentTemp(heatGetCurrentHotend()) > infoSettings.min_ext_temp)
-          {
-            mustStoreCmd("G1 E%.5f F%d\n", tmp.axis[E_AXIS] - infoSettings.pause_retract_len,
-                         infoSettings.pause_feedrate[FEEDRATE_E]);
-          }
+            if (heatGetCurrentTemp(heatGetCurrentHotend()) > infoSettings.min_ext_temp)
+            {
+              mustStoreCmd("G1 E%.5f F%d\n", tmp.axis[E_AXIS] - infoSettings.pause_retract_len,
+                          infoSettings.pause_feedrate[FEEDRATE_E]);
+            }
 
-          if (coordinateIsKnown())
-          {
-            mustStoreCmd("G1 Z%.3f F%d\n", tmp.axis[Z_AXIS] + infoSettings.pause_z_raise, infoSettings.pause_feedrate[FEEDRATE_Z]);
-            mustStoreCmd("G1 X%.3f Y%.3f F%d\n", infoSettings.pause_pos[X_AXIS], infoSettings.pause_pos[Y_AXIS],
-                         infoSettings.pause_feedrate[FEEDRATE_XY]);
-          }
+            if (coordinateIsKnown())
+            {
+              mustStoreCmd("G1 Z%.3f F%d\n", tmp.axis[Z_AXIS] + infoSettings.pause_z_raise, infoSettings.pause_feedrate[FEEDRATE_Z]);
+              mustStoreCmd("G1 X%.3f Y%.3f F%d\n", infoSettings.pause_pos[X_AXIS], infoSettings.pause_pos[Y_AXIS],
+                          infoSettings.pause_feedrate[FEEDRATE_XY]);
+            }
 
-          if (isCoorRelative == true)    mustStoreCmd("G91\n");
-          if (isExtrudeRelative == true) mustStoreCmd("M83\n");
+            if (isCoorRelative == true)    mustStoreCmd("G91\n");
+            if (isExtrudeRelative == true) mustStoreCmd("M83\n");
+            break;
+          default:
+            break;
         }
 
         // store pause type only on pause

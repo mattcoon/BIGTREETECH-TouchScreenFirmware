@@ -613,7 +613,14 @@ void sendQueueCmd(void)
             {
               // TODO: get message and display
               sendCmd(true, avoid_terminal);
-              pausePrint(true, PAUSE_M0);
+              if(cmd_seen('A'))
+                pausePrint(true,PAUSE_ATTACH_PROBE);
+              else if(cmd_seen('D'))
+                pausePrint(true,PAUSE_DETTACH_PROBE);
+              else if(cmd_seen('T'))
+                pausePrint(true,PAUSE_TOOL_ONOFF);
+              else
+                pausePrint(true, PAUSE_M0);
               return;
             }
           }
