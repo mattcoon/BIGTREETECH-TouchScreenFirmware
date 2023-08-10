@@ -17,9 +17,9 @@ extern "C" {
 #define CONFIG_SUPPPORT 20220518
 
 #define FONT_FLASH_SIGN       20210522  // (YYYYMMDD) change if fonts require updating
-#define CONFIG_FLASH_SIGN     20220518  // (YYYYMMDD) change if any keyword(s) in config.ini is added or removed
-#define LANGUAGE_FLASH_SIGN   20230709  // (YYYYMMDD) change if any keyword(s) in language pack is added or removed
-#define ICON_FLASH_SIGN       20220712  // (YYYYMMDD) change if any icon(s) is added or removed
+#define CONFIG_FLASH_SIGN     20230807  // (YYYYMMDD) change if any keyword(s) in config.ini is added or removed
+#define LANGUAGE_FLASH_SIGN   20230807  // (YYYYMMDD) change if any keyword(s) in language pack is added or removed
+#define ICON_FLASH_SIGN       20220807  // (YYYYMMDD) change if any icon(s) is added or removed
 
 #define FONT_CHECK_SIGN       (FONT_FLASH_SIGN + WORD_UNICODE_ADDR + FLASH_SIGN_ADDR)
 #define CONFIG_CHECK_SIGN     (CONFIG_FLASH_SIGN + STRINGS_STORE_ADDR + \
@@ -174,6 +174,9 @@ typedef struct
   uint8_t  general_settings;  // emulated M600 / emulated M109-M190 / file comment parsing toggles (Bit Values)
 
   // UI Settings
+  uint8_t  laser_mode;
+  float    touchplate_height;
+  uint8_t  touchplate_on;
   uint8_t  rotated_ui;
   uint8_t  language;
   uint8_t  status_screen;

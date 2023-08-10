@@ -602,6 +602,10 @@ void abortPrint(void)
   }
 
   // execute post print cancel tasks
+
+  // Always turn off the spindle.
+  mustStoreCmd("M05\n");
+
   if (GET_BIT(infoSettings.send_gcodes, SEND_GCODES_CANCEL_PRINT))
     sendPrintCodes(2);
 

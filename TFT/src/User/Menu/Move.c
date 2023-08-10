@@ -20,8 +20,10 @@ const char *const xyzMoveCmd[] = {X_MOVE_GCODE, Y_MOVE_GCODE, Z_MOVE_GCODE};
 static uint8_t item_moveLen_index = 1;
 AXIS nowAxis = X_AXIS;
 
-void storeMoveCmd(const AXIS xyz, const float amount)
+void storeMoveCmd(const AXIS xyz, float amount)
 {
+  float dist2max = infoSettings.machine_size_max[xyz] - coordinateGetAxisActual(xyz);
+  amount = MIN(amount, dist2max);
   // if invert is true, use 'amount' multiplied by -1
   storeCmd(xyzMoveCmd[xyz], GET_BIT(infoSettings.inverted_axis, xyz) ? -amount : amount,
            ((xyz != Z_AXIS) ? infoSettings.xy_speed[infoSettings.move_speed] : infoSettings.z_speed[infoSettings.move_speed]));
@@ -31,20 +33,24 @@ void storeMoveCmd(const AXIS xyz, const float amount)
 
 void drawXYZ(void)
 {
-  char tempstr[30];
+  if (coordinateIsKnown()) {
+    char tempstr[30];
+    GUI_SetColor(infoSettings.status_color);
 
-  GUI_SetColor(infoSettings.status_color);
+    if(isAxisKnown(X_AXIS)) sprintf(tempstr, "X:%.2f  ", coordinateGetAxisActual(X_AXIS));
+    else sprintf(tempstr,"X:----");
+    GUI_DispString(START_X + (OFFSET + 0) * SPACE_X + (OFFSET + 0) * ICON_WIDTH, (ICON_START_Y - BYTE_HEIGHT) / 2, (uint8_t *)tempstr);
 
-  sprintf(tempstr, "X:%.2f  ", coordinateGetAxisActual(X_AXIS));
-  GUI_DispString(START_X + (OFFSET + 0) * SPACE_X + (OFFSET + 0) * ICON_WIDTH, (ICON_START_Y - BYTE_HEIGHT) / 2, (uint8_t *)tempstr);
+    if(isAxisKnown(Y_AXIS)) sprintf(tempstr, "Y:%.2f  ", coordinateGetAxisActual(Y_AXIS));
+    else sprintf(tempstr,"Y:----");
+    GUI_DispString(START_X + (OFFSET + 1) * SPACE_X + (OFFSET + 1) * ICON_WIDTH, (ICON_START_Y - BYTE_HEIGHT) / 2, (uint8_t *)tempstr);
 
-  sprintf(tempstr, "Y:%.2f  ", coordinateGetAxisActual(Y_AXIS));
-  GUI_DispString(START_X + (OFFSET + 1) * SPACE_X + (OFFSET + 1) * ICON_WIDTH, (ICON_START_Y - BYTE_HEIGHT) / 2, (uint8_t *)tempstr);
+    if(isAxisKnown(Z_AXIS)) sprintf(tempstr, "Z:%.2f  ", coordinateGetAxisActual(Z_AXIS));
+    else sprintf(tempstr,"Z:----");
+    GUI_DispString(START_X + (OFFSET + 2) * SPACE_X + (OFFSET + 2) * ICON_WIDTH, (ICON_START_Y - BYTE_HEIGHT) / 2, (uint8_t *)tempstr);
 
-  sprintf(tempstr, "Z:%.2f  ", coordinateGetAxisActual(Z_AXIS));
-  GUI_DispString(START_X + (OFFSET + 2) * SPACE_X + (OFFSET + 2) * ICON_WIDTH, (ICON_START_Y - BYTE_HEIGHT) / 2, (uint8_t *)tempstr);
-
-  GUI_SetColor(infoSettings.font_color);
+    GUI_SetColor(infoSettings.font_color);
+  }
 }
 
 void updateGantry(void)

@@ -18,6 +18,7 @@ static bool relative_e = false;
 // false means current position is unknown
 // false after M18/M84 disable stepper or power up, true after G28
 static bool position_known = false;
+static bool axisKnown[TOTAL_AXIS] = {false,false,false,false}; 
 static bool coordinateQueryWait = false;
 static uint8_t curQuerySeconds = 0;
 
@@ -49,6 +50,14 @@ bool coordinateIsKnown(void)
 void coordinateSetKnown(bool known)
 {
   position_known = known;
+}
+
+bool isAxisKnown(AXIS xyz) {
+  return axisKnown[xyz];
+}
+
+void setAxisKnown(AXIS xyz, bool known) {
+  axisKnown[xyz] =  known;
 }
 
 float coordinateGetAxisTarget(AXIS axis)

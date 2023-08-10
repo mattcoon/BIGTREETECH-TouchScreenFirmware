@@ -58,6 +58,7 @@ const char * const speedId[2] = {"Speed", "Flow "};
 #define MAX_TITLE_LEN   70
 #define TIME_FORMAT_STR "%02u:%02u:%02u"
 
+bool hasFilamentData;
 PROGRESS_DISPLAY progDisplayType;
 LAYER_TYPE layerDisplayType;
 char title[MAX_TITLE_LEN];
@@ -441,6 +442,11 @@ void printSummaryPopup(void)
   char tempstr[60];
 
   time_2_string(showInfo, (char *)textSelect(LABEL_PRINT_TIME), infoPrintSummary.time);
+  // reDrawFan(ICON_POS_FAN);
+  // reDrawTime(ICON_POS_TIM);
+  // reDrawProgress(ICON_POS_TIM);
+  // reDrawLayer(ICON_POS_Z);
+  // mmm reDrawSpeed(ICON_POS_SPD);
 
   if (isAborted() == true)
   {

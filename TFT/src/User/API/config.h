@@ -22,6 +22,7 @@ extern "C" {
 #define CONFIG_FILE_COMMENT_PARSING   "file_comment_parsing:"
 
 //-----------------------------UI Settings
+#define CONFIG_LASER_MODE             "laser_mode:"
 #define CONFIG_ROTATED_UI             "rotated_ui:"
 #define CONFIG_LANGUAGE               "language:"
 #define CONFIG_STATUS_SCREEN          "status_screen:"

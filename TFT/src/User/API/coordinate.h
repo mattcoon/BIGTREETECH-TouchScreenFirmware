@@ -40,6 +40,8 @@ bool eGetRelative(void);
 void eSetRelative(bool mode);
 bool coordinateIsKnown(void);
 void coordinateSetKnown(bool known);
+bool isAxisKnown(AXIS xyz);
+void setAxisKnown(AXIS xyz, bool known);
 float coordinateGetAxisTarget(AXIS axis);
 void coordinateSetAxisTarget(AXIS axis, float position);
 uint32_t coordinateGetFeedRate(void);

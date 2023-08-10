@@ -635,6 +635,9 @@ void sendQueueCmd(void)
             // this is something else than an "M18/M84 S<timeout>", this will disable at least one stepper,
             // set coordinate as unknown
             coordinateSetKnown(false);
+            setAxisKnown(X_AXIS,false);
+            setAxisKnown(Y_AXIS,false);
+            setAxisKnown(Z_AXIS,false);
           }
           break;
 
@@ -1401,6 +1404,14 @@ void sendQueueCmd(void)
         case 28:  // G28
           coordinateSetKnown(true);
           babystepSetValue(BABYSTEP_DEFAULT_VALUE);  // reset babystep
+          if (cmd_seen('X')) setAxisKnown(X_AXIS,true);
+          if (cmd_seen('Y')) setAxisKnown(Y_AXIS,true);
+          if (cmd_seen('Z')) setAxisKnown(Z_AXIS,true);
+          if (!cmd_seen('Z') && !cmd_seen('X') && !cmd_seen('Y')) {
+            setAxisKnown(X_AXIS,true);
+            setAxisKnown(Y_AXIS,true);
+            setAxisKnown(Z_AXIS,true);
+          }
 
           if (infoMachineSettings.leveling != BL_DISABLED)
             storeCmd("M420\n");  // check bed leveling state

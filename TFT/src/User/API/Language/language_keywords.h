@@ -386,6 +386,17 @@ extern "C" {
 #define LANG_KEY_CALIBRATION                  "label_calibration:"
 #define LANG_KEY_TOUCHPLATE                   "label_touchplate:"
 #define LANG_KEY_SET_POSITION                 "label_set_position:"
+#define LANG_KEY_ZERO_X                       "label_zero_x:"
+#define LANG_KEY_ZERO_Y                       "label_zero_y:"
+#define LANG_KEY_ZERO_Z                       "label_zero_z:"
+#define LANG_KEY_XY                           "label_xy:"
+#define LANG_KEY_SPINDLE                      "label_spindle:"
+#define LANG_KEY_LASER                        "label_laser:"
+#define LANG_KEY_LASER_2                      "label_laser_2:"
+#define LANG_KEY_CUT                          "label_cut:"
+#define LANG_KEY_LASER_OFF                    "label_laser_off:"
+#define LANG_KEY_LASER_100                    "label_laser_100:"
+#define LANG_KEY_LASER_MODE                   "label_laser_mode:"
 
 #ifdef __cplusplus
 }

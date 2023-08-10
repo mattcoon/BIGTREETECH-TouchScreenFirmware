@@ -1348,6 +1348,9 @@ void parseACK(void)
         initMachineSettings();
         fanResetSpeed();
         coordinateSetKnown(false);
+        setAxisKnown(X_AXIS,false);
+        setAxisKnown(Y_AXIS,false);
+        setAxisKnown(Z_AXIS,false);
         setReminderMsg(LABEL_UNCONNECTED, SYS_STATUS_DISCONNECTED);  // set the no printer attached reminder
       }
     }

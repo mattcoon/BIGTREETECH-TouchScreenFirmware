@@ -350,6 +350,13 @@
  */
 #define MARLIN_SHOW_TITLE 1  // Default: 1
 
+// Enable Laser interface instead of the fan interface (for CNC mode only).
+#define LASER_MODE true
+
+// Change this if you'd like to have a Z offset after homing Z.
+#define TOUCHPLATE_OFFSET 0.0
+
+
 /**
  * Marlin Mode Title
  * Banner text displayed at the top of the TFT in Marlin Mode.

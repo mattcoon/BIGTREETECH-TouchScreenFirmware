@@ -28,7 +28,11 @@ void initSettings(void)
                                          (EVENT_LED << INDEX_EVENT_LED) |
                                          (FILE_COMMENT_PARSING << INDEX_FILE_COMMENT_PARSING));
 
+
 // UI Settings
+  infoSettings.laser_mode             = LASER_MODE;
+  infoSettings.touchplate_on          = ENABLED;
+  infoSettings.touchplate_height      = TOUCHPLATE_OFFSET;
   infoSettings.rotated_ui             = ROTATED_UI;
   infoSettings.language               = LANGUAGE;
   infoSettings.status_screen          = STATUS_SCREEN;

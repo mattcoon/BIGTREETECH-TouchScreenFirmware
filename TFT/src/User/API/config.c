@@ -551,6 +551,9 @@ void parseConfigKey(uint16_t index)
 {
   switch (index)
   {
+    case C_INDEX_LASER_MODE:
+      infoSettings.laser_mode = getOnOff();
+    break;
     //----------------------------General Settings
 
     case C_INDEX_SERIAL_PORT:

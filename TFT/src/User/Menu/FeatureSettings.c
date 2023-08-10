@@ -25,6 +25,11 @@ typedef enum
 {
   SKEY_EMULATED_M600 = 0,
   SKEY_EMULATED_M109_M190,
+  SKEY_CNC,
+  SKEY_LASER,
+  SKEY_INVERT_X,
+  SKEY_INVERT_Y,
+  SKEY_INVERT_Z,
   SKEY_EVENT_LED,
   SKEY_FILE_COMMENT_PARSING,
   SKEY_SERIAL_ALWAYS_ON,
@@ -70,6 +75,15 @@ void updateFeatureSettings(uint8_t item_index)
       TOGGLE_BIT(infoSettings.general_settings, ((item_index - SKEY_EMULATED_M600) + INDEX_EMULATED_M600));
       break;
 
+    case SKEY_LASER:
+      TOGGLE_BIT(infoSettings.laser_mode, 0);
+      // settingPage[item_index].icon = toggleitem[infoSettings.laser_mode];
+     break;
+
+    case SKEY_INVERT_X:
+      // TOGGLE_BIT(infoSettings.invert_axis[X_AXIS], 0);
+      // settingPage[item_index].icon = toggleitem[infoSettings.invert_axis[X_AXIS]];
+     break;
     case SKEY_SERIAL_ALWAYS_ON:
       TOGGLE_BIT(infoSettings.serial_always_on, 0);
       break;
@@ -143,6 +157,14 @@ void loadFeatureSettings(LISTITEM * item, uint16_t item_index, uint8_t itemPos)
         item->icon = iconToggle[GET_BIT(infoSettings.general_settings, ((item_index - SKEY_EMULATED_M600) + INDEX_EMULATED_M600))];
         break;
 
+      case SKEY_LASER:
+        item->icon = iconToggle[infoSettings.laser_mode];
+        break;
+
+      case SKEY_INVERT_X:
+        // settingPage[item_index].icon = toggleitem[infoSettings.invert_axis[X_AXIS]];
+        break;
+		
       case SKEY_SERIAL_ALWAYS_ON:
         item->icon = iconToggle[infoSettings.serial_always_on];
         break;
@@ -220,7 +242,7 @@ void menuFeatureSettings(void)
     {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_AUTO_LOAD_LEVELING,     LABEL_NULL},
     {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_PROBING_Z_OFFSET,       LABEL_NULL},
     {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_Z_STEPPERS_ALIGNMENT,   LABEL_NULL},
-
+    {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_LASER_MODE,             LABEL_NULL},
     #ifdef PS_ON_PIN
       {CHARICON_BLANK,       LIST_CUSTOMVALUE,   LABEL_PS_AUTO_SHUTDOWN,       LABEL_OFF},
     #endif
