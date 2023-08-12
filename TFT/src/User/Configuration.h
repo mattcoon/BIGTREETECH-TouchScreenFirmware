@@ -354,7 +354,11 @@
 #define LASER_MODE true
 
 // Change this if you'd like to have a Z offset after homing Z.
-#define TOUCHPLATE_OFFSET 0.0
+#define TOUCHPLATE_ON ENABLE
+#ifdef TOUCHPLATE_ON
+  #define TOUCHPLATE_OFFSET 0.0
+#endif
+
 
 
 /**

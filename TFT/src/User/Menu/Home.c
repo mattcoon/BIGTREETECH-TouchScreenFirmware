@@ -1,15 +1,15 @@
 #include "Home.h"
 #include "includes.h"
 
-const MENUITEMS homeItems = {
+  MENUITEMS homeItems = {
   // title
   LABEL_HOME,
   // icon                          label
   {
     {ICON_HOME,                    LABEL_XY},
+    {ICON_HOME_MOVE,               LABEL_SET_POSITION},
     {ICON_ZERO_X,                  LABEL_ZERO_X},
     {ICON_ZERO_Y,                  LABEL_ZERO_Y},
-    {ICON_NULL,                    LABEL_NULL},
     {ICON_Z_HOME,                  LABEL_Z},
     {ICON_PROBE_OFFSET,            LABEL_TOUCHPLATE},
     {ICON_ZERO_Z,                  LABEL_ZERO_Z},
@@ -21,6 +21,11 @@ void menuHome(void)
 {
   KEY_VALUES key_num = KEY_IDLE;
 
+  if(infoSettings.touchplate_on != 1) {
+    homeItems.items[5].icon = ICON_NULL;
+    homeItems.items[5].label.index = LABEL_NULL;
+  }
+
   menuDrawPage(&homeItems);
   drawXYZ();
 
@@ -31,15 +36,16 @@ void menuHome(void)
     switch(key_num)
     {
       case KEY_ICON_0: storeCmd("G28 XY\n"); break;
-      case KEY_ICON_1: storeCmd("G92 X0\n"); break;
-      case KEY_ICON_2: storeCmd("G92 Y0\n"); break;
-      case KEY_ICON_3: break;
+      case KEY_ICON_1: storeCmd("G92 X0Y0\n"); break;
+      case KEY_ICON_2: storeCmd("G92 X0\n"); break;
+      case KEY_ICON_3: storeCmd("G92 Y0\n"); break;
       case KEY_ICON_4: storeCmd("G28 Z\n"); break;
       case KEY_ICON_5: 
         if(infoSettings.touchplate_on == 1)
         {
-          storeCmd("G38.3 Z-90\n");
-          storeCmd("G92 Z%.3f\n", infoSettings.touchplate_height);
+          storeCmd("G38.3 Z-90\n"); // probe down
+          storeCmd("G92 Z%.3f\n", infoSettings.touchplate_height); // set height position to touchplate
+          storeCmd("G0 Z10\n"); // lift off of probe
         }
         break;
       case KEY_ICON_6: storeCmd("G92 Z0\n"); break;

@@ -883,7 +883,8 @@ void parseConfigKey(uint16_t index)
     case C_INDEX_TOUCHMI_SENSOR:
       infoSettings.touchmi_sensor = getOnOff();
       break;
-
+    case C_INDEX_TOUCHPLATE_ON: infoSettings.touchplate_on = getOnOff(); break;
+    case C_INDEX_TOUCHPLATE_HEIGHT: SET_VALID_FLOAT_VALUE(infoSettings.touchplate_height,0,5.0); break;
     case C_INDEX_PREHEAT_NAME_1:
     case C_INDEX_PREHEAT_NAME_2:
     case C_INDEX_PREHEAT_NAME_3:
