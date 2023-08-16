@@ -35,7 +35,11 @@ void menuHome(void)
     key_num = menuKeyGetValue();
     switch(key_num)
     {
-      case KEY_ICON_0: storeCmd("G28 XY\n"); break;
+      case KEY_ICON_0: 
+        if (isAxisKnown(Z_AXIS)==false)
+          storeCmd("G28 Z\n");
+        storeCmd("G28 XY\n"); 
+        break;
       case KEY_ICON_1: storeCmd("G92 X0Y0\n"); break;
       case KEY_ICON_2: storeCmd("G92 X0\n"); break;
       case KEY_ICON_3: storeCmd("G92 Y0\n"); break;
