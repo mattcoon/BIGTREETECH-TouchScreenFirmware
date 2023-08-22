@@ -104,6 +104,8 @@ void menuFan(void)
         break;
 
       case KEY_ICON_7:
+        // stop fan before exit of fan menu
+        fanSetSpeed(fan_index, 0);
         CLOSE_MENU();
         break;
 

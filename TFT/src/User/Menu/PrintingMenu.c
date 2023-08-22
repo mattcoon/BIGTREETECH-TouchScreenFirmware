@@ -522,6 +522,8 @@ void menuPrinting(void)
   }
   else  // returned to this menu after print was done or aborted
   {
+    // turn off fan if print complete or canceled
+    fanSetSpeed(FAN_TYPE_F, 0);
     // Main Screen
     printingItems.items[KEY_ICON_4].icon = ICON_MAINMENU;
     printingItems.items[KEY_ICON_4].label.index = LABEL_MAIN_SCREEN;
