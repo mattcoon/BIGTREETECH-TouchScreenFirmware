@@ -1,7 +1,7 @@
 name: Build Binaries
 on:
   push:
-    branches: [ master ]
+    branches: [ master, MattCNC2023 ]
     paths-ignore:
     - .devcontainer/**
     - .github/**
