@@ -43,10 +43,7 @@ void menuMain(void) {
 
       case KEY_ICON_1:  OPEN_MENU(menuMove); break;
 
-      case KEY_ICON_2:  
-        // if(infoSettings.laser_mode == 1) 
-          OPEN_MENU(menuFan);  
-        break;
+      case KEY_ICON_2:  OPEN_MENU(menuLaser); break;
 
       case KEY_ICON_3:  OPEN_MENU(menuPrint); break;
 

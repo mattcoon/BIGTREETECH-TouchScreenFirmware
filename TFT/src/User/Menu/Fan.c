@@ -1,29 +1,28 @@
 #include "Fan.h"
 #include "includes.h"
 
-typedef struct
-{
-  uint8_t cur;
-  uint8_t set;
-} LASTFAN;
+const ITEM itemFan[2] = {
+  {ICON_FAN,                     LABEL_FAN},
+  {ICON_FAN_HALF_SPEED,          LABEL_HALF},
+};
 
 static uint8_t fan_index = 0;
 
 void menuFan(void)
 {
   // 1 title, ITEM_PER_PAGE items (icon + label)
-  MENUITEMS laserItems = {
+  MENUITEMS fanItems = {
   // title
-  LABEL_LASER,
+    LABEL_FAN,
   // icon                       label
     {
       {ICON_DEC,                  LABEL_DEC},
       {ICON_NULL,                 LABEL_NULL},
       {ICON_NULL,                 LABEL_NULL},
       {ICON_INC,                  LABEL_INC},
-      {ICON_LASER_2 ,             LABEL_LASER_2},
-      {ICON_LASER_100,            LABEL_LASER_100},
-      {ICON_LASER_OFF,            LABEL_LASER_OFF},
+      {ICON_FAN ,                    LABEL_FAN},
+      {ICON_FAN_FULL_SPEED,          LABEL_FULL},
+      {ICON_STOP,                    LABEL_STOP},
       {ICON_BACK,                 LABEL_BACK},
     }
   };
@@ -34,7 +33,12 @@ void menuFan(void)
   fanSetSpeed(fan_index, fanGetCurSpeed(fan_index));
   lastFan = (LASTFAN) {fanGetCurSpeed(fan_index), fanGetSetSpeed(fan_index)};
 
-  menuDrawPage(&laserItems);
+  if ((infoSettings.fan_count + infoSettings.ctrl_fan_en) > 1)
+    fanItems.items[KEY_ICON_4] = itemFan[0];
+  else
+    fanItems.items[KEY_ICON_4] = itemFan[1];
+
+  menuDrawPage(&fanItems);
   drawXYZ();
 
   fanReDraw(fan_index, true);
@@ -92,7 +96,21 @@ void menuFan(void)
         break;
 
       case KEY_ICON_4:
-          fanSetPercent(fan_index, 2);
+        if ((infoSettings.fan_count + infoSettings.ctrl_fan_en) > 1)
+        {
+          do
+          {
+            fan_index = (fan_index + 1) % MAX_FAN_COUNT;  // switch between fans
+          } while (!fanIsValid(fan_index));
+
+          fanSetSpeed(fan_index, fanGetCurSpeed(fan_index));  // set initial desired speed to actual speed
+          lastFan = (LASTFAN) {fanGetCurSpeed(fan_index), fanGetSetSpeed(fan_index)};  // avoid unnecessary redraw of values
+          fanReDraw(fan_index, true);
+        }
+        else
+        {
+          fanSetSpeed(fan_index, infoSettings.fan_max[fan_index] / 2);  // fan at half speed
+        }
         break;
 
       case KEY_ICON_5:
@@ -104,8 +122,6 @@ void menuFan(void)
         break;
 
       case KEY_ICON_7:
-        // stop fan before exit of fan menu
-        fanSetSpeed(fan_index, 0);
         CLOSE_MENU();
         break;
 

@@ -1225,6 +1225,7 @@ void loopBackEnd(void)
 
   // Fan speed monitor
   loopFan();
+  loopLaser();
 
   // Speed & flow monitor
   loopSpeed();

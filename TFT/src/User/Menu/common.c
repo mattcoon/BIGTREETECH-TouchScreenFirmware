@@ -239,6 +239,23 @@ void fanReDraw(uint8_t fanIndex, bool drawHeader)
   displayExhibitValue(tempstr);
 }
 
+void laserReDraw(bool drawHeader)
+{
+  char tempstr[20];
+
+  if (drawHeader)
+  {
+    displayExhibitHeader("laser", (infoSettings.fan_percentage == 1) ? " % " : "PWM");
+  }
+
+  if (infoSettings.fan_percentage == 1)
+    sprintf(tempstr, DUAL_VAL_FORMAT, laserGetCurPercent(), laserGetSetPercent());
+  else
+    sprintf(tempstr, DUAL_VAL_FORMAT, laserGetCurSpeed(), laserGetSetSpeed());
+
+  displayExhibitValue(tempstr);
+}
+
 // Show/draw extruder in a standard menu
 void extruderReDraw(uint8_t extruderIndex, float extrusion, bool drawHeader)
 {
