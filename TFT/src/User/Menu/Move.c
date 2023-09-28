@@ -19,9 +19,11 @@
 const char *const xyzMoveCmd[] = {X_MOVE_GCODE, Y_MOVE_GCODE, Z_MOVE_GCODE};
 static uint8_t item_moveLen_index = 1;
 AXIS nowAxis = X_AXIS;
+bool hadMovement = false;
 
 void storeMoveCmd(const AXIS xyz, float amount)
 {
+  hadMovement = true;
   float dist2max = infoSettings.machine_size_max[xyz] - coordinateGetAxisActual(xyz);
   amount = MIN(amount, dist2max);
   // if invert is true, use 'amount' multiplied by -1
@@ -163,7 +165,13 @@ void menuMove(void)
         case KEY_ICON_5: storeMoveCmd(Y_AXIS, -amount); break;  // Y move decrease if no invert
         case KEY_ICON_6: storeMoveCmd(X_AXIS, amount); break;   // X move increase if no invert
 
-        case KEY_ICON_7: CLOSE_MENU(); break;
+        case KEY_ICON_7: 
+          if (hadMovement) {
+            hadMovement=false;
+            OPEN_MENU(menuHome);
+          }
+          CLOSE_MENU(); 
+          break;
       #else
         case KEY_ICON_0: storeMoveCmd(X_AXIS, amount); break;   // X move increase if no invert
         case KEY_ICON_1: storeMoveCmd(Y_AXIS, amount); break;   // Y move increase if no invert
