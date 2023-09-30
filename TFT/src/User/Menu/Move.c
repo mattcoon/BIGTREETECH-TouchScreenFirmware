@@ -24,7 +24,7 @@ bool hadMovement = false;
 void storeMoveCmd(const AXIS xyz, float amount)
 {
   hadMovement = true;
-  float dist2max = infoSettings.machine_size_max[xyz] - coordinateGetAxisActual(xyz);
+  float dist2max = infoSettings.machine_size_max[xyz] - coordinateGetAbsAxis(xyz);
   amount = MIN(amount, dist2max);
   // if invert is true, use 'amount' multiplied by -1
   storeCmd(xyzMoveCmd[xyz], GET_BIT(infoSettings.inverted_axis, xyz) ? -amount : amount,
@@ -39,14 +39,17 @@ void drawXYZ(void)
     char tempstr[30];
     GUI_SetColor(infoSettings.status_color);
 
+    // if(isAxisKnown(X_AXIS)) sprintf(tempstr, "X:%.2f  ", coordinateGetAbsAxis(X_AXIS));
     if(isAxisKnown(X_AXIS)) sprintf(tempstr, "X:%.2f  ", coordinateGetAxisActual(X_AXIS));
     else sprintf(tempstr,"X:----");
     GUI_DispString(START_X + (OFFSET + 0) * SPACE_X + (OFFSET + 0) * ICON_WIDTH, (ICON_START_Y - BYTE_HEIGHT) / 2, (uint8_t *)tempstr);
 
+    // if(isAxisKnown(Y_AXIS)) sprintf(tempstr, "Y:%.2f  ", coordinateGetAbsAxis(Y_AXIS));
     if(isAxisKnown(Y_AXIS)) sprintf(tempstr, "Y:%.2f  ", coordinateGetAxisActual(Y_AXIS));
     else sprintf(tempstr,"Y:----");
     GUI_DispString(START_X + (OFFSET + 1) * SPACE_X + (OFFSET + 1) * ICON_WIDTH, (ICON_START_Y - BYTE_HEIGHT) / 2, (uint8_t *)tempstr);
 
+    // if(isAxisKnown(Z_AXIS)) sprintf(tempstr, "Z:%.2f  ", coordinateGetAbsAxis(Z_AXIS));
     if(isAxisKnown(Z_AXIS)) sprintf(tempstr, "Z:%.2f  ", coordinateGetAxisActual(Z_AXIS));
     else sprintf(tempstr,"Z:----");
     GUI_DispString(START_X + (OFFSET + 2) * SPACE_X + (OFFSET + 2) * ICON_WIDTH, (ICON_START_Y - BYTE_HEIGHT) / 2, (uint8_t *)tempstr);
@@ -170,7 +173,9 @@ void menuMove(void)
             hadMovement=false;
             OPEN_MENU(menuHome);
           }
-          CLOSE_MENU(); 
+          else {
+            CLOSE_MENU(); 
+          }
           break;
       #else
         case KEY_ICON_0: storeMoveCmd(X_AXIS, amount); break;   // X move increase if no invert

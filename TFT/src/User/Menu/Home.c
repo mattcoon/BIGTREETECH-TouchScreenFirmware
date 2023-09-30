@@ -17,6 +17,12 @@
   }
 };
 
+void setPosition(AXIS axis, float position) {
+  // cur2work based on current absolute - position used to reset
+  cur2workSetAxis(axis, coordinateGetAbsAxis(axis)-position);
+  storeCmd("G92 %c%.3f\n",axis_id[axis],position);
+}
+
 void menuHome(void)
 {
   KEY_VALUES key_num = KEY_IDLE;
@@ -36,23 +42,28 @@ void menuHome(void)
     switch(key_num)
     {
       case KEY_ICON_0: 
-        if (isAxisKnown(Z_AXIS)==false)
+        if (isAxisKnown(Z_AXIS)==false) {
           storeCmd("G28 Z\n");
-        storeCmd("G28 XY\n"); 
+          cur2workSetAxis(Z_AXIS,0);
+        }
+        storeCmd("G28 XY\n");
+        cur2workSetAxis(X_AXIS,0);
+        cur2workSetAxis(Y_AXIS,0);
         break;
-      case KEY_ICON_1: storeCmd("G92 X0Y0\n"); break;
-      case KEY_ICON_2: storeCmd("G92 X0\n"); break;
-      case KEY_ICON_3: storeCmd("G92 Y0\n"); break;
-      case KEY_ICON_4: storeCmd("G28 Z\n"); break;
+      case KEY_ICON_1: setPosition(X_AXIS,0); setPosition(Y_AXIS,0); break;
+      case KEY_ICON_2: setPosition(X_AXIS,0); break;
+      case KEY_ICON_3: setPosition(Y_AXIS,0); break;
+      case KEY_ICON_4: storeCmd("G28 Z\n"); cur2workSetAxis(Z_AXIS,0); break;
       case KEY_ICON_5: 
         if(infoSettings.touchplate_on == 1)
         {
           storeCmd("G38.3 Z-90\n"); // probe down
-          storeCmd("G92 Z%.3f\n", infoSettings.touchplate_height); // set height position to touchplate
+          setPosition(Z_AXIS,infoSettings.touchplate_height);
+          // storeCmd("G92 Z%.3f\n", infoSettings.touchplate_height); // set height position to touchplate
           storeCmd("G0 Z10\n"); // lift off of probe
         }
         break;
-      case KEY_ICON_6: storeCmd("G92 Z0\n"); break;
+      case KEY_ICON_6: setPosition(Z_AXIS,0); break;
       case KEY_ICON_7: CLOSE_MENU();         break;
       default: break;
     }

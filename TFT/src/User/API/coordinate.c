@@ -5,6 +5,9 @@ const char axis_id[TOTAL_AXIS] = {'X', 'Y', 'Z', 'E'};
 
 static COORDINATE targetPosition = {{0.0f, 0.0f, 0.0f, 0.0f}, 3000};
 static COORDINATE curPosition = {{0.0f, 0.0f, 0.0f, 0.0f}, 3000};
+// cur2work is what position in current location needed to return to working 0,0
+// machine coord = cur2workPosition + curPosition
+static COORDINATE cur2workPosition = {{0.0f, 0.0f, 0.0f, 0.0f}, 3000};
 E_AXIS_BACKUP eAxisBackup = {0, 0, false, false};
 
 /**
@@ -115,6 +118,34 @@ void coordinateSetAxisActual(AXIS axis, float position)
 void coordinateGetAllActual(COORDINATE *tmp)
 {
   memcpy(tmp, &curPosition, sizeof(curPosition));
+}
+
+void coordinateGetAbsActual(COORDINATE *tmp)
+{
+  tmp->axis[X_AXIS] = curPosition.axis[X_AXIS] + cur2workPosition.axis[X_AXIS];
+  tmp->axis[Y_AXIS] = curPosition.axis[Y_AXIS] + cur2workPosition.axis[Y_AXIS];
+  tmp->axis[Z_AXIS] = curPosition.axis[Z_AXIS] + cur2workPosition.axis[Z_AXIS];
+}
+
+float coordinateGetAbsAxis(AXIS axis) {
+  return cur2workPosition.axis[axis] + curPosition.axis[axis];
+}
+
+void cur2workSetAxis(AXIS axis, float position) {
+  cur2workPosition.axis[axis] = position;
+}
+
+// to be called on setting of axis to zero
+void cur2workSetAxisSet(AXIS axis) {
+  cur2workPosition.axis[axis] = curPosition.axis[axis];
+}
+
+void cur2workSetAxisCur(AXIS axis){
+  cur2workPosition.axis[axis] += curPosition.axis[axis];
+}
+
+void cur2workSetAll(COORDINATE *tmp){
+  memcpy(tmp, &cur2workPosition, sizeof(cur2workPosition));
 }
 
 void coordinateQuerySetWait(bool wait)
