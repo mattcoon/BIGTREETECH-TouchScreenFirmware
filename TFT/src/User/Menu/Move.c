@@ -25,7 +25,9 @@ void storeMoveCmd(const AXIS xyz, float amount)
 {
   hadMovement = true;
   float dist2max = infoSettings.machine_size_max[xyz] - coordinateGetAbsAxis(xyz);
+  float dist2min = infoSettings.machine_size_min[xyz] - coordinateGetAbsAxis(xyz);
   amount = MIN(amount, dist2max);
+  amount = MAX(amount, dist2min);
   // if invert is true, use 'amount' multiplied by -1
   storeCmd(xyzMoveCmd[xyz], GET_BIT(infoSettings.inverted_axis, xyz) ? -amount : amount,
            ((xyz != Z_AXIS) ? infoSettings.xy_speed[infoSettings.move_speed] : infoSettings.z_speed[infoSettings.move_speed]));
