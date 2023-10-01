@@ -16,6 +16,7 @@
   #define OFFSET 1
 #endif
 
+extern bool inhibitHome;
 const char *const xyzMoveCmd[] = {X_MOVE_GCODE, Y_MOVE_GCODE, Z_MOVE_GCODE};
 static uint8_t item_moveLen_index = 1;
 AXIS nowAxis = X_AXIS;
@@ -173,6 +174,7 @@ void menuMove(void)
         case KEY_ICON_7: 
           if (hadMovement) {
             hadMovement=false;
+            inhibitHome=true;
             REPLACE_MENU(menuHome);
           }
           else
