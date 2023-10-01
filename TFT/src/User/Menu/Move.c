@@ -171,11 +171,10 @@ void menuMove(void)
         case KEY_ICON_7: 
           if (hadMovement) {
             hadMovement=false;
-            OPEN_MENU(menuHome);
+            REPLACE_MENU(menuHome);
           }
-          else {
+          else
             CLOSE_MENU(); 
-          }
           break;
       #else
         case KEY_ICON_0: storeMoveCmd(X_AXIS, amount); break;   // X move increase if no invert
