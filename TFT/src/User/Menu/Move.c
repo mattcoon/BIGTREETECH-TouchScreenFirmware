@@ -112,12 +112,12 @@ void menuMove(void)
   uint8_t table[TOTAL_AXIS][2] =
     #ifdef ALTERNATIVE_MOVE_MENU
       /*-------*-------*-------*---------*
-       | Z-(0) | Y-(1) | Z+(2) | unit(3) |
+       | Z-(0) | Y+(1) | Z+(2) | unit(3) |
        *-------*-------*-------*---------*
-       | X-(4) | Y+(5) | X+(6) | back(7) |
+       | X-(4) | Y-(5) | X+(6) | back(7) |
        *-------*-------*-------*---------*
        |X+ X-  |Y+ Y-  |Z+ Z-            */
-      {{6, 4}, {5, 1}, {2, 0}}
+      {{6, 4}, {1, 5}, {2, 0}}
     #else
       /*-------*-------*-------*---------*
        | X+(0) | Y+(1) | Z+(2) | unit(3) |
@@ -157,7 +157,7 @@ void menuMove(void)
     {
       #ifdef ALTERNATIVE_MOVE_MENU
         case KEY_ICON_0: storeMoveCmd(Z_AXIS, -amount); break;  // Z move down if no invert
-        case KEY_ICON_1: storeMoveCmd(Y_AXIS, -amount); break;  // Y move decrease if no invert
+        case KEY_ICON_1: storeMoveCmd(Y_AXIS, amount); break;  // Y move decrease if no invert
         case KEY_ICON_2: storeMoveCmd(Z_AXIS, amount); break;   // Z move up if no invert
 
         case KEY_ICON_3:
@@ -170,7 +170,7 @@ void menuMove(void)
           break;
 
         case KEY_ICON_4: storeMoveCmd(X_AXIS, -amount); break;  // X move decrease if no invert
-        case KEY_ICON_5: storeMoveCmd(Y_AXIS, amount); break;   // Y move increase if no invert
+        case KEY_ICON_5: storeMoveCmd(Y_AXIS, -amount); break;   // Y move increase if no invert
         case KEY_ICON_6: storeMoveCmd(X_AXIS, amount); break;   // X move increase if no invert
 
         case KEY_ICON_7: 
