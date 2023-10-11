@@ -26,11 +26,6 @@ typedef enum
   SKEY_ADVANCED_OK = 0,
   SKEY_EMULATED_M600,
   SKEY_EMULATED_M109_M190,
-  SKEY_CNC,
-  SKEY_LASER,
-  SKEY_INVERT_X,
-  SKEY_INVERT_Y,
-  SKEY_INVERT_Z,
   SKEY_EVENT_LED,
   SKEY_FILE_COMMENT_PARSING,
   SKEY_SERIAL_ALWAYS_ON,
@@ -38,6 +33,7 @@ typedef enum
   SKEY_AUTO_LOAD_LEVELING,
   SKEY_PROBING_Z_OFFSET,
   SKEY_Z_STEPPERS_ALIGNMENT,
+  SKEY_LASER,
 
   #ifdef PS_ON_PIN
     SKEY_PS_AUTO_SHUTDOWN,
@@ -76,70 +72,51 @@ void updateFeatureSettings(uint8_t item_index)
     case SKEY_FILE_COMMENT_PARSING:
       TOGGLE_BIT(infoSettings.general_settings, ((item_index - SKEY_ADVANCED_OK) + INDEX_ADVANCED_OK));
       break;
-
     case SKEY_LASER:
       TOGGLE_BIT(infoSettings.laser_mode, 0);
-      // settingPage[item_index].icon = toggleitem[infoSettings.laser_mode];
-     break;
-
-    case SKEY_INVERT_X:
-      // TOGGLE_BIT(infoSettings.invert_axis[X_AXIS], 0);
-      // settingPage[item_index].icon = toggleitem[infoSettings.invert_axis[X_AXIS]];
-     break;
+      break;
     case SKEY_SERIAL_ALWAYS_ON:
       TOGGLE_BIT(infoSettings.serial_always_on, 0);
       break;
-
     case SKEY_SPEED:
       infoSettings.move_speed = (infoSettings.move_speed + 1) % ITEM_SPEED_NUM;
       break;
-
     case SKEY_AUTO_LOAD_LEVELING:
       TOGGLE_BIT(infoSettings.auto_load_leveling, 0);
       break;
-
     case SKEY_PROBING_Z_OFFSET:
       TOGGLE_BIT(infoSettings.probing_z_offset, 0);
       break;
-
     case SKEY_Z_STEPPERS_ALIGNMENT:
       TOGGLE_BIT(infoSettings.z_steppers_alignment, 0);
       break;
-
     #ifdef PS_ON_PIN
       case SKEY_PS_AUTO_SHUTDOWN:
         infoSettings.auto_shutdown = (infoSettings.auto_shutdown + 1) % ITEM_TOGGLE_AUTO_NUM;
         break;
     #endif
-
     #ifdef FIL_RUNOUT_PIN
       case SKEY_FIL_RUNOUT:
         TOGGLE_BIT(infoSettings.runout, 0);
         break;
     #endif
-
     case SKEY_PL_RECOVERY:
       TOGGLE_BIT(infoSettings.plr, 0);
       break;
-
     case SKEY_PL_RECOVERY_HOME:
       TOGGLE_BIT(infoSettings.plr_home, 0);
       break;
-
     case SKEY_BTT_MINI_UPS:
       TOGGLE_BIT(infoSettings.btt_ups, 0);
       break;
-
     case SKEY_START_GCODE_ENABLED:
     case SKEY_END_GCODE_ENABLED:
     case SKEY_CANCEL_GCODE_ENABLED:
       TOGGLE_BIT(infoSettings.send_gcodes, (item_index - SKEY_START_GCODE_ENABLED));
       break;
-
     case SKEY_RESET_SETTINGS:
       popupDialog(DIALOG_TYPE_ALERT, LABEL_SETTINGS_RESET, LABEL_SETTINGS_RESET_INFO, LABEL_CONFIRM, LABEL_CANCEL, resetSettings, NULL, NULL);
       break;
-
     default:
       return;
   }
@@ -163,37 +140,26 @@ void loadFeatureSettings(LISTITEM * item, uint16_t item_index, uint8_t itemPos)
       case SKEY_LASER:
         item->icon = iconToggle[infoSettings.laser_mode];
         break;
-
-      case SKEY_INVERT_X:
-        // settingPage[item_index].icon = toggleitem[infoSettings.invert_axis[X_AXIS]];
-        break;
-		
       case SKEY_SERIAL_ALWAYS_ON:
         item->icon = iconToggle[infoSettings.serial_always_on];
         break;
-
       case SKEY_SPEED:
         item->valueLabel = itemSpeed[infoSettings.move_speed].label;
         break;
-
       case SKEY_AUTO_LOAD_LEVELING:
         item->icon = iconToggle[infoSettings.auto_load_leveling];
         break;
-
       case SKEY_PROBING_Z_OFFSET:
         item->icon = iconToggle[infoSettings.probing_z_offset];
         break;
-
       case SKEY_Z_STEPPERS_ALIGNMENT:
         item->icon = iconToggle[infoSettings.z_steppers_alignment];
         break;
-
       #ifdef PS_ON_PIN
         case SKEY_PS_AUTO_SHUTDOWN:
           item->valueLabel = itemToggleAuto[infoSettings.auto_shutdown];
           break;
       #endif
-
       #ifdef FIL_RUNOUT_PIN
         case SKEY_FIL_RUNOUT:
         {
@@ -202,28 +168,22 @@ void loadFeatureSettings(LISTITEM * item, uint16_t item_index, uint8_t itemPos)
           break;
         }
       #endif
-
       case SKEY_PL_RECOVERY:
         item->icon = iconToggle[infoSettings.plr];
         break;
-
       case SKEY_PL_RECOVERY_HOME:
         item->icon = iconToggle[infoSettings.plr_home];
         break;
-
       case SKEY_BTT_MINI_UPS:
         item->icon = iconToggle[infoSettings.btt_ups];
         break;
-
       case SKEY_START_GCODE_ENABLED:
       case SKEY_END_GCODE_ENABLED:
       case SKEY_CANCEL_GCODE_ENABLED:
         item->icon = iconToggle[GET_BIT(infoSettings.send_gcodes, (item_index - SKEY_START_GCODE_ENABLED))];
         break;
-
       case SKEY_RESET_SETTINGS:
         break;
-
       default:
         break;
     }
@@ -236,33 +196,31 @@ void menuFeatureSettings(void)
 
   // set item types
   LISTITEM settingPage[SKEY_COUNT] = {
-    {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_ADVANCED_OK,            LABEL_NULL},
-    {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_EMULATED_M600,          LABEL_NULL},
-    {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_EMULATED_M109_M190,     LABEL_NULL},
-    {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_EVENT_LED,              LABEL_NULL},
-    {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_FILE_COMMENT_PARSING,   LABEL_NULL},
-    {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_SERIAL_ALWAYS_ON,       LABEL_NULL},
-    {CHARICON_BLANK,       LIST_CUSTOMVALUE,   LABEL_MOVE_SPEED,             LABEL_NORMAL},
-    {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_AUTO_LOAD_LEVELING,     LABEL_NULL},
-    {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_PROBING_Z_OFFSET,       LABEL_NULL},
-    {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_Z_STEPPERS_ALIGNMENT,   LABEL_NULL},
-    {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_LASER_MODE,             LABEL_NULL},
+    {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_ADVANCED_OK,            LABEL_NULL}, //0
+    {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_EMULATED_M600,          LABEL_NULL}, //1
+    {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_EMULATED_M109_M190,     LABEL_NULL}, //2
+    {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_EVENT_LED,              LABEL_NULL}, //3
+    {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_FILE_COMMENT_PARSING,   LABEL_NULL}, //4 do not change above to advanced_ok
+    {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_SERIAL_ALWAYS_ON,       LABEL_NULL}, //5
+    {CHARICON_BLANK,       LIST_CUSTOMVALUE,   LABEL_MOVE_SPEED,             LABEL_NORMAL}, //6
+    {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_AUTO_LOAD_LEVELING,     LABEL_NULL}, //7
+    {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_PROBING_Z_OFFSET,       LABEL_NULL}, //8
+    {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_Z_STEPPERS_ALIGNMENT,   LABEL_NULL}, //9
+    {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_LASER_MODE,             LABEL_NULL}, // 10
     #ifdef PS_ON_PIN
-      {CHARICON_BLANK,       LIST_CUSTOMVALUE,   LABEL_PS_AUTO_SHUTDOWN,       LABEL_OFF},
+      {CHARICON_BLANK,       LIST_CUSTOMVALUE,   LABEL_PS_AUTO_SHUTDOWN,       LABEL_OFF}, //10 on not working
     #endif
-
     #ifdef FIL_RUNOUT_PIN
-      {CHARICON_BLANK,       LIST_CUSTOMVALUE,   LABEL_FIL_RUNOUT,             LABEL_OFF},
+      {CHARICON_BLANK,       LIST_CUSTOMVALUE,   LABEL_FIL_RUNOUT,             LABEL_OFF}, //11 on not working
     #endif
-
-    {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_PL_RECOVERY,            LABEL_NULL},
-    {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_PL_RECOVERY_HOME,       LABEL_NULL},
-    {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_BTT_MINI_UPS,           LABEL_NULL},
-    {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_START_GCODE_ENABLED,    LABEL_NULL},
-    {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_END_GCODE_ENABLED,      LABEL_NULL},
-    {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_CANCEL_GCODE_ENABLED,   LABEL_NULL},
+    {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_PL_RECOVERY,            LABEL_NULL}, //11
+    {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_PL_RECOVERY_HOME,       LABEL_NULL}, //12
+    {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_BTT_MINI_UPS,           LABEL_NULL}, //13
+    {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_START_GCODE_ENABLED,    LABEL_NULL}, //14 do not change to cancel gcode
+    {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_END_GCODE_ENABLED,      LABEL_NULL}, //15
+    {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_CANCEL_GCODE_ENABLED,   LABEL_NULL}, //16 do not change between start gcode
     // keep reset settings always at the bottom of the settings menu list
-    {CHARICON_BLANK,       LIST_MOREBUTTON,    LABEL_SETTINGS_RESET,         LABEL_NULL}
+    {CHARICON_BLANK,       LIST_MOREBUTTON,    LABEL_SETTINGS_RESET,         LABEL_NULL}  //17 keeps english....
   };
 
   uint16_t index = KEY_IDLE;

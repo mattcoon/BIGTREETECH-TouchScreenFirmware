@@ -20,9 +20,9 @@ void menuFan(void)
       {ICON_NULL,                 LABEL_NULL},
       {ICON_NULL,                 LABEL_NULL},
       {ICON_INC,                  LABEL_INC},
-      {ICON_FAN ,                    LABEL_FAN},
-      {ICON_FAN_FULL_SPEED,          LABEL_FULL},
-      {ICON_STOP,                    LABEL_STOP},
+      {ICON_FAN ,                 LABEL_FAN},
+      {ICON_FAN_FULL_SPEED,       LABEL_FULL},
+      {ICON_STOP,                 LABEL_STOP},
       {ICON_BACK,                 LABEL_BACK},
     }
   };
