@@ -378,6 +378,7 @@ void completePrint(void)
   infoPrinting.cur = infoPrinting.size;  // always update the print progress to 100% even if the print terminated
   infoPrinting.progress = 100;           // set progress to 100% in case progress is controlled by slicer
   infoPrinting.printing = infoPrinting.paused = false;
+  fanMBControlOff();
   setPrintRemainingTime(0);
   preparePrintSummary();  // update print summary. infoPrinting is used
 
@@ -424,6 +425,7 @@ bool startPrintFromRemoteHost(const char * filename)
   // we assume infoPrinting is clean, so we need to set only the needed attributes
   infoPrinting.size = 1;  // .size must be different than .cur to avoid 100% progress on TFT
   infoPrinting.printing = true;
+  fanMBControlOn();
 
   // present just to make the code robust. It should never be used printing from remote onboard media
   infoFile.onboardSource = BOARD_SD;
@@ -505,6 +507,7 @@ bool startPrint(void)
 
   // we assume infoPrinting is clean, so we need to set only the needed attributes
   infoPrinting.printing = true;
+  fanMBControlOn();
 
   // execute pre print start tasks
   if (!printRestore && GET_BIT(infoSettings.send_gcodes, SEND_GCODES_START_PRINT))  // PLR continue printing, CAN NOT use start gcode

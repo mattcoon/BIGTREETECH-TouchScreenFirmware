@@ -44,6 +44,7 @@ extern const ITEM itemDegreeSteps[ITEM_DEGREE_NUM];
 extern const uint8_t degreeSteps[ITEM_DEGREE_NUM];
 
 extern const ITEM itemSpeed[ITEM_SPEED_NUM];
+extern const ITEM itemFanCnt[MAX_FAN_COUNT];
 
 extern const ITEM itemPercent[ITEM_PERCENT_STEPS_NUM];
 extern const uint8_t percentSteps[ITEM_PERCENT_STEPS_NUM];

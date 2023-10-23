@@ -212,6 +212,12 @@ extern "C" {
 #define LANG_KEY_BED                          "label_bed:"
 #define LANG_KEY_CHAMBER                      "label_chamber:"
 #define LANG_KEY_FAN                          "label_fan:"
+#define LANG_KEY_FAN0                         "label_fan0:"
+#define LANG_KEY_FAN1                         "label_fan1:"
+#define LANG_KEY_FAN2                         "label_fan2:"
+#define LANG_KEY_FAN3                         "label_fan3:"
+#define LANG_KEY_FAN4                         "label_fan4:"
+#define LANG_KEY_FAN5                         "label_fan5:"
 
 #define LANG_KEY_BLTOUCH                      "label_bltouch:"
 #define LANG_KEY_TOUCHMI                      "label_touchmi:"

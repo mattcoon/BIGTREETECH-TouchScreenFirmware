@@ -205,6 +205,12 @@
     #define STRING_BED                    "Hotbed"
     #define STRING_CHAMBER                "Chamber"
     #define STRING_FAN                    "Fan"
+    #define STRING_FAN0                   "Fan0"
+    #define STRING_FAN1                   "Fan1"
+    #define STRING_FAN2                   "Fan2"
+    #define STRING_FAN3                   "Fan3"
+    #define STRING_FAN4                   "Fan4"
+    #define STRING_FAN5                   "Fan5"
 
     #define STRING_BLTOUCH                "BLTouch"
     #define STRING_TOUCHMI                "TouchMi"

@@ -47,6 +47,16 @@ const ITEM itemSpeed[ITEM_SPEED_NUM] =
   {ICON_FAST_SPEED,              LABEL_FAST},
 };
 
+const ITEM itemFanCnt[MAX_FAN_COUNT] =
+{
+  {ICON_FAN,                     LABEL_FAN0},
+  {ICON_FAN,                     LABEL_FAN1},
+  {ICON_FAN,                     LABEL_FAN2},
+  {ICON_FAN,                     LABEL_FAN3},
+  {ICON_FAN,                     LABEL_FAN4},
+  {ICON_FAN,                     LABEL_FAN5},
+};
+
 // Icons list for percent change steps
 const ITEM itemPercent[ITEM_PERCENT_STEPS_NUM] =
 {

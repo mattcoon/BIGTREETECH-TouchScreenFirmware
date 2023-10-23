@@ -461,7 +461,13 @@
  * Fan Count
  *   Value range: [min: 1, max: 6]
  */
-#define FAN_COUNT 1  // Default: 1
+#define FAN_COUNT 3  // Default: 1
+
+/**
+ * System Fan Index
+ *   Value range: [min: 1, max: 6]
+ */
+#define SYS_FAN_INDEX 1 // Defaul: 1
 
 /**
  * Controller Fan Support

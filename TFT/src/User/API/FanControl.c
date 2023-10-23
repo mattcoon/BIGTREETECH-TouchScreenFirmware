@@ -103,3 +103,13 @@ void ctrlFanQuery(void)
     ctrlFanQueryWait = storeCmd("M710\n");
   }
 }
+
+void fanMBControlOff (void) 
+{
+  fanSetSpeed(infoSettings.sysFanIndex,0);
+}
+void fanMBControlOn (void)
+{
+  fanSetSpeed(infoSettings.sysFanIndex,240);
+}
+

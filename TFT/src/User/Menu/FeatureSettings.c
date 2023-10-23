@@ -33,6 +33,8 @@ typedef enum
   SKEY_AUTO_LOAD_LEVELING,
   SKEY_PROBING_Z_OFFSET,
   SKEY_Z_STEPPERS_ALIGNMENT,
+  SKEY_FAN_COUNT,
+  SKEY_SYS_FAN_INDEX,
   SKEY_LASER,
 
   #ifdef PS_ON_PIN
@@ -89,6 +91,12 @@ void updateFeatureSettings(uint8_t item_index)
       break;
     case SKEY_Z_STEPPERS_ALIGNMENT:
       TOGGLE_BIT(infoSettings.z_steppers_alignment, 0);
+      break;
+    case SKEY_FAN_COUNT:
+      infoSettings.fan_count = (infoSettings.fan_count + 1) % MAX_FAN_COUNT;
+      break;
+    case SKEY_SYS_FAN_INDEX:
+      infoSettings.sysFanIndex = (infoSettings.sysFanIndex + 1) % MAX_FAN_COUNT;
       break;
     #ifdef PS_ON_PIN
       case SKEY_PS_AUTO_SHUTDOWN:
@@ -154,6 +162,12 @@ void loadFeatureSettings(LISTITEM * item, uint16_t item_index, uint8_t itemPos)
         break;
       case SKEY_Z_STEPPERS_ALIGNMENT:
         item->icon = iconToggle[infoSettings.z_steppers_alignment];
+        break;
+      case SKEY_FAN_COUNT:
+        item->valueLabel = itemFanCnt[infoSettings.fan_count].label;
+        break;
+      case SKEY_SYS_FAN_INDEX:
+        item->valueLabel = itemFanCnt[infoSettings.sysFanIndex].label;
         break;
       #ifdef PS_ON_PIN
         case SKEY_PS_AUTO_SHUTDOWN:

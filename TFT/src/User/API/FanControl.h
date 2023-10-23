@@ -31,6 +31,9 @@ void loopFan(void);
 void ctrlFanQuerySetWait(const bool wait);
 void ctrlFanQuery(void);
 
+void fanMBControlOff (void);
+void fanMBControlOn (void);;
+
 #ifdef __cplusplus
 }
 #endif

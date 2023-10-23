@@ -14,11 +14,11 @@ extern "C" {
 // Config version support (format YYYYMMDD)
 // change if new elements/keywords are added/removed/changed in the Configuration.h
 // this number should match CONFIG_VERSION in Configuration.h
-#define CONFIG_SUPPPORT 20230821
+#define CONFIG_SUPPPORT 20231021
 
 #define FONT_FLASH_SIGN       20230821  // (YYYYMMDD) change if fonts require updating
-#define CONFIG_FLASH_SIGN     20230821  // (YYYYMMDD) change if any keyword(s) in config.ini is added or removed
-#define LANGUAGE_FLASH_SIGN   20230821  // (YYYYMMDD) change if any keyword(s) in language pack is added or removed
+#define CONFIG_FLASH_SIGN     20231021  // (YYYYMMDD) change if any keyword(s) in config.ini is added or removed
+#define LANGUAGE_FLASH_SIGN   20231021  // (YYYYMMDD) change if any keyword(s) in language pack is added or removed
 #define ICON_FLASH_SIGN       20230821  // (YYYYMMDD) change if any icon(s) is added or removed
 
 #define FONT_CHECK_SIGN       (FONT_FLASH_SIGN + WORD_UNICODE_ADDR + FLASH_SIGN_ADDR)
@@ -221,6 +221,7 @@ typedef struct
   uint8_t  chamber_en;
   uint8_t  ext_count;
   uint8_t  fan_count;
+  uint8_t  sysFanIndex;
   uint8_t  ctrl_fan_en;
   uint16_t max_temp[MAX_HEATER_COUNT];  // hotends + bed + chamber
   uint16_t min_ext_temp;
