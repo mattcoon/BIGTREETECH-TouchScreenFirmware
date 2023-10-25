@@ -204,6 +204,8 @@
     #define STRING_NOZZLE                 "Nozzle"
     #define STRING_BED                    "Hotbed"
     #define STRING_CHAMBER                "Chamber"
+    #define STRING_FAN_COUNT              "Number of Fans"
+    #define STRING_SYS_FAN_INDEX          "System Fan"
     #define STRING_FAN                    "Fan"
     #define STRING_FAN0                   "Fan0"
     #define STRING_FAN1                   "Fan1"
