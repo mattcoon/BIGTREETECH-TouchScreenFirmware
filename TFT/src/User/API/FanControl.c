@@ -106,10 +106,12 @@ void ctrlFanQuery(void)
 
 void fanMBControlOff (void) 
 {
-  fanSetSpeed(infoSettings.sysFanIndex,0);
+  if (infoSettings.sysFanIndex < infoSettings.fan_count)
+    fanSetSpeed(infoSettings.sysFanIndex,0);
 }
 void fanMBControlOn (void)
 {
-  fanSetSpeed(infoSettings.sysFanIndex,240);
+  if (infoSettings.sysFanIndex < infoSettings.fan_count)
+    fanSetSpeed(infoSettings.sysFanIndex,240);
 }
 
