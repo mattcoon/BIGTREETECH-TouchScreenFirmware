@@ -3,6 +3,7 @@
 
 
 bool inhibitHome = false;
+bool hadHome = false;
 
   MENUITEMS homeItems = {
   // title
@@ -26,6 +27,20 @@ void setPosition(AXIS axis, float position) {
   storeCmd("G92 %c%.3f\n",axis_id[axis],position);
 }
 
+void replaceHomeBack(bool replace){
+  hadHome = replace;
+  if (replace) {
+    // after home move is next. replace "back" with "move"
+    homeItems.items[7].icon = ICON_MOVE;
+    homeItems.items[7].label.index = LABEL_MOVE;
+  }
+  else {
+    homeItems.items[7].icon = ICON_BACK;
+    homeItems.items[7].label.index = LABEL_BACK;
+  }
+  menuDrawPage(&homeItems);
+}
+
 void menuHome(void)
 {
   KEY_VALUES key_num = KEY_IDLE;
@@ -42,7 +57,7 @@ void menuHome(void)
     homeItems.items[0].icon = ICON_HOME_MOVE;
     homeItems.items[0].label.index = LABEL_XY;
   }
-
+  
   menuDrawPage(&homeItems);
   drawXYZ();
 
@@ -62,11 +77,12 @@ void menuHome(void)
           cur2workSetAxis(X_AXIS,0);
           cur2workSetAxis(Y_AXIS,0);
         }
+        replaceHomeBack(true);
         break;
       case KEY_ICON_1: setPosition(X_AXIS,0); setPosition(Y_AXIS,0); break;
       case KEY_ICON_2: setPosition(X_AXIS,0); break;
       case KEY_ICON_3: setPosition(Y_AXIS,0); break;
-      case KEY_ICON_4: storeCmd("G28 Z\n"); cur2workSetAxis(Z_AXIS,0); break;
+      case KEY_ICON_4: storeCmd("G28 Z\n"); cur2workSetAxis(Z_AXIS,0);   replaceHomeBack(true); break;
       case KEY_ICON_5: 
         if(infoSettings.touchplate_on == 1)
         {
@@ -78,8 +94,14 @@ void menuHome(void)
         break;
       case KEY_ICON_6: setPosition(Z_AXIS,0); break;
       case KEY_ICON_7: 
-        inhibitHome = false; 
-        CLOSE_MENU();
+        inhibitHome = false;
+        if (hadHome){
+          replaceHomeBack(false);
+          REPLACE_MENU(menuMove);
+        }
+        else {
+          CLOSE_MENU();
+        }
         break;
       default: break;
     }

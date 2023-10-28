@@ -24,7 +24,7 @@ bool hadMovement = false;
 
 void storeMoveCmd(const AXIS xyz, float amount)
 {
-  hadMovement = true;
+  replaceMoveBack(true);
   float dist2max = infoSettings.machine_size_max[xyz] - coordinateGetAbsAxis(xyz);
   float dist2min = infoSettings.machine_size_min[xyz] - coordinateGetAbsAxis(xyz);
   amount = MIN(amount, dist2max);
@@ -72,34 +72,49 @@ void updateGantry(void)
   }
 }
 
+MENUITEMS moveItems = {
+  // title
+  LABEL_MOVE,
+  //   icon                          label
+  {
+    #ifdef ALTERNATIVE_MOVE_MENU
+      {ICON_Z_DEC,                   LABEL_Z_DEC},
+      {ICON_Y_INC,                   LABEL_Y_DEC},
+      {ICON_Z_INC,                   LABEL_Z_INC},
+      {ICON_01_MM,                   LABEL_01_MM},
+      {ICON_X_DEC,                   LABEL_X_DEC},
+      {ICON_Y_DEC,                   LABEL_Y_INC},
+      {ICON_X_INC,                   LABEL_X_INC},
+      {ICON_BACK,                    LABEL_BACK},
+    #else
+      {ICON_X_INC,                   LABEL_X_INC},
+      {ICON_Y_DEC,                   LABEL_Y_INC},
+      {ICON_Z_INC,                   LABEL_Z_INC},
+      {ICON_01_MM,                   LABEL_01_MM},
+      {ICON_X_DEC,                   LABEL_X_DEC},
+      {ICON_Y_INC,                   LABEL_Y_DEC},
+      {ICON_Z_DEC,                   LABEL_Z_DEC},
+      {ICON_BACK,                    LABEL_BACK},
+    #endif
+  }
+};
+
+void replaceMoveBack(bool replace) {
+  hadMovement = replace;
+  if (replace) {
+    // after home move is next. replace "back" with "move"
+    moveItems.items[7].icon = ICON_HOME;
+    moveItems.items[7].label.index = LABEL_HOME;
+  }
+  else {
+    moveItems.items[7].icon = ICON_BACK;
+    moveItems.items[7].label.index = LABEL_BACK;
+  }
+  menuDrawPage(&moveItems);
+}
+
 void menuMove(void)
 {
-  MENUITEMS moveItems = {
-    // title
-    LABEL_MOVE,
-    //   icon                          label
-    {
-      #ifdef ALTERNATIVE_MOVE_MENU
-        {ICON_Z_DEC,                   LABEL_Z_DEC},
-        {ICON_Y_INC,                   LABEL_Y_DEC},
-        {ICON_Z_INC,                   LABEL_Z_INC},
-        {ICON_01_MM,                   LABEL_01_MM},
-        {ICON_X_DEC,                   LABEL_X_DEC},
-        {ICON_Y_DEC,                   LABEL_Y_INC},
-        {ICON_X_INC,                   LABEL_X_INC},
-        {ICON_BACK,                    LABEL_BACK},
-      #else
-        {ICON_X_INC,                   LABEL_X_INC},
-        {ICON_Y_DEC,                   LABEL_Y_INC},
-        {ICON_Z_INC,                   LABEL_Z_INC},
-        {ICON_01_MM,                   LABEL_01_MM},
-        {ICON_X_DEC,                   LABEL_X_DEC},
-        {ICON_Y_INC,                   LABEL_Y_DEC},
-        {ICON_Z_DEC,                   LABEL_Z_DEC},
-        {ICON_BACK,                    LABEL_BACK},
-      #endif
-    }
-  };
 
   KEY_VALUES key_num = KEY_IDLE;
 
@@ -175,7 +190,7 @@ void menuMove(void)
 
         case KEY_ICON_7: 
           if (hadMovement) {
-            hadMovement=false;
+            replaceMoveBack(false);
             inhibitHome=true;
             REPLACE_MENU(menuHome);
           }
