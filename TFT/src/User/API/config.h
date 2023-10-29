@@ -85,6 +85,7 @@ extern "C" {
 #define CONFIG_PAUSE_POS              "pause_pos:"
 #define CONFIG_PAUSE_Z_RAISE          "pause_z_raise:"
 #define CONFIG_PAUSE_FEEDRATE         "pause_feedrate:"
+#define CONFIG_SLEEP_POS              "sleep_pos:"
 #define CONFIG_LEVEL_EDGE_DISTANCE    "level_edge_distance:"
 #define CONFIG_LEVEL_Z_POS            "level_z_pos:"
 #define CONFIG_LEVEL_Z_RAISE          "level_z_raise:"

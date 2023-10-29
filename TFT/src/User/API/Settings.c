@@ -92,7 +92,9 @@ void initSettings(void)
   infoSettings.pause_pos[X_AXIS]      = NOZZLE_PAUSE_X_POSITION;  // X
   infoSettings.pause_pos[Y_AXIS]      = NOZZLE_PAUSE_Y_POSITION;  // Y
   infoSettings.pause_z_raise          = NOZZLE_PAUSE_Z_RAISE;
-
+  infoSettings.sleep_pos[X_AXIS]      = SLEEP_POSITION_X;
+  infoSettings.sleep_pos[Y_AXIS]      = SLEEP_POSITION_Y;
+  infoSettings.sleep_pos[Z_AXIS]      = SLEEP_POSITION_Z;
   infoSettings.level_edge             = LEVELING_EDGE_DISTANCE;
   infoSettings.level_z_pos            = LEVELING_Z_POS;
   infoSettings.level_z_raise          = LEVELING_Z_RAISE;

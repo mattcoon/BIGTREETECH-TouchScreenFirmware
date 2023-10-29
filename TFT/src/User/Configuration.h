@@ -78,7 +78,7 @@
  *
  *   Options: [disable: 0, enable: 1]
  */
-#define ADVANCED_OK 0  // Default: 0
+#define ADVANCED_OK 1  // Default: 0
 
 /**
  * Emulated M600
@@ -520,7 +520,7 @@
 #define Y_MIN_POS   0  // Default: 0
 #define Z_MIN_POS   0  // Default: 0
 #define X_MAX_POS 1220  // Default: 235
-#define Y_MAX_POS 900  // Default: 235
+#define Y_MAX_POS 1200  // Default: 235
 #define Z_MAX_POS 90  // Default: 250
 
 /**
@@ -652,6 +652,9 @@
 #define NOZZLE_PAUSE_Z_FEEDRATE                    6000  // (mm/min) Z axis feedrate (Default: 6000)
 #define NOZZLE_PAUSE_E_FEEDRATE                     600  // (mm/min) retract & purge feedrate (Default: 600)
 
+#define SLEEP_POSITION_X          0
+#define SLEEP_POSITION_Y          800
+#define SLEEP_POSITION_Z          20
 /**
  * Leveling Settings
  * These settings are used for leveling.
@@ -749,7 +752,7 @@
  *
  *   Options: [disable: 0, enable: 1]
  */
-#define Z_STEPPER_ALIGNEMENT 1  // Default: 0
+#define Z_STEPPER_ALIGNEMENT 0  // Default: 0
 
 /**
  * TouchMI Settings (ABL)

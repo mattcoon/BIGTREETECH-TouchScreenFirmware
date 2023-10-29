@@ -851,6 +851,12 @@ void parseConfigKey(uint16_t index)
       if (key_seen("E")) SET_VALID_INT_VALUE(infoSettings.pause_feedrate[FEEDRATE_E], MIN_SPEED_LIMIT, MAX_SPEED_LIMIT);
       break;
 
+    case C_INDEX_SLEEP_POS:
+      if (key_seen("X")) SET_VALID_FLOAT_VALUE(infoSettings.sleep_pos[X_AXIS], MIN_XY_POS_LIMIT, MAX_SIZE_LIMIT);
+      if (key_seen("Y")) SET_VALID_FLOAT_VALUE(infoSettings.sleep_pos[Y_AXIS], MIN_XY_POS_LIMIT, MAX_SIZE_LIMIT);
+      if (key_seen("Z")) SET_VALID_FLOAT_VALUE(infoSettings.sleep_pos[Z_AXIS], MIN_Z_POS_LIMIT,  MAX_SIZE_LIMIT);
+      break;
+
     case C_INDEX_LEVEL_EDGE_DISTANCE:
       SET_VALID_INT_VALUE(infoSettings.level_edge, MIN_Z_POS_LIMIT, MAX_SIZE_LIMIT);
       break;
