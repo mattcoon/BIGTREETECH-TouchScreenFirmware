@@ -15,8 +15,8 @@ void menuMain(void) {
       {ICON_PRINT,                   LABEL_CUT},
       {ICON_SETTINGS,                LABEL_SETTINGS},
       {ICON_DISABLE_STEPPERS,        LABEL_DISABLE_STEPPERS},
-      {ICON_STOP,                    LABEL_EMERGENCYSTOP},
-      {ICON_NULL, /* BACK */         LABEL_NULL},
+      {ICON_NULL,                    LABEL_NULL},
+      {ICON_NULL,                    LABEL_NULL},
     }
   };
 
@@ -39,19 +39,19 @@ void menuMain(void) {
     key_num = menuKeyGetValue();
     switch (key_num)
     {
-      case KEY_ICON_0:  OPEN_MENU(menuHome); break;
+      case KEY_ICON_0:  OPEN_MENU(menuHome);     break;
 
-      case KEY_ICON_1:  OPEN_MENU(menuMove); break;
+      case KEY_ICON_1:  OPEN_MENU(menuMove);     break;
 
-      case KEY_ICON_2:  OPEN_MENU(menuLaser); break;
+      case KEY_ICON_2:  OPEN_MENU(menuLaser);    break;
 
-      case KEY_ICON_3:  OPEN_MENU(menuPrint); break;
+      case KEY_ICON_3:  OPEN_MENU(menuPrint);    break;
 
       case KEY_ICON_4:  OPEN_MENU(menuSettings); break;
 
-      case KEY_ICON_5:  storeCmd("M84\n");    break;
+      case KEY_ICON_5:  storeCmd("M84\n");       break;
 
-      case KEY_ICON_6:  sendEmergencyCmd("M112\n"); break;
+      case KEY_ICON_6:  break;
 
       case KEY_ICON_7:
         if (infoSettings.status_screen == 1)
