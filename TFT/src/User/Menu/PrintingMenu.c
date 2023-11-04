@@ -323,7 +323,6 @@ static inline void toggleInfo(void)
 
     speedQuery();
 
-    if (infoFile.source >= FS_ONBOARD_MEDIA)
       coordinateQuery(MS_TO_SEC(TOGGLE_TIME));
 
   }
@@ -462,11 +461,10 @@ void menuPrinting(void)
   };
 
   uint8_t nowFan[MAX_FAN_COUNT] = {0};
-  AXIS    nowPos[AXIS_NUM];
+  float   nowPos[AXIS_NUM] = {0,0,0};
   uint8_t oldProgress = 0;
   uint16_t curspeed[2] = {0};
   uint32_t time = 0;
-  bool layerDrawEnabled = false;
   bool lastPause = isPaused();
   bool lastPrinting = isPrinting();
 
