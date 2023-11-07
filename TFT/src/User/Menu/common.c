@@ -74,15 +74,16 @@ const uint8_t percentSteps[ITEM_PERCENT_STEPS_NUM] = {1, 5, 10};
 const ITEM itemMoveLen[ITEM_MOVE_LEN_NUM] =
 {
 // icon                          label
-  {ICON_001_MM,                  LABEL_001_MM},
-  {ICON_01_MM,                   LABEL_01_MM},
-  {ICON_1_MM,                    LABEL_1_MM},
-  {ICON_10_MM,                   LABEL_10_MM},
   {ICON_100_MM,                  LABEL_100_MM},
+  {ICON_10_MM,                   LABEL_10_MM},
+  {ICON_1_MM,                    LABEL_1_MM},
+  {ICON_01_MM,                   LABEL_01_MM},
+  {ICON_001_MM,                  LABEL_001_MM},
 };
 
+
 // List for length/distance change steps
-const float moveLenSteps[ITEM_MOVE_LEN_NUM] = {0.01f, 0.1f, 1, 10, 100};
+const float moveLenSteps[ITEM_MOVE_LEN_NUM] = { 100, 10, 1, 0.1f, 0.01f };
 
 // Icons list for Extruder length/distance change steps
 const ITEM itemExtLenSteps[ITEM_EXT_LEN_NUM] =
