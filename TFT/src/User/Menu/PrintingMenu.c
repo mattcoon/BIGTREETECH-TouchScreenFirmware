@@ -608,8 +608,10 @@ void menuPrinting(void)
           // in case the print was started from menuPrintFromSource menu,
           // remove the filename from path to allow the files scanning from its folder avoiding a scanning error message
           exitFolder();
-
-          CLOSE_MENU();
+          if (isAborted() == true)
+            REPLACE_MENU(menuMain);
+          else
+            CLOSE_MENU();
         }
         break;
 
