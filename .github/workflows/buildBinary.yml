@@ -27,7 +27,7 @@ jobs:
 
       - name: Install PlatformIO
         run: |
-          update-alternatives
+          update-alternatives --config python
           python -m pip install --upgrade pip
           pip install --upgrade platformio
 
