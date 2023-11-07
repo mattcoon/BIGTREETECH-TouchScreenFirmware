@@ -86,42 +86,14 @@ static inline void setPauseResumeIcon(MENUITEMS * curmenu, bool paused)
   curmenu->items[KEY_ICON_4].label.index = paused ? LABEL_RESUME : LABEL_PAUSE;
 }
 
-static void setLayerHeightText(char * layer_height_txt)
+static void setLayerPosText(char * layer_height_txt, AXIS axis)
 {
   float layer_height;
-  layer_height = coordinateGetAxis(Z_AXIS);
+  layer_height = coordinateGetAxis(axis);
 
-  if (layer_height > 0)
-    sprintf(layer_height_txt, "%6.2fmm", layer_height);
-  else
-    strcpy(layer_height_txt, " --- mm ");  // leading and trailing space char so the text is centered on both rows
+    sprintf(layer_height_txt, "%.1f", layer_height);
 }
 
-static void setLayerNumberTxt(char * layer_number_txt)
-{
-  uint16_t layerNumber = getPrintLayerNumber();
-  uint16_t layerCount = getPrintLayerCount();
-
-  if (layerNumber > 0)
-  {
-    if (layerCount > 0
-        #ifndef TFT70_V3_0
-          && layerCount < 1000  // there's no space to display layer number & count if the layer count is above 999
-        #endif
-       )
-    {
-      sprintf(layer_number_txt, " %u/%u ", layerNumber, layerCount);
-    }
-    else
-    {
-      sprintf(layer_number_txt, "%s%u%s", "  ", layerNumber, "  ");
-    }
-  }
-  else
-  {
-    strcpy(layer_number_txt, "---");
-  }
-}
 
 // initialize printing info before opening Printing menu
 static void initMenuPrinting(void)
@@ -211,15 +183,15 @@ static void reDrawPrintingValue(uint8_t icon_pos, uint8_t draw_type)
     switch (icon_pos)
     {
       case ICON_POS_X:
-        lvIcon.lines[0].text = (uint8_t *)"";
+  	    setLayerPosText(tempstrTop, X_AXIS);
         break;
       
       case ICON_POS_Y:
-        lvIcon.lines[0].text = (uint8_t *)"";
+	      setLayerPosText(tempstrTop, Y_AXIS);
         break;
 
       case ICON_POS_Z:
-        lvIcon.lines[0].text = (uint8_t *)"";
+	      setLayerPosText(tempstrTop, Z_AXIS);
         break;
 
       case ICON_POS_TIM:
@@ -261,17 +233,6 @@ static void reDrawPrintingValue(uint8_t icon_pos, uint8_t draw_type)
 
     switch (icon_pos)
     {
-      case ICON_POS_X:
-        sprintf(tempstrBottom, "%.1f", coordinateGetAxisActual(X_AXIS));
-        break;
-
-      case ICON_POS_Y:
-        sprintf(tempstrBottom, "%.1f", coordinateGetAxisActual(Y_AXIS));
-        break;
-
-      case ICON_POS_Z:
-        sprintf(tempstrBottom, "%.1f", coordinateGetAxisActual(Z_AXIS));
-        break;
 
       case ICON_POS_FAN:
         if (infoSettings.fan_percentage == 1)
@@ -462,6 +423,7 @@ void menuPrinting(void)
 
   uint8_t nowFan[MAX_FAN_COUNT] = {0};
   float   nowPos[AXIS_NUM] = {0,0,0};
+  float   oldPos[AXIS_NUM] = {0,0,0};
   uint8_t oldProgress = 0;
   uint16_t curspeed[2] = {0};
   uint32_t time = 0;
@@ -506,22 +468,25 @@ void menuPrinting(void)
   {
     //Scroll_DispString(&titleScroll, LEFT);  // scroll display file name will take too many CPU cycles
 
-    // check nozzle temp change
-    if (nowPos[X_AXIS] != coordinateGetAxisActual(X_AXIS))
+      nowPos[X_AXIS] = coordinateGetAxis(X_AXIS);
+      nowPos[Y_AXIS] = coordinateGetAxis(Y_AXIS);
+      nowPos[Z_AXIS] = coordinateGetAxis(Z_AXIS);
+    if (oldPos[X_AXIS] != nowPos[X_AXIS])
     {
-      nowPos[X_AXIS] = coordinateGetAxisActual(X_AXIS);
+      oldPos[X_AXIS] = nowPos[X_AXIS];
       reDrawPrintingValue(ICON_POS_X, LIVE_INFO_TOP_ROW);
     }
-    if (nowPos[Y_AXIS] != coordinateGetAxisActual(Y_AXIS))
+    if (oldPos[Y_AXIS] != nowPos[Y_AXIS])
     {
-      nowPos[Y_AXIS] = coordinateGetAxisActual(Y_AXIS);
+      oldPos[Y_AXIS] = nowPos[Y_AXIS];
       reDrawPrintingValue(ICON_POS_Y, LIVE_INFO_TOP_ROW);
     }
-    if (nowPos[Z_AXIS] != coordinateGetAxisActual(Z_AXIS))
+    if (oldPos[Z_AXIS] != nowPos[Z_AXIS])
     {
-      nowPos[Z_AXIS] = coordinateGetAxisActual(Z_AXIS);
+      oldPos[Z_AXIS] = nowPos[Z_AXIS];
       reDrawPrintingValue(ICON_POS_Z, LIVE_INFO_TOP_ROW);
     }
+
     // check fan speed change
     if (nowFan[currentFan] != fanGetCurSpeed(currentFan))
     {
@@ -582,13 +547,20 @@ void menuPrinting(void)
     switch (key_num)
     {
       case PS_KEY_0:
-        break;
-
       case PS_KEY_1:
-        break;
-
       case PS_KEY_2:
+        layerDisplayType++;  // trigger cleaning previous values
 
+        if (layerDisplayType != CLEAN_LAYER_HEIGHT)
+          reDrawPrintingValue(ICON_POS_Z, LIVE_INFO_TOP_ROW);
+
+        layerDisplayType = (layerDisplayType + 1) % 6;  // iterate layerDisplayType
+
+        if (layerDisplayType != SHOW_LAYER_NUMBER)  // upper row content changes
+          reDrawPrintingValue(ICON_POS_Z, LIVE_INFO_TOP_ROW);
+
+		break;
+		
       case PS_KEY_3:
         progDisplayType = (progDisplayType + 1) % 3;
         reDrawPrintingValue(ICON_POS_TIM, LIVE_INFO_TOP_ROW | LIVE_INFO_BOTTOM_ROW);

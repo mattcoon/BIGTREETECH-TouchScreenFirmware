@@ -34,9 +34,9 @@
  *                P2: [min: 0, max: 9]
  *                P3: [min: 0, max: 9]
  *                P4: [min: 0, max: 9]
- *   Options: [OFF (port disabled): 0, 2400: 1, 9600: 2, 19200: 3, 38400: 4, 57600: 5, 115200: 6, 250000: 7, 500000: 8, 1000000: 9]
+ *   Options: [OFF (port disabled): 0, 2400: 1, 9600: 2, 19200: 3, 38400: 4, 57600: 5, 115200: 6, 230400: 7, 250000: 8, 500000: 9, 921600: 10, 1000000: 11]
  */
-#define SP_1 7  // Default: 6
+#define SP_1 8  // Default: 7
 #define SP_2 0  // Default: 0
 #define SP_3 0  // Default: 0
 #define SP_4 0  // Default: 0
@@ -62,7 +62,7 @@
  *
  *   Value range: [min: 2, max: 16]
  */
-#define TX_SLOTS 2  // Default: 1
+#define TX_SLOTS 1  // Default: 1
 
 /**
  * Advanced OK
