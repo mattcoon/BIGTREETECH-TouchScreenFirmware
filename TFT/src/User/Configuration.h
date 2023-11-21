@@ -1188,7 +1188,7 @@
  * Cooling fans have index from 0 to 5.
  * Controller fan has index 6 and 7 (Active and Idle).
  */
-#define FAN_DISPLAY_ID {"F0 ", "F1 ", "F2 ", "F3 ", "F4 ", "F5 ", "CtA", "CtI"}
+#define FAN_DISPLAY_ID {"F0   ", "F1   ", "F2   ", "F3   ", "F4   ", "F5   ", "CtA  ", "CtI  "}
 #define FAN_CMD        {"M106 P0 S%d\n", "M106 P1 S%d\n", "M106 P2 S%d\n", "M106 P3 S%d\n", "M106 P4 S%d\n", "M106 P5 S%d\n", \
                         "M710 S%d\n",    "M710 I%d\n" }
 #define LASER_CMD      {"M3 S%i\n"}

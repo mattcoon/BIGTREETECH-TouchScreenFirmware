@@ -598,7 +598,14 @@ void sendQueueCmd(void)
             }
           }
           break;
-
+        case 3: // M3
+        case 4: // M4
+          if (cmd_seen('S'))
+            laserSetSpeed(cmd_value());
+          break;
+        case 5: // M5
+            laserSetSpeed(cmd_value());
+          break;
         case 18:  // M18 disable steppers
         case 84:  // M84 disable steppers
           // do not mark coordinate as unknown in case of a M18/M84 S<timeout> command that
@@ -1368,7 +1375,8 @@ void sendQueueCmd(void)
             if (cmd_seen(axis_id[i]))
               coordinateSetAxisTarget(i, cmd_float());
           }
-
+          if (cmd_seen('S'))
+            laserSetSpeed(cmd_value());
           if (cmd_seen('F'))
             coordinateSetFeedRate(cmd_value());
           break;

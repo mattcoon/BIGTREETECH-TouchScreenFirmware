@@ -51,7 +51,7 @@ const uint8_t printingIcon[] = {ICON_PRINTING_XPOS, ICON_PRINTING_YPOS,    ICON_
 // const uint8_t printingIcon2nd[] = {ICON_PRINTING_CHAMBER, ICON_PRINTING_FLOW};
 
 const char * const speedId[2] = {"Speed", "Flow "};
-
+const char * const laserId = "Laser";
 #define TOGGLE_TIME     2000     // 1 seconds is 1000
 #define LAYER_DELTA     0.1      // minimal layer height change to update the layer display (avoid congestion in vase mode)
 #define LAYER_TITLE     "Layer"
@@ -202,7 +202,7 @@ static void reDrawPrintingValue(uint8_t icon_pos, uint8_t draw_type)
         break;
 
       case ICON_POS_FAN:
-        lvIcon.lines[0].text = (uint8_t *)fanID[currentFan];
+        lvIcon.lines[0].text = currentFan<infoSettings.fan_count?(uint8_t *)fanID[currentFan]:(uint8_t *)laserId;
         break;
 
       case ICON_POS_SPD:
@@ -236,9 +236,9 @@ static void reDrawPrintingValue(uint8_t icon_pos, uint8_t draw_type)
 
       case ICON_POS_FAN:
         if (infoSettings.fan_percentage == 1)
-          sprintf(tempstrBottom, "%3d%%", fanGetCurPercent(currentFan));  // 4 chars
+          sprintf(tempstrBottom, "%3d%%", currentFan<infoSettings.fan_count? fanGetCurPercent(currentFan): laserGetSetPercent());  // 4 chars
         else
-          sprintf(tempstrBottom, "%3d ", fanGetCurSpeed(currentFan));  // 4 chars
+          sprintf(tempstrBottom, "%3d ", currentFan<infoSettings.fan_count? fanGetCurSpeed(currentFan): laserGetSetSpeed());  // 4 chars
         break;
 
       case ICON_POS_TIM:
@@ -271,10 +271,7 @@ static inline void toggleInfo(void)
   {
     if ((infoSettings.fan_count + infoSettings.ctrl_fan_en) > 1)
     {
-      do
-      {
-        currentFan = (currentFan + 1) % MAX_COOLING_FAN_COUNT;
-      } while (!fanIsValid(currentFan));
+      currentFan = (currentFan + 1) % (MAX_COOLING_FAN_COUNT + 1);
 
       reDrawPrintingValue(ICON_POS_FAN, LIVE_INFO_TOP_ROW | LIVE_INFO_BOTTOM_ROW);
     }
@@ -422,6 +419,7 @@ void menuPrinting(void)
   };
 
   uint8_t nowFan[MAX_FAN_COUNT] = {0};
+  uint8_t nowLaser = 0;
   float   nowPos[AXIS_NUM] = {0,0,0};
   float   oldPos[AXIS_NUM] = {0,0,0};
   uint8_t oldProgress = 0;
@@ -488,10 +486,18 @@ void menuPrinting(void)
     }
 
     // check fan speed change
-    if (nowFan[currentFan] != fanGetCurSpeed(currentFan))
-    {
-      nowFan[currentFan] = fanGetCurSpeed(currentFan);
-      reDrawPrintingValue(ICON_POS_FAN, LIVE_INFO_BOTTOM_ROW);
+    if (currentFan<infoSettings.fan_count) {
+      if (nowFan[currentFan] != fanGetCurSpeed(currentFan))
+      {
+        nowFan[currentFan] = fanGetCurSpeed(currentFan);
+        reDrawPrintingValue(ICON_POS_FAN, LIVE_INFO_BOTTOM_ROW);
+      }
+    } 
+    else {
+      if (nowLaser != laserGetCurSpeed()) {
+        nowLaser = laserGetCurSpeed();
+        reDrawPrintingValue(ICON_POS_FAN, LIVE_INFO_BOTTOM_ROW);
+      }
     }
 
     // check print time change
