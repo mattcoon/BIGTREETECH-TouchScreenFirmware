@@ -16,11 +16,51 @@
   #define OFFSET 1
 #endif
 
-extern bool inhibitHome;
 const char *const xyzMoveCmd[] = {X_MOVE_GCODE, Y_MOVE_GCODE, Z_MOVE_GCODE};
 static uint8_t item_moveLen_index = 1;
 AXIS nowAxis = X_AXIS;
 bool hadMovement = false;
+
+MENUITEMS moveItems = {
+  // title
+  LABEL_MOVE,
+  //   icon                          label
+  {
+    #ifdef ALTERNATIVE_MOVE_MENU
+      {ICON_Z_DEC,                   LABEL_Z_DEC},
+      {ICON_Y_INC,                   LABEL_Y_DEC},
+      {ICON_Z_INC,                   LABEL_Z_INC},
+      {ICON_01_MM,                   LABEL_01_MM},
+      {ICON_X_DEC,                   LABEL_X_DEC},
+      {ICON_Y_DEC,                   LABEL_Y_INC},
+      {ICON_X_INC,                   LABEL_X_INC},
+      {ICON_BACK,                    LABEL_BACK},
+    #else
+      {ICON_X_INC,                   LABEL_X_INC},
+      {ICON_Y_DEC,                   LABEL_Y_INC},
+      {ICON_Z_INC,                   LABEL_Z_INC},
+      {ICON_01_MM,                   LABEL_01_MM},
+      {ICON_X_DEC,                   LABEL_X_DEC},
+      {ICON_Y_INC,                   LABEL_Y_DEC},
+      {ICON_Z_DEC,                   LABEL_Z_DEC},
+      {ICON_BACK,                    LABEL_BACK},
+    #endif
+  }
+};
+
+void replaceMoveBack(bool replace) {
+  hadMovement = replace;
+  if (replace) {
+    // after home move is next. replace "back" with "move"
+    moveItems.items[7].icon = ICON_LEVEL_EDGE_DISTANCE;
+    moveItems.items[7].label.index = LABEL_ZERO;
+  }
+  else {
+    moveItems.items[7].icon = ICON_BACK;
+    moveItems.items[7].label.index = LABEL_BACK;
+  }
+  menuDrawPage(&moveItems);
+}
 
 void storeMoveCmd(const AXIS xyz, float amount)
 {
@@ -70,47 +110,6 @@ void updateGantry(void)
     coordinateQuery(0);  // query position manually for delay less than 1 second
     drawXYZ();
   }
-}
-
-MENUITEMS moveItems = {
-  // title
-  LABEL_MOVE,
-  //   icon                          label
-  {
-    #ifdef ALTERNATIVE_MOVE_MENU
-      {ICON_Z_DEC,                   LABEL_Z_DEC},
-      {ICON_Y_INC,                   LABEL_Y_DEC},
-      {ICON_Z_INC,                   LABEL_Z_INC},
-      {ICON_01_MM,                   LABEL_01_MM},
-      {ICON_X_DEC,                   LABEL_X_DEC},
-      {ICON_Y_DEC,                   LABEL_Y_INC},
-      {ICON_X_INC,                   LABEL_X_INC},
-      {ICON_BACK,                    LABEL_BACK},
-    #else
-      {ICON_X_INC,                   LABEL_X_INC},
-      {ICON_Y_DEC,                   LABEL_Y_INC},
-      {ICON_Z_INC,                   LABEL_Z_INC},
-      {ICON_01_MM,                   LABEL_01_MM},
-      {ICON_X_DEC,                   LABEL_X_DEC},
-      {ICON_Y_INC,                   LABEL_Y_DEC},
-      {ICON_Z_DEC,                   LABEL_Z_DEC},
-      {ICON_BACK,                    LABEL_BACK},
-    #endif
-  }
-};
-
-void replaceMoveBack(bool replace) {
-  hadMovement = replace;
-  if (replace) {
-    // after home move is next. replace "back" with "move"
-    moveItems.items[7].icon = ICON_HOME;
-    moveItems.items[7].label.index = LABEL_HOME;
-  }
-  else {
-    moveItems.items[7].icon = ICON_BACK;
-    moveItems.items[7].label.index = LABEL_BACK;
-  }
-  menuDrawPage(&moveItems);
 }
 
 void menuMove(void)
@@ -191,8 +190,7 @@ void menuMove(void)
         case KEY_ICON_7: 
           if (hadMovement) {
             replaceMoveBack(false);
-            inhibitHome=true;
-            REPLACE_MENU(menuHome);
+            REPLACE_MENU(menuZero);
           }
           else
             CLOSE_MENU(); 

@@ -49,15 +49,7 @@ void menuHome(void)
     homeItems.items[5].icon = ICON_NULL;
     homeItems.items[5].label.index = LABEL_NULL;
   }
-  if(inhibitHome == true) {
-    homeItems.items[0].icon = ICON_NULL;
-    homeItems.items[0].label.index = LABEL_NULL;
-  }
-  else {
-    homeItems.items[0].icon = ICON_HOME_MOVE;
-    homeItems.items[0].label.index = LABEL_XY;
-  }
-  
+
   menuDrawPage(&homeItems);
   drawXYZ();
 
@@ -79,7 +71,7 @@ void menuHome(void)
         }
         replaceHomeBack(true);
         break;
-      case KEY_ICON_1: setPosition(X_AXIS,0); setPosition(Y_AXIS,0); break;
+      case KEY_ICON_1: setPosition(X_AXIS,0); setPosition(Y_AXIS,0); setPosition(Z_AXIS,0); break;
       case KEY_ICON_2: setPosition(X_AXIS,0); break;
       case KEY_ICON_3: setPosition(Y_AXIS,0); break;
       case KEY_ICON_4: storeCmd("G28 Z\n"); cur2workSetAxis(Z_AXIS,0);   replaceHomeBack(true); break;

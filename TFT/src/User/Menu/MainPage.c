@@ -11,11 +11,11 @@ void menuMain(void) {
     {
       {ICON_HOME,                    LABEL_HOME},
       {ICON_MOVE,                    LABEL_MOVE},
-      {ICON_LASER,                   LABEL_LASER},
+      {ICON_LEVEL_EDGE_DISTANCE,     LABEL_ZERO},
       {ICON_PRINT,                   LABEL_CUT},
       {ICON_SETTINGS,                LABEL_SETTINGS},
       {ICON_DISABLE_STEPPERS,        LABEL_DISABLE_STEPPERS},
-      {ICON_NULL,                    LABEL_NULL},
+      {ICON_LASER,                   LABEL_LASER},
       {ICON_NULL,                    LABEL_NULL},
     }
   };
@@ -43,7 +43,7 @@ void menuMain(void) {
 
       case KEY_ICON_1:  OPEN_MENU(menuMove);     break;
 
-      case KEY_ICON_2:  OPEN_MENU(menuLaser);    break;
+      case KEY_ICON_2:  OPEN_MENU(menuZero);    break;
 
       case KEY_ICON_3:  OPEN_MENU(menuPrint);    break;
 
@@ -51,7 +51,7 @@ void menuMain(void) {
 
       case KEY_ICON_5:  storeCmd("M84\n");       break;
 
-      case KEY_ICON_6:  break;
+      case KEY_ICON_6:  OPEN_MENU(menuLaser);    break;
 
       case KEY_ICON_7:
         if (infoSettings.status_screen == 1)
