@@ -465,9 +465,9 @@
 
 /**
  * System Fan Index
- *   Value range: [min: 1, max: 6]
+ *   Value range: [min: 0, max: 6]
  */
-#define SYS_FAN_INDEX 1 // Defaul: 1
+#define SYS_FAN_INDEX 0 // Default: 0
 
 /**
  * Controller Fan Support

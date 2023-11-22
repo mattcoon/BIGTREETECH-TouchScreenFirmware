@@ -17,7 +17,7 @@
 #endif
 
 const char *const xyzMoveCmd[] = {X_MOVE_GCODE, Y_MOVE_GCODE, Z_MOVE_GCODE};
-static uint8_t item_moveLen_index = 1;
+static uint8_t item_moveLen_index = 0;
 AXIS nowAxis = X_AXIS;
 bool hadMovement = false;
 
@@ -170,9 +170,9 @@ void menuMove(void)
     switch (key_num)
     {
       #ifdef ALTERNATIVE_MOVE_MENU
-        case KEY_ICON_0: storeMoveCmd(Z_AXIS, -amount); break;  // Z move down if no invert
+        case KEY_ICON_0: storeMoveCmd(Z_AXIS, -MAX(10,amount)); break;  // Z move down if no invert
         case KEY_ICON_1: storeMoveCmd(Y_AXIS, amount); break;  // Y move decrease if no invert
-        case KEY_ICON_2: storeMoveCmd(Z_AXIS, amount); break;   // Z move up if no invert
+        case KEY_ICON_2: storeMoveCmd(Z_AXIS, MAX(10,amount)); break;   // Z move up if no invert
 
         case KEY_ICON_3:
           item_moveLen_index = (item_moveLen_index + 1) % ITEM_MOVE_LEN_NUM;
@@ -198,7 +198,7 @@ void menuMove(void)
       #else
         case KEY_ICON_0: storeMoveCmd(X_AXIS, amount); break;   // X move increase if no invert
         case KEY_ICON_1: storeMoveCmd(Y_AXIS, amount); break;   // Y move increase if no invert
-        case KEY_ICON_2: storeMoveCmd(Z_AXIS, amount); break;   // Z move up if no invert
+        case KEY_ICON_2: storeMoveCmd(Z_AXIS, MAX(10,amount)); break;   // Z move up if no invert
 
         case KEY_ICON_3:
           item_moveLen_index = (item_moveLen_index + 1) % ITEM_MOVE_LEN_NUM;
@@ -211,7 +211,7 @@ void menuMove(void)
 
         case KEY_ICON_4: storeMoveCmd(X_AXIS, -amount); break;  // X move decrease if no invert
         case KEY_ICON_5: storeMoveCmd(Y_AXIS, -amount); break;  // Y move decrease if no invert
-        case KEY_ICON_6: storeMoveCmd(Z_AXIS, -amount); break;  // Z move down if no invert
+        case KEY_ICON_6: storeMoveCmd(Z_AXIS, -MAX(10,amount)); break;  // Z move down if no invert
 
         case KEY_ICON_7: CLOSE_MENU(); break;
       #endif
