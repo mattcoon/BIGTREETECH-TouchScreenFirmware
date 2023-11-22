@@ -170,9 +170,9 @@ void menuMove(void)
     switch (key_num)
     {
       #ifdef ALTERNATIVE_MOVE_MENU
-        case KEY_ICON_0: storeMoveCmd(Z_AXIS, -MAX(10,amount)); break;  // Z move down if no invert
+        case KEY_ICON_0: storeMoveCmd(Z_AXIS, -MIN(10,amount)); break;  // Z move down if no invert
         case KEY_ICON_1: storeMoveCmd(Y_AXIS, amount); break;  // Y move decrease if no invert
-        case KEY_ICON_2: storeMoveCmd(Z_AXIS, MAX(10,amount)); break;   // Z move up if no invert
+        case KEY_ICON_2: storeMoveCmd(Z_AXIS, MIN(10,amount)); break;   // Z move up if no invert
 
         case KEY_ICON_3:
           item_moveLen_index = (item_moveLen_index + 1) % ITEM_MOVE_LEN_NUM;
