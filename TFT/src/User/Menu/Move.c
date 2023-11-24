@@ -112,6 +112,32 @@ void updateGantry(void)
   }
 }
 
+#define LASEROFFTIME  250
+#define LASERONTIME  2000
+#define LASERONSPD      2
+
+static bool laserState = false;
+static uint32_t laserUpdate = 250; // 250 mS off
+void laserTest(void)
+{
+  
+  if (nextScreenUpdate(laserUpdate))
+  {
+    if( laserState )
+    { // was on, turn off
+      laserState = false;
+      laserUpdate = LASEROFFTIME;
+      laserSetSpeed(0);
+    }
+    else
+    { // was off, turn on
+      laserState = true;
+      laserUpdate = LASERONTIME;
+      laserSetSpeed(LASERONSPD);
+    }
+  }
+}
+
 void menuMove(void)
 {
 
@@ -187,7 +213,9 @@ void menuMove(void)
         case KEY_ICON_5: storeMoveCmd(Y_AXIS, -amount); break;   // Y move increase if no invert
         case KEY_ICON_6: storeMoveCmd(X_AXIS, amount); break;   // X move increase if no invert
 
-        case KEY_ICON_7: 
+        case KEY_ICON_7:
+          laserSetSpeed(0);
+          laserState = false;
           if (hadMovement) {
             replaceMoveBack(false);
             REPLACE_MENU(menuZero);
@@ -228,6 +256,7 @@ void menuMove(void)
           break;
     }
 
+    laserTest();
     loopProcess();
     updateGantry();
   }
