@@ -216,6 +216,7 @@ void menuMove(void)
         case KEY_ICON_7:
           laserSetSpeed(0);
           laserState = false;
+          mustStoreCmd("M5\n");
           if (hadMovement) {
             replaceMoveBack(false);
             REPLACE_MENU(menuZero);
