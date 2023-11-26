@@ -117,7 +117,7 @@ void updateGantry(void)
 #define LASERONSPD      2
 
 static bool laserState = false;
-static uint32_t laserUpdate = 250; // 250 mS off
+static uint32_t laserUpdate = LASEROFFTIME; // 250 mS off
 void laserTest(void)
 {
   
@@ -144,6 +144,9 @@ void menuMove(void)
   KEY_VALUES key_num = KEY_IDLE;
 
   float amount = moveLenSteps[item_moveLen_index];
+
+  laserState = false;
+  laserUpdate = LASEROFFTIME; // 250 mS off
 
   mustStoreCmd("G91\n");
   mustStoreCmd("M114\n");
@@ -216,7 +219,6 @@ void menuMove(void)
         case KEY_ICON_7:
           laserSetSpeed(0);
           laserState = false;
-          mustStoreCmd("M5\n");
           if (hadMovement) {
             replaceMoveBack(false);
             REPLACE_MENU(menuZero);
@@ -257,7 +259,8 @@ void menuMove(void)
           break;
     }
 
-    laserTest();
+    if (infoSettings.laser_mode == 1)
+      laserTest();
     loopProcess();
     updateGantry();
   }

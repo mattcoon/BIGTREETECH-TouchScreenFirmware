@@ -601,10 +601,10 @@ void sendQueueCmd(void)
         case 3: // M3
         case 4: // M4
           if (cmd_seen('S'))
-            laserSetSpeed(cmd_value());
+            laserSetCurSpeed(cmd_value());
           break;
         case 5: // M5
-            laserSetSpeed(cmd_value());
+            laserSetCurSpeed(0);
           break;
         case 18:  // M18 disable steppers
         case 84:  // M84 disable steppers
@@ -1376,7 +1376,7 @@ void sendQueueCmd(void)
               coordinateSetAxisTarget(i, cmd_float());
           }
           if (cmd_seen('S'))
-            laserSetSpeed(cmd_value());
+            laserSetCurSpeed(cmd_value());
           if (cmd_seen('F'))
             coordinateSetFeedRate(cmd_value());
           break;

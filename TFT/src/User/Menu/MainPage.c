@@ -30,6 +30,16 @@ void menuMain(void) {
     mainPageItems.items[7].icon = ICON_BACK;
     mainPageItems.items[7].label.index = LABEL_BACK;
   }
+  if (infoSettings.laser_mode == 1)
+  {
+    mainPageItems.items[6].icon = ICON_LASER;
+    mainPageItems.items[6].label.index = LABEL_LASER;
+  }
+  else
+  {
+    mainPageItems.items[6].icon = ICON_NULL;
+    mainPageItems.items[6].label.index = LABEL_NULL;
+  }
 
   menuDrawPage(&mainPageItems);
   drawXYZ();
@@ -51,8 +61,10 @@ void menuMain(void) {
 
       case KEY_ICON_5:  storeCmd("M84\n");       break;
 
-      case KEY_ICON_6:  OPEN_MENU(menuLaser);    break;
-
+      case KEY_ICON_6:  
+        if (infoSettings.laser_mode == 1)
+          OPEN_MENU(menuLaser);    
+        break;
       case KEY_ICON_7:
         if (infoSettings.status_screen == 1)
           CLOSE_MENU();

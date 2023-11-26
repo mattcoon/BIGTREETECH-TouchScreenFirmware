@@ -26,7 +26,17 @@ void menuZero(void)
     zeroItems.items[5].icon = ICON_NULL;
     zeroItems.items[5].label.index = LABEL_NULL;
   }
-  
+  if (infoSettings.laser_mode != 1)
+  {
+    zeroItems.items[4].icon = ICON_NULL;
+    zeroItems.items[4].label.index = LABEL_NULL;
+  }
+  else
+  {
+    zeroItems.items[4].icon = ICON_SPINDLE;
+    zeroItems.items[4].label.index = LABEL_PROBE_OFFSET;    
+  }
+ 
   menuDrawPage(&zeroItems);
   drawXYZ();
 
@@ -46,9 +56,13 @@ void menuZero(void)
       case KEY_ICON_2: setPosition(X_AXIS,0); break;
       case KEY_ICON_3: setPosition(Y_AXIS,0); break;
       case KEY_ICON_4: 
-        setPosition(X_AXIS,infoParameters.ProbeOffset[X_AXIS]); 
-        setPosition(Y_AXIS,infoParameters.ProbeOffset[Y_AXIS]); 
-        mustStoreCmd("M5\n");
+        if (infoSettings.laser_mode == 1)
+        {
+          setPosition(X_AXIS,infoParameters.ProbeOffset[X_AXIS]); 
+          setPosition(Y_AXIS,infoParameters.ProbeOffset[Y_AXIS]); 
+          laserSetSpeed(0);
+        }
+        break;
       case KEY_ICON_5: 
         if(infoSettings.touchplate_on == 1)
         {
