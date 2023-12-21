@@ -177,9 +177,11 @@ bool isRootFolder(void)
 // check if filename provides a supported filename extension
 char * isSupportedFile(const char * filename)
 {
+  if (filename[0] == '.') // file is hidden
+    return NULL;
   char * extPos = strrchr(filename, '.');  // check last "." in the name where extension is supposed to start
 
-  return (extPos != NULL && (extPos[1] == 'g' || extPos[1] == 'G')) ? extPos : NULL;
+  return (extPos != NULL && (extPos[1] == 'g' || extPos[1] == 'G' || extPos[1] == 'n' || extPos[1] == 'N')) ? extPos : NULL;
 }
 
 // add a file name or folder name to file list
