@@ -217,7 +217,7 @@ void menuMove(void)
         case KEY_ICON_6: storeMoveCmd(X_AXIS, amount); break;   // X move increase if no invert
 
         case KEY_ICON_7:
-          laserSetSpeed(0);
+          laserReset();
           laserState = false;
           if (hadMovement) {
             replaceMoveBack(false);

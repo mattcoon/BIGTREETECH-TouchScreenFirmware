@@ -11,6 +11,7 @@ extern "C" {
 
 extern const char* laserCmd;
 
+void laserReset(void);
 void laserResetSpeed(void);
 void laserSetSpeed(const uint8_t speed);
 uint8_t laserGetSetSpeed(void);

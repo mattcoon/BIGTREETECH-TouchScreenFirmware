@@ -51,7 +51,11 @@ void menuMain(void) {
     {
       case KEY_ICON_0:  OPEN_MENU(menuHome);     break;
 
-      case KEY_ICON_1:  OPEN_MENU(menuMove);     break;
+      case KEY_ICON_1:  
+        if (infoSettings.laser_mode == 1)
+          laserReset();
+        OPEN_MENU(menuMove);
+        break;
 
       case KEY_ICON_2:  OPEN_MENU(menuZero);    break;
 
@@ -63,8 +67,10 @@ void menuMain(void) {
 
       case KEY_ICON_6:  
         if (infoSettings.laser_mode == 1)
+          laserReset();
           OPEN_MENU(menuLaser);    
         break;
+        
       case KEY_ICON_7:
         if (infoSettings.status_screen == 1)
           CLOSE_MENU();

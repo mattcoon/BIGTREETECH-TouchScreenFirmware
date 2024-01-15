@@ -95,12 +95,12 @@ void menuLaser(void)
         break;
 
       case KEY_ICON_6:
-        laserSetSpeed(0);  // stop fan
+        laserReset();
         break;
 
       case KEY_ICON_7:
         // stop laser before exit of fan menu
-        laserSetSpeed(0);
+        laserReset();
         CLOSE_MENU();
         break;
 

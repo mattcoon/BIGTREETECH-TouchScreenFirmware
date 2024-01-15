@@ -438,7 +438,8 @@ void menuPrinting(void)
   {
     // turn off fan if print complete or canceled
     fanSetSpeed(FAN_TYPE_F, 0);
-    laserSetSpeed(0);
+    laserReset();
+
     // Main Screen
     printingItems.items[KEY_ICON_4].icon = ICON_MAINMENU;
     printingItems.items[KEY_ICON_4].label.index = LABEL_MAIN_SCREEN;

@@ -27,6 +27,12 @@ void laserSetSpeed(const uint8_t speed)
   }
 }
 
+void laserReset()
+{
+        laserSetSpeed(0);
+        storeCmd("M5I\n"); // reset laser mode
+}
+
 uint8_t laserGetSetSpeed(void)
 {
   return setLaserSpeed;
