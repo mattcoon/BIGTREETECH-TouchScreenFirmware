@@ -31,7 +31,6 @@ void initSettings(void)
                                          (EVENT_LED << INDEX_EVENT_LED) |
                                          (FILE_COMMENT_PARSING << INDEX_FILE_COMMENT_PARSING));
 
-
 // UI Settings
   infoSettings.laser_mode             = LASER_MODE;
   infoSettings.touchplate_on          = TOUCHPLATE_ON;
@@ -106,7 +105,7 @@ void initSettings(void)
 
   infoSettings.probing_z_offset       = PROBING_Z_OFFSET;
   infoSettings.probing_z_raise        = PROBING_Z_RAISE;
-  infoSettings.z_steppers_alignment   = Z_STEPPER_ALIGNEMENT;
+  infoSettings.z_steppers_alignment   = Z_STEPPERS_ALIGNMENT;
   infoSettings.touchmi_sensor         = TOUCHMI_SENSOR;
 
 // Power Supply Settings (only if connected to TFT controller)

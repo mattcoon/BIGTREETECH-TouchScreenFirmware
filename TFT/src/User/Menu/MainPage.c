@@ -1,9 +1,9 @@
 #include "MainPage.h"
 #include "includes.h"
 
-
-void menuMain(void) {
-  //1 title, ITEM_PER_PAGE items(icon+label)
+void menuMain(void)
+{
+  // 1 title, ITEM_PER_PAGE items (icon + label)
   MENUITEMS mainPageItems = {
     // title
     LABEL_MAINMENU,
@@ -19,9 +19,6 @@ void menuMain(void) {
       {ICON_NULL,                    LABEL_NULL},
     }
   };
-
-  // mainPageItems.items[3].icon = (infoSettings.laser_mode == 1) ? ICON_LASER : ICON_NULL;
-  // mainPageItems.items[3].label.index = (infoSettings.laser_mode == 1) ? LABEL_LASER : LABEL_NULL;
 
   KEY_VALUES key_num = KEY_IDLE;
 

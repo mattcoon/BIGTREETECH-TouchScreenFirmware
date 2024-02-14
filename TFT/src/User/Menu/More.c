@@ -9,9 +9,6 @@ const MENUITEMS moreItems = {
     {ICON_NULL,                    LABEL_NULL},
     {ICON_NULL,                    LABEL_NULL},
     {ICON_NULL,                    LABEL_NULL},
-    // {ICON_HEAT,                    LABEL_HEAT},
-    // {ICON_FAN,                     LABEL_FAN},
-    // {ICON_EXTRUDE,                 LABEL_EXTRUDE},
     {ICON_PERCENTAGE,              LABEL_PERCENTAGE},
     {ICON_FEATURE_SETTINGS,        LABEL_FEATURE_SETTINGS},
     {ICON_MACHINE_SETTINGS,        LABEL_MACHINE_SETTINGS},
@@ -48,22 +45,15 @@ void menuMore(void)
     switch (key_num)
     {
       case KEY_ICON_0:
-        // OPEN_MENU(menuHeat);
+
         break;
 
       case KEY_ICON_1:
-        // OPEN_MENU(menuFan);
+
         break;
 
       case KEY_ICON_2:
-        // if (isPrinting() && !isPaused())  // need paused before extrude
-        // {
-        //   popupDialog(DIALOG_TYPE_ALERT, LABEL_WARNING, LABEL_IS_PAUSE, LABEL_CONFIRM, LABEL_CANCEL, isPauseExtrude, NULL, NULL);
-        // }
-        // else
-        // {
-        //   OPEN_MENU(menuExtrude);
-        // }
+
         break;
 
       case KEY_ICON_3:

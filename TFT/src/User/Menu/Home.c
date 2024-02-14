@@ -53,11 +53,10 @@ void menuHome(void)
   menuDrawPage(&homeItems);
   drawXYZ();
 
-
   while (MENU_IS(menuHome))
   {
     key_num = menuKeyGetValue();
-    switch(key_num)
+    switch (key_num)
     {
       case KEY_ICON_0:
         if(inhibitHome == false) {

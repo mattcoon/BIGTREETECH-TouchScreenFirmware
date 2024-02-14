@@ -1,7 +1,7 @@
 #ifndef _CONFIGURATION_H_
 #define _CONFIGURATION_H_
 
-#define CONFIG_VERSION 20231021
+#define CONFIG_VERSION 20231119
 
 //====================================================================================================
 //=============================== Settings Configurable On config.ini ================================
@@ -30,10 +30,10 @@
  *                P2: WIFI    (e.g. ESP3D)
  *                P3: UART 3  (e.g. OctoPrint)
  *                P4: UART 4
- *   Value range: P1: [min: 1, max: 9]
- *                P2: [min: 0, max: 9]
- *                P3: [min: 0, max: 9]
- *                P4: [min: 0, max: 9]
+ *   Value range: P1: [min: 1, max: 11]
+ *                P2: [min: 0, max: 11]
+ *                P3: [min: 0, max: 11]
+ *                P4: [min: 0, max: 11]
  *   Options: [OFF (port disabled): 0, 2400: 1, 9600: 2, 19200: 3, 38400: 4, 57600: 5, 115200: 6, 230400: 7, 250000: 8, 500000: 9, 921600: 10, 1000000: 11]
  */
 #define SP_1 8  // Default: 7
@@ -714,15 +714,15 @@
  * is moved to the XY probing point.
  * If disabled, after homing the nozzle is moved directly to the XY homing point. This is useful
  * in case Marlin firmware is configured to use the probe for Z axis homing (e.g.
- * USE_PROBE_FOR_Z_HOMING enabled in Marlin firmware) to avoid a second probing after homing.
+ * "USE_PROBE_FOR_Z_HOMING" enabled in Marlin firmware) to avoid a second probing after homing.
  *
  * NOTES:
  *   - Enable it in case Marlin firmware is not configured to use the probe for Z axis homing
- *     (e.g. USE_PROBE_FOR_Z_HOMING disabled in Marlin firmware) or the XY probing point set
+ *     (e.g. "USE_PROBE_FOR_Z_HOMING" disabled in Marlin firmware) or the XY probing point set
  *     for homing is not reachable by the nozzle (e.g. due to HW limitations/constraints or
  *     printer specific configuration).
  *   - Disable it (preferably) in case Marlin firmware is configured to use the probe for Z axis
- *     homing (e.g. USE_PROBE_FOR_Z_HOMING enabled in Marlin firmware).
+ *     homing (e.g. "USE_PROBE_FOR_Z_HOMING" enabled in Marlin firmware).
  *
  *   Options: [disable: 0, enable: 1]
  */
@@ -752,7 +752,7 @@
  *
  *   Options: [disable: 0, enable: 1]
  */
-#define Z_STEPPER_ALIGNEMENT 0  // Default: 0
+#define Z_STEPPERS_ALIGNMENT 0  // Default: 0
 
 /**
  * TouchMI Settings (ABL)

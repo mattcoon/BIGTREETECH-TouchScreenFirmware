@@ -15,13 +15,17 @@ void menuUnifiedMove(void)
     LABEL_UNIFIEDMOVE,
     // icon                          label
     {
+      {ICON_HOME,                    LABEL_HOME},
       {ICON_MOVE,                    LABEL_MOVE},
-      {ICON_NULL,                    LABEL_NULL},
-      {ICON_NULL,                    LABEL_NULL},
+      {ICON_EXTRUDE,                 LABEL_EXTRUDE},
       {ICON_DISABLE_STEPPERS,        LABEL_DISABLE_STEPPERS},
       {ICON_BABYSTEP,                LABEL_BABYSTEP},
-      {ICON_HOME_MOVE,               LABEL_SET_POSITION},
-      {ICON_PROBE_OFFSET,            LABEL_TOUCHPLATE},
+      #if DELTA_PROBE_TYPE == 0  // if not Delta printer
+        {ICON_MANUAL_LEVEL,            LABEL_LEVELING},
+      #else
+        {ICON_DELTA_CALIBRATE,         LABEL_CALIBRATION},
+      #endif
+      {ICON_NULL,                    LABEL_NULL},
       {ICON_BACK,                    LABEL_BACK},
     }
   };
@@ -35,7 +39,6 @@ void menuUnifiedMove(void)
   }
 
   menuDrawPage(&UnifiedMoveItems);
-  drawXYZ();
 
   while (MENU_IS(menuUnifiedMove))
   {
@@ -43,15 +46,15 @@ void menuUnifiedMove(void)
     switch (key_num)
     {
       case KEY_ICON_0:
-        OPEN_MENU(menuMove);
+        OPEN_MENU(menuHome);
         break;
 
       case KEY_ICON_1:
-        // OPEN_MENU(menuHome);
+        OPEN_MENU(menuMove);
         break;
 
       case KEY_ICON_2:
-        // OPEN_MENU(menuExtrude);
+        OPEN_MENU(menuExtrude);
         break;
 
       case KEY_ICON_3:
@@ -63,11 +66,25 @@ void menuUnifiedMove(void)
         break;
 
       case KEY_ICON_5:
-        storeCmd("G92 X0 Y0 Z0.5\n");
+        #if DELTA_PROBE_TYPE == 0  // if not Delta printer
+          OPEN_MENU(menuManualLeveling);
+        #else
+          #if DELTA_PROBE_TYPE != 2  // if not removable probe
+            deltaCalibration();
+          #else  // if removable probe
+            popupDialog(DIALOG_TYPE_ALERT, LABEL_WARNING, LABEL_CONNECT_PROBE, LABEL_CONTINUE, LABEL_CANCEL, deltaCalibration, NULL, NULL);
+          #endif
+        #endif
         break;
 
       case KEY_ICON_6:
-        storeCmd("G38.3 Z-10\n");
+        if (infoMachineSettings.leveling != BL_DISABLED)
+        {
+          if (infoMachineSettings.firmwareType == FW_MARLIN)
+            storeCmd("M420\n");  // refresh ABL_STATE
+
+          OPEN_MENU(menuBedLeveling);
+        }
         break;
 
       case KEY_ICON_7:
@@ -79,6 +96,5 @@ void menuUnifiedMove(void)
     }
 
     loopProcess();
-    updateGantry();
   }
 }

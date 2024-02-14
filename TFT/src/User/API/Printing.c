@@ -81,13 +81,7 @@ void abortAndTerminate(void)
 
   if (infoMachineSettings.firmwareType != FW_REPRAPFW)
   {
-    // clear the command queue and send the M524 gcode immediately if there is an already pending gcode waiting for an ACK message.
-    // Otherwise, store the gcode on command queue to send it waiting for its related ACK message
-    //
-    if (isPendingCmd())
-      sendEmergencyCmd("M524\n");
-    else
-      mustStoreCmd("M524\n");
+    sendEmergencyCmd("M524\n");
   }
   else  // if RepRap
   {
@@ -98,9 +92,9 @@ void abortAndTerminate(void)
   }
 }
 
-void loopBreakToCondition(CONDITION_CALLBACK condCallback)
+void waitForAbort(void)
 {
-  // M108 is sent to Marlin because consecutive blocking operations such as heating bed, extruder may defer processing of other gcodes.
+  // M108 is sent to Marlin because consecutive blocking operations such as heating bed/extruder may defer processing of other gcodes.
   // If there's any ongoing blocking command, "M108" will take that out from the closed loop and a response will be received
   // from that command. Than another "M108" will be sent to unlock a next possible blocking command.
   // This way enough "M108" will be sent to unlock all possible blocking command(s) (ongoing or enqueued) but not too much and
@@ -109,7 +103,7 @@ void loopBreakToCondition(CONDITION_CALLBACK condCallback)
   uint16_t rIndex_old = -1;  // out of band value -1 will guarantee the beginning of M108 transmission loop
   uint16_t rIndex;
 
-  TASK_LOOP_WHILE(condCallback(),
+  TASK_LOOP_WHILE(!infoPrinting.aborted,
                   if ((rIndex = Serial_GetReadingIndexRX(SERIAL_PORT)) != rIndex_old)
                   {
                     sendEmergencyCmd("M108\n");
@@ -138,11 +132,10 @@ void updatePrintTime(void)
   {
     infoPrinting.elapsedTime++;
 
-      if (infoPrinting.remainingTime > 0 && !heatHasWaiting())
-        infoPrinting.remainingTime--;
-    }
+    if (infoPrinting.remainingTime > 0 && !heatHasWaiting())
+      infoPrinting.remainingTime--;
   }
-
+}
 
 uint32_t getPrintTime(void)
 {
@@ -575,8 +568,6 @@ void abortPrint(void)
   {
     case FS_TFT_SD:
     case FS_TFT_USB:
-      loopBreakToCondition(&isPendingCmd);  // break a pending gcode waiting for an ACK message, if any
-      setPrintAbort();                      // finalize the print abort
       break;
 
     case FS_ONBOARD_MEDIA:
@@ -584,36 +575,30 @@ void abortPrint(void)
       popupSplash(DIALOG_TYPE_INFO, LABEL_SCREEN_INFO, LABEL_BUSY);
       loopPopup();  // trigger the immediate draw of the above popup
 
-      // clear the command queue and send the M524 gcode immediately if there is an already pending gcode waiting for an ACK message.
-      // Otherwise, store the gcode on command queue to send it waiting for its related ACK message.
-      // Furthermore, forward the print cancel action to all hosts (also TFT) to notify the print cancelation
-      //
-      // NOTE: the print cancel action received by the TFT always guarantees the invokation of setPrintAbort() in parseAck.c
-      //       to finalize the print (e.g. stats) in case the ACK messages "Not SD printing" and/or "//action:cancel"
-      //       are not received from Marlin
-      //
-      abortAndTerminate();
-      mustStoreCmd("M118 P0 A1 action:cancel\n");
-
-      // loop on break until infoHost.status is set to "HOST_STATUS_IDLE" by setPrintAbort() in parseAck.c
-      loopBreakToCondition(&isPrintingFromOnboard);
+      abortAndTerminate();  // send a print abort command before calling the following waitForAbort() function
       break;
 
     case FS_REMOTE_HOST:
-      loopBreakToCondition(&isPendingCmd);  // break a pending gcode waiting for an ACK message, if any
-
-      // forward a print cancel notification to all hosts (so also the one handling the print) asking to cancel the print
+      // - forward a print cancel notification to all hosts (so also the one handling the print) asking to cancel the print
+      // - the host handling the print should respond to this notification with "M118 P0 A1 action:cancel" that will
+      //   trigger setPrintAbort() in parseACK() once the following loop does its job (stopping all blocking operations)
+      //
       mustStoreCmd("M118 P0 A1 action:notification remote cancel\n");
+      waitForAbort();
 
       loopDetected = false;  // finally, remove lock and exit
       return;
   }
 
+  // - forward a print cancel action to all hosts (also TFT) to notify the print cancelation
+  // - the print cancel action received by the TFT always guarantees the invokation of setPrintAbort() in parseAck.c
+  //   (e.g. to finalize the print (e.g. stats) in case the ACK messages "Not SD printing" and/or "//action:cancel"
+  //   are not received from Marlin) once the following loop does its job (stopping all blocking operations)
+  //
+  mustStoreCmd("M118 P0 A1 action:cancel\n");
+  waitForAbort();
+
   // execute post print cancel tasks
-
-  // Always turn off the spindle.
-  mustStoreCmd("M05\n");
-
   if (GET_BIT(infoSettings.send_gcodes, SEND_GCODES_CANCEL_PRINT))
     sendPrintCodes(2);
 
@@ -636,7 +621,7 @@ bool pausePrint(bool isPause, PAUSE_TYPE pauseType)
   {
     case FS_TFT_SD:
     case FS_TFT_USB:
-      if (isPause == true && ((pauseType != PAUSE_NORMAL) && (pauseType != PAUSE_EXTERNAL)))
+      if (isPause == true && pauseType == PAUSE_M0)
         TASK_LOOP_WHILE(isNotEmptyCmdQueue());  // wait for the communication to be clean
 
       static COORDINATE tmp;
@@ -645,43 +630,32 @@ bool pausePrint(bool isPause, PAUSE_TYPE pauseType)
 
       if (isPause)  // pause
       {
-        switch(pauseType) {
-          case PAUSE_M0:
-            popupReminder(DIALOG_TYPE_ALERT, LABEL_PAUSE, LABEL_PAUSE);
-            break;
-          case PAUSE_ATTACH_PROBE:
-            popupReminder(DIALOG_TYPE_ALERT, LABEL_PAUSE, LABEL_ATTACH_PROBE);
-            break;
-          case PAUSE_DETTACH_PROBE:
-            popupReminder(DIALOG_TYPE_ALERT, LABEL_PAUSE, LABEL_DETTACH_PROBE);
-            break;
-          case PAUSE_TOOL_ONOFF:
-            popupReminder(DIALOG_TYPE_ALERT, LABEL_PAUSE, LABEL_TOOL_ONOFF);
-            break;
-          case PAUSE_NORMAL:  // send command only for pause originated from TFT
-            coordinateGetAll(&tmp);
+        if (pauseType == PAUSE_M0)
+        {
+          popupReminder(DIALOG_TYPE_ALERT, LABEL_PAUSE, LABEL_PAUSE);
+        }
+        else if (pauseType == PAUSE_NORMAL)  // send command only for pause originated from TFT
+        {
+          coordinateGetAll(&tmp);
 
-            if (isCoorRelative == true)    mustStoreCmd("G90\n");
-            if (isExtrudeRelative == true) mustStoreCmd("M82\n");
+          if (isCoorRelative == true)    mustStoreCmd("G90\n");
+          if (isExtrudeRelative == true) mustStoreCmd("M82\n");
 
-            if (heatGetCurrentTemp(heatGetCurrentHotend()) > infoSettings.min_ext_temp)
-            {
-              mustStoreCmd("G1 E%.5f F%d\n", tmp.axis[E_AXIS] - infoSettings.pause_retract_len,
-                          infoSettings.pause_feedrate[FEEDRATE_E]);
-            }
+          if (heatGetCurrentTemp(heatGetCurrentHotend()) > infoSettings.min_ext_temp)
+          {
+            mustStoreCmd("G1 E%.5f F%d\n", tmp.axis[E_AXIS] - infoSettings.pause_retract_len,
+                         infoSettings.pause_feedrate[FEEDRATE_E]);
+          }
 
-            if (coordinateIsKnown())
-            {
-              mustStoreCmd("G1 Z%.3f F%d\n", tmp.axis[Z_AXIS] + infoSettings.pause_z_raise, infoSettings.pause_feedrate[FEEDRATE_Z]);
-              mustStoreCmd("G1 X%.3f Y%.3f F%d\n", infoSettings.pause_pos[X_AXIS], infoSettings.pause_pos[Y_AXIS],
-                          infoSettings.pause_feedrate[FEEDRATE_XY]);
-            }
+          if (coordinateIsKnown())
+          {
+            mustStoreCmd("G1 Z%.3f F%d\n", tmp.axis[Z_AXIS] + infoSettings.pause_z_raise, infoSettings.pause_feedrate[FEEDRATE_Z]);
+            mustStoreCmd("G1 X%.3f Y%.3f F%d\n", infoSettings.pause_pos[X_AXIS], infoSettings.pause_pos[Y_AXIS],
+                         infoSettings.pause_feedrate[FEEDRATE_XY]);
+          }
 
-            if (isCoorRelative == true)    mustStoreCmd("G91\n");
-            if (isExtrudeRelative == true) mustStoreCmd("M83\n");
-            break;
-          default:
-            break;
+          if (isCoorRelative == true)    mustStoreCmd("G91\n");
+          if (isExtrudeRelative == true) mustStoreCmd("M83\n");
         }
 
         // store pause type only on pause
@@ -844,7 +818,6 @@ void loopPrintFromTFT(void)
 
   CMD      gcode;
   uint8_t  gcode_count = 0;
-  uint8_t  comment_count = 0;
   char     read_char = '\0';
   UINT     br = 0;
   FIL *    ip_file = &infoPrinting.file;
@@ -889,6 +862,7 @@ void loopPrintFromTFT(void)
     // if file comment parsing is enabled and a comment tag was previously intercepted parsing the gcode, enable comment parsing
     bool comment_parsing = (GET_BIT(infoSettings.general_settings, INDEX_FILE_COMMENT_PARSING) == 1 &&
                             read_char == ';') ? true : false;
+    uint8_t comment_count = 0;
 
     for ( ; ip_cur < ip_size; ip_cur++)  // continue to parse the line (e.g. comment) until command end flag
     {

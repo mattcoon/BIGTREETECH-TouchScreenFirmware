@@ -3,8 +3,16 @@
 
 #define STR_PATH_JOIN                         "%s/%s"
 #define GET_FULL_PATH(buf, rootDir, filepath) sprintf(buf, STR_PATH_JOIN, rootDir, filepath)
+#define PADDING                               10
 
-#define PADDING 10
+typedef enum
+{
+  BMP_SUCCESS,
+  BMP_NOTFOUND,
+  BMP_NOT24BIT,
+  BMP_INVALIDFILE
+} BMPUPDATE_STAT;
+
 const GUI_RECT labelUpdateRect = {0,     BYTE_HEIGHT + PADDING,                 LCD_WIDTH, (BYTE_HEIGHT*2) + PADDING};
 const GUI_RECT iconUpdateRect  = {0, (BYTE_HEIGHT*2) + PADDING*2,               LCD_WIDTH, (BYTE_HEIGHT*2) + PADDING*3 + ICON_HEIGHT};
 const GUI_RECT statUpdateRect  = {0, (BYTE_HEIGHT*3) + PADDING*3 + ICON_HEIGHT, LCD_WIDTH, (BYTE_HEIGHT*4) + PADDING*3 + ICON_HEIGHT};
@@ -24,23 +32,14 @@ const char * fontPathList[] = {
   FONT_UPDATE_DIR "/" FILE_8X16_ASCII_FONT
 };
 
-GUI_POINT bmp_size;
-
-// This List is Auto-Generated. Please add new icons in icon_list.inc only
+// this list is Auto-Generated. Please add new icons in icon_list.inc only
 const char * const iconBmpName[] = {
   #define X_ICON(NAME) #NAME ,
     #include "icon_list.inc"
   #undef X_ICON
-  // add new icons in icon_list.inc only
 };
 
-// This List is Auto-Generated. Please add new icons in small_icon_list.inc only
-const char * const smallIconBmpName[] = {
-  #define X_SMALLICON(NAME) #NAME ,
-    #include "small_icon_list.inc"
-  #undef X_SMALLICON
-  // add new icons in small_icon_list.inc only
-};
+GUI_POINT bmpSize;
 
 BMPUPDATE_STAT bmpDecode(char * bmp, uint32_t addr)
 {
@@ -51,7 +50,7 @@ BMPUPDATE_STAT bmpDecode(char * bmp, uint32_t addr)
   short bpp;
   int offset;
   uint8_t buf[256];
-  uint8_t lcdcolor[4];
+  uint8_t lcdColor[4];
   uint16_t bnum = 0;
   UINT mybr;
   GUI_COLOR pix;
@@ -64,6 +63,7 @@ BMPUPDATE_STAT bmpDecode(char * bmp, uint32_t addr)
   if (memcmp(magic, "BM", 2))
   {
     f_close(&bmpFile);
+
     return BMP_INVALIDFILE;
   }
 
@@ -78,11 +78,12 @@ BMPUPDATE_STAT bmpDecode(char * bmp, uint32_t addr)
   if (bpp < 24)
   {
     f_close(&bmpFile);
+
     return BMP_NOT24BIT;
   }
 
-  bmp_size.x = w;
-  bmp_size.y = h;
+  bmpSize.x = w;
+  bmpSize.y = h;
   bpp >>= 3;
   bytePerLine = w * bpp;
 
@@ -94,8 +95,8 @@ BMPUPDATE_STAT bmpDecode(char * bmp, uint32_t addr)
     W25Qxx_EraseSector(addr + bnum * W25QXX_SECTOR_SIZE);
   }
 
-  bnum = 0;
   // store size of BMP
+  bnum = 0;
   memcpy(buf, (uint8_t *)&w, sizeof(uint16_t));
   bnum += sizeof(uint16_t);
   memcpy(buf + bnum, (uint8_t *)&h, sizeof(uint16_t));
@@ -107,11 +108,11 @@ BMPUPDATE_STAT bmpDecode(char * bmp, uint32_t addr)
 
     for (int i = 0; i < w; i++)
     {
-      f_read(&bmpFile, (char *)&lcdcolor, bpp, &mybr);
+      f_read(&bmpFile, (char *)&lcdColor, bpp, &mybr);
 
-      pix.RGB.r = lcdcolor[2] >> 3;
-      pix.RGB.g = lcdcolor[1] >> 2;
-      pix.RGB.b = lcdcolor[0] >> 3;
+      pix.RGB.r = lcdColor[2] >> 3;
+      pix.RGB.g = lcdColor[1] >> 2;
+      pix.RGB.b = lcdColor[0] >> 3;
 
       // GUI_DrawPixel(iconUpdateRect.x0 + i,iconUpdateRect.y0 + j,pix.color);
 
@@ -127,18 +128,50 @@ BMPUPDATE_STAT bmpDecode(char * bmp, uint32_t addr)
     }
   }
 
-  W25Qxx_WritePage(buf,addr,bnum);
-  addr+=bnum;
+  W25Qxx_WritePage(buf, addr, bnum);
+  addr += bnum;
   f_close(&bmpFile);
+
   return BMP_SUCCESS;
+}
+
+void dispIconFail(uint8_t * lbl, BMPUPDATE_STAT bmpState)
+{
+  char * statTxt;
+  char errorTxt[30];
+
+  GUI_SetColor(infoSettings.reminder_color);
+  GUI_ClearPrect(&labelFailedRect);
+  GUI_DispString(labelFailedRect.x0, labelFailedRect.y0, lbl);
+
+  switch (bmpState)
+  {
+    case BMP_INVALIDFILE:
+      statTxt = "BMP file not valid ";
+      break;
+
+    case BMP_NOT24BIT:
+      statTxt = "Format is not 24Bit";
+      break;
+
+    case BMP_NOTFOUND:
+    default:
+      statTxt = "BMP file not found ";
+      break;
+  }
+
+  sprintf(errorTxt, "Error: %s", statTxt);
+  GUI_DispString(labelFailedRect.x0, labelFailedRect.y0 + BYTE_HEIGHT + 2, (uint8_t *)errorTxt);
+  GUI_RestoreColorDefault();
+  Delay_ms(1000);  // give some time to the user to read failed icon name.
 }
 
 static inline bool updateIcon(char * rootDir)
 {
   uint16_t found = 0;
-  uint16_t notfound = 0;
+  uint16_t notFound = 0;
   char curBmpPath[64];
-  char tempstr[50];
+  char tempStr[50];
   BMPUPDATE_STAT bmpState;
 
   GUI_Clear(infoSettings.bg_color);
@@ -155,7 +188,7 @@ static inline bool updateIcon(char * rootDir)
   }
   else
   {
-    notfound++;
+    notFound++;
     dispIconFail((uint8_t *)(curBmpPath), bmpState);
   }
 
@@ -164,28 +197,29 @@ static inline bool updateIcon(char * rootDir)
 
   for (int i = 0; i < COUNT(iconBmpName); i++)
   {
-    GUI_POINT last_size = bmp_size;
-    sprintf(curBmpPath, "%s" BMP_UPDATE_DIR "/%s.bmp", rootDir, iconBmpName[i]);
-    GUI_ClearPrect(&labelUpdateRect);
-    GUI_DispString(labelUpdateRect.x0, labelUpdateRect.y0, (uint8_t *)curBmpPath);
+    GUI_POINT lastSize = bmpSize;
 
+    sprintf(curBmpPath, "%s%s/%s.bmp", rootDir, BMP_UPDATE_DIR, iconBmpName[i]);
     bmpState = bmpDecode(curBmpPath, ICON_ADDR(i));
 
+    GUI_ClearPrect(&labelUpdateRect);
+    GUI_DispString(labelUpdateRect.x0, labelUpdateRect.y0, (uint8_t *)curBmpPath);
+    GUI_ClearRect(iconUpdateRect.x0, iconUpdateRect.y0, iconUpdateRect.x0 + lastSize.x, iconUpdateRect.y0 + lastSize.y);
+
     if (bmpState == BMP_SUCCESS)
-    {  // display bmp update success
+    { // display bmp update success
       found++;
-      GUI_ClearRect(iconUpdateRect.x0, iconUpdateRect.y0, iconUpdateRect.x0 + last_size.x, iconUpdateRect.y0 + last_size.y);
       IMAGE_ReadDisplay(iconUpdateRect.x0, iconUpdateRect.y0, ICON_ADDR(i));
     }
     else
-    {  // display bmp update fail
-      notfound++;
-      GUI_ClearRect(iconUpdateRect.x0, iconUpdateRect.y0, iconUpdateRect.x0 + last_size.x, iconUpdateRect.y0 + last_size.y);
+    { // display bmp update fail
+      notFound++;
       dispIconFail((uint8_t *)curBmpPath, bmpState);
     }
-    // Display icon update progress
-    sprintf(tempstr, "Updated: %d | Not Updated: %d", found, notfound);
-    GUI_DispString(statUpdateRect.x0, statUpdateRect.y0, (uint8_t *)tempstr);
+
+    // display icon update progress
+    sprintf(tempStr, "Updated: %d | Not Updated: %d", found, notFound);
+    GUI_DispString(statUpdateRect.x0, statUpdateRect.y0, (uint8_t *)tempStr);
   }
 
   GET_FULL_PATH(curBmpPath, rootDir, BMP_UPDATE_DIR "/InfoBox.bmp");
@@ -198,86 +232,58 @@ static inline bool updateIcon(char * rootDir)
   }
   else
   {
-    notfound++;
+    notFound++;
     dispIconFail((uint8_t *)(curBmpPath), bmpState);
   }
 
-  if (notfound == 0)
-    return true;
-  else
-    return false;
+  return !notFound;
 }
 
-void dispIconFail(uint8_t * lbl, BMPUPDATE_STAT bmpState)
-{
-  char * stat_txt;
-  char error_txt[30];
-
-  GUI_SetColor(infoSettings.reminder_color);
-  GUI_ClearPrect(&labelFailedRect);
-  GUI_DispString(labelFailedRect.x0, labelFailedRect.y0, lbl);
-
-  switch (bmpState)
-  {
-    case BMP_INVALIDFILE:
-      stat_txt = "BMP file not valid ";
-      break;
-    case BMP_NOT24BIT:
-      stat_txt = "Format is not 24Bit";
-      break;
-    case BMP_NOTFOUND:
-    default:
-      stat_txt = "BMP file not found ";
-      break;
-  }
-
-  sprintf(error_txt, "Error: %s", stat_txt);
-  GUI_DispString(labelFailedRect.x0, labelFailedRect.y0 + BYTE_HEIGHT + 2, (uint8_t *)error_txt);
-  GUI_RestoreColorDefault();
-  Delay_ms(1000);  // give some time to the user to read failed icon name.
-}
-
-bool updateFont(char * font, uint32_t addr)
+static inline bool updateFont(char * font, uint32_t addr)
 {
   uint8_t progress = 0;
   UINT rnum = 0;
   uint32_t offset = 0;
-  char buffer[128];
   FIL myfp;
-  uint8_t * tempbuf = NULL;
+  uint8_t * tempBuf = NULL;
 
   if (f_open(&myfp, font, FA_OPEN_EXISTING|FA_READ) != FR_OK)
     return false;
 
-  tempbuf = malloc(W25QXX_SECTOR_SIZE);
+  tempBuf = malloc(W25QXX_SECTOR_SIZE);
 
-  if (tempbuf == NULL)
+  if (tempBuf == NULL)
     return false;
 
   GUI_Clear(infoSettings.bg_color);
-  sprintf((void *)buffer, "%s Size: %dKB", font, (uint32_t)f_size(&myfp) >> 10);
-  GUI_DispString(0, 100, (uint8_t *)buffer);
-  GUI_DispString(0, 140, (uint8_t *)"Updating:   %");
+  GUI_DispString(5, PADDING, (uint8_t *)"Updating Fonts");
+  GUI_DispString(0, BYTE_HEIGHT * 3 + PADDING, (uint8_t *)font);
+  GUI_DispString(0, BYTE_HEIGHT * 4 + PADDING, (uint8_t *)"Size:    KB");
+  GUI_DispDec(0 + BYTE_WIDTH * 5, BYTE_HEIGHT * 4 + PADDING, (uint32_t)f_size(&myfp) >> 10, 4, RIGHT);
+  GUI_DispString(0, BYTE_HEIGHT * 5 + PADDING, (uint8_t *)"Updating:   %");
 
   while (!f_eof(&myfp))
   {
-    if (f_read(&myfp, tempbuf, W25QXX_SECTOR_SIZE, &rnum) != FR_OK) break;
+    if (f_read(&myfp, tempBuf, W25QXX_SECTOR_SIZE, &rnum) != FR_OK)
+      break;
 
     W25Qxx_EraseSector(addr + offset);
-    W25Qxx_WriteBuffer(tempbuf, addr + offset, W25QXX_SECTOR_SIZE);
+    W25Qxx_WriteBuffer(tempBuf, addr + offset, W25QXX_SECTOR_SIZE);
     offset += rnum;
 
     if (progress != (offset * 100) / f_size(&myfp))
     {
       progress = (offset * 100) / f_size(&myfp);
-      GUI_DispDec(0 + BYTE_WIDTH * 9, 140, progress, 3, RIGHT);
+      GUI_DispDec(0 + BYTE_WIDTH * 9, BYTE_HEIGHT * 5 + PADDING, progress, 3, RIGHT);
     }
 
-    if (rnum !=W25QXX_SECTOR_SIZE) break;
+    if (rnum != W25QXX_SECTOR_SIZE)
+      break;
   }
 
   f_close(&myfp);
-  free(tempbuf);
+  free(tempBuf);
+
   return true;
 }
 
@@ -285,6 +291,7 @@ static inline void scanResetDir(char * rootDir)
 {
   char curPath[100];
   char renamedPath[100];
+
   GET_FULL_PATH(curPath, rootDir, TFT_RESET_FILE);
   GET_FULL_PATH(renamedPath, rootDir, TFT_RESET_FILE ".DONE");
 
@@ -295,7 +302,7 @@ static inline void scanResetDir(char * rootDir)
 
     initSettings();
     LCD_RefreshDirection(infoSettings.rotated_ui);
-    TSC_Calibration();
+    TS_Calibrate();
     storePara();
     f_rename(curPath, renamedPath);
   }
@@ -331,7 +338,7 @@ static inline void scanRenameUpdate(char * rootDir)
   GET_FULL_PATH(curPath, rootDir, UPDATE_DIR);
 
   if (f_dir_exists(curPath))
-  {  // UPDATE_DIR exists
+  { // UPDATE_DIR exists
     GET_FULL_PATH(renamedPath, rootDir, renamedDIR);
 
     if (f_dir_exists(renamedPath))  // old UPDATE_DIR also exists
@@ -371,89 +378,79 @@ void scanUpdates(void)
 {
   char * rootDir = NULL;
 
-  #ifdef USB_FLASH_DRIVE_SUPPORT
-    bool checkUSBDisk = true;
-  #endif
-
   if (mountSDCard())
     rootDir = SD_ROOT_DIR;
+  #ifdef USB_FLASH_DRIVE_SUPPORT
+    // check USB flash drive for update file
+    else if (mountUSBDisk())
+      rootDir = USB_ROOT_DIR;
+  #endif
+  else
+    return;
 
-#ifdef USB_FLASH_DRIVE_SUPPORT
-checkupdate:
-#endif
-  if (rootDir != NULL)
+  char curFilePath[100];
+  bool updatedFlashSign = false;
+  uint32_t savedFlashSign[sign_count];
+
+  W25Qxx_ReadBuffer((uint8_t *)&savedFlashSign, FLASH_SIGN_ADDR, sizeof(savedFlashSign));
+
+  // check for font update
+  GET_FULL_PATH(curFilePath, rootDir, FONT_UPDATE_DIR);
+
+  if (f_dir_exists(curFilePath))
   {
-    char curfilePath[100];
-    bool flash_sign_updated = false;
-    uint32_t saved_flash_sign[sign_count];
+    bool updateOk = true;
 
-    W25Qxx_ReadBuffer((uint8_t *)&saved_flash_sign, FLASH_SIGN_ADDR, sizeof(saved_flash_sign));
-
-    // check for font update
-    GET_FULL_PATH(curfilePath, rootDir, FONT_UPDATE_DIR);
-    if (f_dir_exists(curfilePath))
+    for (uint8_t i = 0; i < COUNT(fontAddrList); i++)
     {
-      bool updateOk = true;
-      for (uint8_t i = 0; i < COUNT(fontAddrList); i++)
-      {
-        GET_FULL_PATH(curfilePath, rootDir, fontPathList[i]);
-        if (!updateFont(curfilePath, fontAddrList[i]))
-          updateOk = false;  // set update to false if any font fails to update
-      }
+      GET_FULL_PATH(curFilePath, rootDir, fontPathList[i]);
 
-      if (updateOk && saved_flash_sign[font_sign] != FONT_CHECK_SIGN)
-      {
-        saved_flash_sign[font_sign] = FONT_CHECK_SIGN;
-        flash_sign_updated = true;
-      }
+      if (!updateFont(curFilePath, fontAddrList[i]))
+        updateOk = false;  // set update to false if any font fails to update
     }
 
-    // check for icon/bmp update
-    GET_FULL_PATH(curfilePath, rootDir, BMP_UPDATE_DIR);
-    if (f_dir_exists(BMP_UPDATE_DIR))
+    if (updateOk && savedFlashSign[font_sign] != FONT_CHECK_SIGN)
     {
-      if (updateIcon(rootDir) && (saved_flash_sign[icon_sign] != ICON_CHECK_SIGN))
-      {
-        saved_flash_sign[icon_sign] = ICON_CHECK_SIGN;
-        flash_sign_updated = true;
-      }
-    }
-
-    // check for config update
-    GET_FULL_PATH(curfilePath, rootDir, CONFIG_FILE_PATH);
-    if (getConfigFromFile(curfilePath) && (saved_flash_sign[config_sign] != CONFIG_CHECK_SIGN))
-    {
-      saved_flash_sign[config_sign] = CONFIG_CHECK_SIGN;
-      flash_sign_updated = true;
-    }
-
-    // check for language update
-    if (getLangFromFile(rootDir) && (saved_flash_sign[lang_sign] != LANGUAGE_CHECK_SIGN))
-    {
-      saved_flash_sign[lang_sign] = LANGUAGE_CHECK_SIGN;
-      flash_sign_updated = true;
-    }
-
-    // rename files
-    scanRenameUpdate(rootDir);
-
-    // check for reset file
-    scanResetDir(rootDir);
-
-    // update flash sign
-    if (flash_sign_updated)
-    {
-      saveflashSign((uint8_t *)saved_flash_sign, sizeof(saved_flash_sign));
+      savedFlashSign[font_sign] = FONT_CHECK_SIGN;
+      updatedFlashSign = true;
     }
   }
 
-  #ifdef USB_FLASH_DRIVE_SUPPORT
-    // check USB flash drive for update file
-    else if (checkUSBDisk && mountUSBDisk())
+  // check for icon/bmp update
+  GET_FULL_PATH(curFilePath, rootDir, BMP_UPDATE_DIR);
+
+  if (f_dir_exists(curFilePath))
+  {
+    if (updateIcon(rootDir) && (savedFlashSign[icon_sign] != ICON_CHECK_SIGN))
     {
-      rootDir = USB_ROOT_DIR;
-      checkUSBDisk = false;
-      goto checkupdate;
+      savedFlashSign[icon_sign] = ICON_CHECK_SIGN;
+      updatedFlashSign = true;
     }
-  #endif
+  }
+
+  // check for config update
+  GET_FULL_PATH(curFilePath, rootDir, CONFIG_FILE_PATH);
+
+  if (getConfigFromFile(curFilePath) && (savedFlashSign[config_sign] != CONFIG_CHECK_SIGN))
+  {
+    savedFlashSign[config_sign] = CONFIG_CHECK_SIGN;
+    updatedFlashSign = true;
+  }
+
+  // check for language update
+  if (getLangFromFile(rootDir) && (savedFlashSign[lang_sign] != LANGUAGE_CHECK_SIGN))
+  {
+    savedFlashSign[lang_sign] = LANGUAGE_CHECK_SIGN;
+    updatedFlashSign = true;
+  }
+
+  // rename files
+  scanRenameUpdate(rootDir);
+
+  // check for reset file
+  scanResetDir(rootDir);
+
+  // update flash sign
+  if (updatedFlashSign)
+    saveflashSign((uint8_t *)savedFlashSign, sizeof(savedFlashSign));
 }

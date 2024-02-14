@@ -81,7 +81,6 @@ const ITEM itemMoveLen[ITEM_MOVE_LEN_NUM] =
   {ICON_001_MM,                  LABEL_001_MM},
 };
 
-
 // List for length/distance change steps
 const float moveLenSteps[ITEM_MOVE_LEN_NUM] = { 100, 10, 1, 0.1f, 0.01f };
 

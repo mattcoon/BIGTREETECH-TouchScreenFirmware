@@ -19,7 +19,7 @@ const uint8_t icon_mode [MODE_COUNT] = {
   ICON_TOUCH_MODE,
 };
 
-void drawModeIcon(void)
+static inline void drawModeIcon(void)
 {
   for (uint8_t i = 0; i < MODE_COUNT; i++)
   {
@@ -59,7 +59,7 @@ void drawSelectedMode(int8_t nowMode)
 void menuMode(void)
 {
   int8_t nowMode = GET_BIT(infoSettings.mode, 0);
-  TSC_ReDrawIcon = NULL;  // disable icon redraw callback function
+  TS_ReDrawIcon = NULL;  // disable icon redraw callback function
 
   GUI_Clear(infoSettings.bg_color);
   drawModeIcon();

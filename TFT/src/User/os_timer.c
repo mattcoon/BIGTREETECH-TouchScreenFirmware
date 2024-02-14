@@ -1,9 +1,15 @@
 #include "os_timer.h"
 #include "includes.h"
 
-volatile uint32_t os_counter = 0;
+typedef struct
+{
+  uint32_t ms;   // milliseconds
+  uint16_t sec;  // seconds
+} OS_COUNTER;
 
-void OS_TimerInitMs(void)
+volatile static OS_COUNTER os_counter = {0, 0};
+
+void OS_InitTimerMs(void)
 {
 #ifdef GD32F2XX
   nvic_irq_enable(TIMER6_IRQn, 2U, 0U);
@@ -35,53 +41,58 @@ void OS_TimerInitMs(void)
 #ifdef GD32F2XX
 void TIMER6_IRQHandler(void)
 {
-  if ((TIMER_INTF(TIMER6) & 0x01) != 0)
-  { // update interrupt flag
-    TIMER_INTF(TIMER6) &= (uint16_t)~(1<<0);  // clear interrupt flag
+  if ((TIMER_INTF(TIMER6) & TIMER_INTF_UPIF) != 0)
+  {
+    TIMER_INTF(TIMER6) &= ~TIMER_INTF_UPIF;  // clear interrupt flag
 
-    os_counter++;
+    os_counter.ms++;
+    os_counter.sec++;
 
-    if (os_counter % 1000 == 0)
+    if (os_counter.sec >= 1000)  // if one second has been elapsed
     {
-      AVG_KPIS();  // debug monitoring KPI
+      os_counter.sec = 0;  // reset one second counter
 
-      updatePrintTime();
+      AVG_KPIS();          // collect debug monitoring KPI
+
+      updatePrintTime();   // if printing, update printing info
     }
 
-    loopTouchScreen();
+    TS_CheckPress();  // check touch screen once a millisecond
   }
 }
 #else
 void TIM7_IRQHandler(void)
 {
-  if ((TIM7->SR & 0x01) != 0)
-  { // update interrupt flag
-    TIM7->SR &= (uint16_t)~(1<<0);  // clear interrupt flag
+  if ((TIM7->SR & TIM_SR_UIF) != 0)
+  {
+    TIM7->SR &= ~TIM_SR_UIF;  // clear interrupt flag
 
-    os_counter++;
+    os_counter.ms++;
+    os_counter.sec++;
 
-    if (os_counter % 1000 == 0)
+    if (os_counter.sec >= 1000)  // if one second has been elapsed
     {
-      AVG_KPIS();  // debug monitoring KPI
+      os_counter.sec = 0;  // reset one second counter
 
-      updatePrintTime();
+      AVG_KPIS();          // collect debug monitoring KPI
+
+      updatePrintTime();   // if printing, update printing info
     }
 
-    loopTouchScreen();
+    TS_CheckPress();  // check touch screen once a millisecond
   }
 }
 #endif
 
-// 1ms
+// 1 ms
 uint32_t OS_GetTimeMs(void)
 {
-  return os_counter;
+  return os_counter.ms;
 }
 
-/*
- * task: task structure to be filled
- * time_ms:
- */
+// task: task structure to be filled
+// time_ms:
+//
 void OS_TaskInit(OS_TASK *task_t, uint32_t time_ms, FP_TASK function, void *para)
 {
   task_t->time_ms = time_ms;

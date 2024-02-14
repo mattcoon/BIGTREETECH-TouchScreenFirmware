@@ -89,7 +89,7 @@ void ctrlLaserQuerySetWait(const bool wait)
 // query for controller fan only
 void ctrlLaserQuery(void)
 {
-  if (infoHost.connected && !infoHost.wait && !ctrlLaserQueryWait && infoSettings.ctrl_fan_en)
+  if (!ctrlLaserQueryWait && infoHost.tx_slots != 0 && infoHost.connected && infoSettings.ctrl_fan_en)
   {
     ctrlLaserQueryWait = storeCmd("M710\n");
   }

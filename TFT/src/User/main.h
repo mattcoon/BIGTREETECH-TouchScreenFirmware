@@ -41,7 +41,6 @@ typedef struct
   uint8_t target_tx_slots;  // keep track of target gcode tx slots (e.g. if ADVANCED_OK feature is enabled on both mainboard and TFT)
   uint8_t tx_slots;         // keep track of available gcode tx slots (e.g. if ADVANCED_OK feature is enabled on both mainboard and TFT)
   uint8_t tx_count;         // keep track of pending gcode tx count
-  bool wait;                // whether wait for Marlin's response
   bool connected;           // TFT is connected to Marlin
   bool listening_mode;      // TFT is in listening mode from Marlin
   HOST_STATUS status;       // host is busy in printing execution. (USB serial printing and gcode print from onboard)
@@ -54,11 +53,16 @@ typedef struct
   uint32_t PCLK2_Timer_Frequency;
 } CLOCKS;
 
-extern MENU infoMenu;
-extern HOST infoHost;
-extern CLOCKS mcuClocks;
-extern uint32_t bePriorityCounter;
-extern uint32_t fePriorityCounter;
+typedef struct
+{
+  uint32_t be;  // back end
+  uint32_t fe;  // front end
+} PRIORITY_COUNTER;
+
+extern MENU infoMenu;                     // menu structure
+extern HOST infoHost;                     // information interaction with Marlin
+extern CLOCKS mcuClocks;                  // system clocks: SYSCLK, AHB, APB1, APB2, APB1_Timer, APB2_Timer2
+extern PRIORITY_COUNTER priorityCounter;  // priority counter
 
 void InfoHost_Init(bool isConnected);
 void InfoHost_UpdateListeningMode(void);

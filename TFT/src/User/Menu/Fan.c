@@ -6,24 +6,30 @@ const ITEM itemFan[2] = {
   {ICON_FAN_HALF_SPEED,          LABEL_HALF},
 };
 
+typedef struct
+{
+  uint8_t cur;
+  uint8_t set;
+} LASTFAN;
+
 static uint8_t fan_index = 0;
 
 void menuFan(void)
 {
   // 1 title, ITEM_PER_PAGE items (icon + label)
   MENUITEMS fanItems = {
-  // title
+    // title
     LABEL_FAN,
-  // icon                       label
+    // icon                          label
     {
-      {ICON_DEC,                  LABEL_DEC},
-      {ICON_NULL,                 LABEL_NULL},
-      {ICON_NULL,                 LABEL_NULL},
-      {ICON_INC,                  LABEL_INC},
-      {ICON_FAN ,                 LABEL_FAN},
-      {ICON_FAN_FULL_SPEED,       LABEL_FULL},
-      {ICON_STOP,                 LABEL_STOP},
-      {ICON_BACK,                 LABEL_BACK},
+      {ICON_DEC,                     LABEL_DEC},
+      {ICON_NULL,                    LABEL_NULL},
+      {ICON_NULL,                    LABEL_NULL},
+      {ICON_INC,                     LABEL_INC},
+      {ICON_FAN ,                    LABEL_FAN},
+      {ICON_FAN_FULL_SPEED,          LABEL_FULL},
+      {ICON_STOP,                    LABEL_STOP},
+      {ICON_BACK,                    LABEL_BACK},
     }
   };
 
