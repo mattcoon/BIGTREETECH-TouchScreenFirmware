@@ -12,7 +12,9 @@ enum
     PRINT_KEY_TFT_USB,
   #endif
   PRINT_KEY_ONBOARD_SD,
-  PRINT_KEY_ONBOARD_USB
+  PRINT_KEY_ONBOARD_USB,
+  PRINT_KEY_SUMMARY,
+  PRINT_KEY_PRINTSPECIAL,
 };
 
 const GUI_RECT titleRect = {10, (TITLE_END_Y - BYTE_HEIGHT) / 2, LCD_WIDTH - 10, (TITLE_END_Y - BYTE_HEIGHT) / 2 + BYTE_HEIGHT};
@@ -387,7 +389,7 @@ void menuPrint(void)
       {ICON_NULL,                    LABEL_NULL},
       {ICON_NULL,                    LABEL_NULL},
       {ICON_SCREEN_INFO,             LABEL_PREVIOUS_PRINT_DATA},
-      {ICON_NULL,                    LABEL_NULL},
+      {ICON_PRINT,                   LABEL_SURFACE},
       {ICON_NULL,                    LABEL_NULL},
       {ICON_BACK,                    LABEL_BACK},
     }
@@ -469,7 +471,9 @@ void menuPrint(void)
           }
         }
         break;
-
+      case PRINT_KEY_PRINTSPECIAL:
+        OPEN_MENU(menuPrintSpecial);
+        break;
       case KEY_ICON_4:
         if (infoPrintSummary.name[0] != '\0')
           printSummaryPopup();

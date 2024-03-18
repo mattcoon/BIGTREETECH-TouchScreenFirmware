@@ -406,6 +406,13 @@ extern "C" {
 #define LANG_KEY_LASER_OFF                    "label_laser_off:"
 #define LANG_KEY_LASER_100                    "label_laser_100:"
 #define LANG_KEY_LASER_MODE                   "label_laser_mode:"
+#define LANG_KEY_ITEM_Y_DEPTH                 "label_item_y_depth:"
+#define LANG_KEY_ITEM_X_WIDTH                 "label_item_x_width:"
+#define LANG_KEY_STEPOVER                     "label_stepover:"
+#define LANG_KEY_STEPDOWN                     "label_stepdown:"
+#define LANG_KEY_STEPCNT                      "label_stepcnt:"
+#define LANG_KEY_SURFACE                      "label_surface:"
+#define LANG_KEY_PRINT_SPECIAL                "label_print_special:"
 
 #ifdef __cplusplus
 }

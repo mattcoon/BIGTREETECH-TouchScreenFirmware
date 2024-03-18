@@ -400,5 +400,12 @@
     #define STRING_LASER_MODE             "Laser Mode"
     #define STRING_TOUCHPLATE             "Touchplate"
     #define STRING_SET_POSITION           "Set Pos"
+    #define STRING_ITEM_Y_DEPTH           "Y Depth"
+    #define STRING_ITEM_X_WIDTH           "X Width"
+    #define STRING_STEPOVER               "Stepover"
+    #define STRING_STEPDOWN               "Stepdown"
+    #define STRING_STEPCNT                "Step Count"
+    #define STRING_SURFACE                "Surface"
+    #define STRING_PRINT_SPECIAL          "Special"
 
 #endif
