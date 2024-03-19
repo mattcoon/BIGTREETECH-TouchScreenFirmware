@@ -8,9 +8,7 @@
 enum
 {
   PRINT_KEY_TFT_SD,
-  #ifdef USB_FLASH_DRIVE_SUPPORT
-    PRINT_KEY_TFT_USB,
-  #endif
+  PRINT_KEY_TFT_USB,
   PRINT_KEY_ONBOARD_SD,
   PRINT_KEY_ONBOARD_USB,
   PRINT_KEY_SUMMARY,
@@ -474,7 +472,7 @@ void menuPrint(void)
       case PRINT_KEY_PRINTSPECIAL:
         OPEN_MENU(menuPrintSpecial);
         break;
-      case KEY_ICON_4:
+      case PRINT_KEY_SUMMARY:
         if (infoPrintSummary.name[0] != '\0')
           printSummaryPopup();
         break;
