@@ -8,7 +8,7 @@ float Y_depth = 100;
 float X_width = 100;
 float stepOver = 15;
 float stepDown = 2;
-uint16_t stepCnt = 0;
+// uint16_t stepCnt = 0;
 
 float targetX = 0; // used for next command X
 float targetY = 0; // used for next command Y
@@ -19,11 +19,11 @@ float targetZ = 0; // used for next command Z
 
   LISTITEM listPrintSpecial[] = {
     // icon            item type           item title          item value text(only for custom value)
-    {CHARICON_SETTING1, LIST_CUSTOMVALUE,   LABEL_ITEM_Y_DEPTH, VAL_TYPE_FLOAT}, // Y_depth
-    {CHARICON_SETTING1, LIST_CUSTOMVALUE,   LABEL_ITEM_X_WIDTH, VAL_TYPE_FLOAT}, // X_width
-    {CHARICON_SETTING1, LIST_CUSTOMVALUE,   LABEL_STEPOVER,     VAL_TYPE_FLOAT}, // stepOver
-    {CHARICON_SETTING1, LIST_CUSTOMVALUE,   LABEL_STEPDOWN,     VAL_TYPE_FLOAT}, // stepDown
-    {CHARICON_SETTING1, LIST_CUSTOMVALUE,   LABEL_STEPCNT,      VAL_TYPE_INT},   // stepCnt
+    {CHARICON_SETTING1, LIST_CUSTOMVALUE,   LABEL_ITEM_Y_DEPTH, LABEL_CUSTOM_VALUE}, // Y_depth
+    {CHARICON_SETTING1, LIST_CUSTOMVALUE,   LABEL_ITEM_X_WIDTH, LABEL_CUSTOM_VALUE}, // X_width
+    {CHARICON_SETTING1, LIST_CUSTOMVALUE,   LABEL_STEPOVER,     LABEL_CUSTOM_VALUE}, // stepOver
+    {CHARICON_SETTING1, LIST_CUSTOMVALUE,   LABEL_STEPDOWN,     LABEL_CUSTOM_VALUE}, // stepDown
+    // {CHARICON_SETTING1, LIST_CUSTOMVALUE,   LABEL_STEPCNT,      VAL_TYPE_INT},   // stepCnt
     {CHARICON_PRINT,    LIST_LABEL,         LABEL_SURFACE,      LABEL_NULL},
   };
 
@@ -32,7 +32,7 @@ float targetZ = 0; // used for next command Z
     VAL_TYPE_FLOAT, // X_width
     VAL_TYPE_FLOAT, // stepOver
     VAL_TYPE_FLOAT, // stepDown
-    VAL_TYPE_INT,   // stepCnt
+    // VAL_TYPE_INT,   // stepCnt
   };
 
 // print surface
@@ -53,11 +53,6 @@ bool printSurface( void ) {
   // check if first layer is done
   if (targetX > (X_width+stepOver)) {
     return false;
-    // targetX = 0;
-    // targetZ -= stepDown;
-    // stepCnt--;
-    // check if all layers are done
-    // if (stepCnt < 0) return false;
   }
   // still working
   return true;
@@ -76,7 +71,7 @@ float getSurfaceParameter(uint8_t index) {
       case 1: return X_width;
       case 2: return stepOver;
       case 3: return stepDown;
-      case 4: return stepCnt;
+      // case 4: return stepCnt;
     }
   }
   return 0;
@@ -90,7 +85,7 @@ void setSurfaceParameter(uint8_t index, float value) {
       case 1: X_width = value; break;
       case 2: stepOver = value; break;
       case 3: stepDown = value; break;
-      case 4: stepCnt = value; break;
+      // case 4: stepCnt = value; break;
     }
   }
 }
@@ -121,17 +116,17 @@ void menuPrintSpecial (void) {
 
   static bool isPrinting = false;
   const uint8_t parameterCount = getSurfaceParameterCount();
-  float oldval[parameterCount];
+  // float oldval[parameterCount];
   uint16_t curIndex = KEY_IDLE;
-  uint8_t curItem = parameterCount;
+  // uint8_t curItem = parameterCount;
 
-  uint16_t curPage = curItem / LISTITEM_PER_PAGE;
-  for (uint8_t i = 0; i < parameterCount; i++)
-  {
-    oldval[i] = getSurfaceParameter(i);
-  }
+  // uint16_t curPage = curItem / LISTITEM_PER_PAGE;
+  // for (uint8_t i = 0; i < parameterCount; i++)
+  // {
+  //   oldval[i] = getSurfaceParameter(i);
+  // }
   
-  listViewCreate(title, NULL, parameterCount, &curPage, false, NULL, loadRoutineElements);
+  listViewCreate(title, NULL, parameterCount, NULL, false, NULL, loadRoutineElements);
 
   while (MENU_IS(menuPrintSpecial))
   {
@@ -140,7 +135,7 @@ void menuPrintSpecial (void) {
     switch (curIndex)
     {
       case KEY_BACK:
-        curPage = 0;
+        // curPage = 0;
         CLOSE_MENU();
         break;
 
@@ -148,13 +143,9 @@ void menuPrintSpecial (void) {
         if (curIndex < parameterCount-1)
         {
           float val = getSurfaceParameter(curIndex);
-          if (typePrintSpecial[curIndex] == VAL_TYPE_INT) {
-            val = (float)numPadInt(NULL, val, val, false);  // parameter is an integer number
-          } else {
-            float val = getSurfaceParameter(curIndex);
-            val = numPadFloat(NULL, val, val, false);  // parameter is a decimal number
-          }
+          val = numPadFloat(NULL, val, val, false);  // parameter is a decimal number
           setSurfaceParameter(curIndex, val);
+          setDynamicValue(curIndex, val);
           listViewRefreshMenu();
         }
         else if (curIndex == parameterCount-1)
@@ -163,17 +154,17 @@ void menuPrintSpecial (void) {
         }
         break;
     }
-    for (uint8_t i = 0; i < parameterCount; i++)
-    {
-      float newVal = getSurfaceParameter(i);
+    // for (uint8_t i = 0; i < parameterCount; i++)
+    // {
+    //   float newVal = getSurfaceParameter(i);
 
-      if (oldval[i] != newVal)
-      {
-        oldval[i] = newVal;
+    //   if (oldval[i] != newVal)
+    //   {
+    //     oldval[i] = newVal;
 
-        listViewRefreshItem(i);
-      }
-    }
+    //     listViewRefreshItem(i);
+    //   }
+    // }
 
     if (isPrinting) isPrinting = printSurface();
 
