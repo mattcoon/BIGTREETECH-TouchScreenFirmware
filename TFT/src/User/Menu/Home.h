@@ -5,7 +5,11 @@
 extern "C" {
 #endif
 
+#include "coordinate.h"
+
 void menuHome(void);
+
+void setPosition(AXIS axis, float position);
 
 #ifdef __cplusplus
 }

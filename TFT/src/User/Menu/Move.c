@@ -19,39 +19,40 @@
 #endif
 
 const char *const xyzMoveCmd[] = {X_MOVE_GCODE, Y_MOVE_GCODE, Z_MOVE_GCODE};
-static uint8_t item_moveLen_index = 1;
+static uint8_t item_moveLen_index = 0;
 AXIS nowAxis = X_AXIS;
+bool hadMovement = false;
 
-void storeMoveCmd(const AXIS xyz, const float amount)
-{
-  // if invert is true, use 'amount' multiplied by -1
-  storeCmd(xyzMoveCmd[xyz], GET_BIT(infoSettings.inverted_axis, xyz) ? -amount : amount,
-           xyz != Z_AXIS ? infoSettings.xy_speed[infoSettings.move_speed] : infoSettings.z_speed[infoSettings.move_speed]);
 
-  nowAxis = xyz;  // update now axis
-}
 
 void drawXYZ(void)
 {
   if (getReminderStatus() != SYS_STATUS_IDLE || toastRunning()) return;
 
-  char tempstr[30];
+  if (coordinateIsKnown()) {
+    char tempstr[30];
+    GUI_SetColor(infoSettings.status_color);
 
-  GUI_SetColor(infoSettings.status_color);
+    // if(isAxisKnown(X_AXIS)) sprintf(tempstr, "X:%.2f  ", coordinateGetAbsAxis(X_AXIS));
+    if(isAxisKnown(X_AXIS)) sprintf(tempstr, "X:%.2f  ", coordinateGetAxisActual(X_AXIS));
+    else sprintf(tempstr,"X:----");
+    GUI_DispString(START_X + (OFFSET + 0) * SPACE_X + (OFFSET + 0) * ICON_WIDTH, (ICON_START_Y - BYTE_HEIGHT) / 2, (uint8_t *)tempstr);
 
-  sprintf(tempstr, "X:%.2f  ", coordinateGetAxisActual(X_AXIS));
-  GUI_DispString(START_X + (OFFSET + 0) * SPACE_X + (OFFSET + 0) * ICON_WIDTH, (TITLE_END_Y - BYTE_HEIGHT) / 2, (uint8_t *)tempstr);
+    // if(isAxisKnown(Y_AXIS)) sprintf(tempstr, "Y:%.2f  ", coordinateGetAbsAxis(Y_AXIS));
+    if(isAxisKnown(Y_AXIS)) sprintf(tempstr, "Y:%.2f  ", coordinateGetAxisActual(Y_AXIS));
+    else sprintf(tempstr,"Y:----");
+    GUI_DispString(START_X + (OFFSET + 1) * SPACE_X + (OFFSET + 1) * ICON_WIDTH, (ICON_START_Y - BYTE_HEIGHT) / 2, (uint8_t *)tempstr);
 
-  sprintf(tempstr, "Y:%.2f  ", coordinateGetAxisActual(Y_AXIS));
-  GUI_DispString(START_X + (OFFSET + 1) * SPACE_X + (OFFSET + 1) * ICON_WIDTH, (TITLE_END_Y - BYTE_HEIGHT) / 2, (uint8_t *)tempstr);
+    // if(isAxisKnown(Z_AXIS)) sprintf(tempstr, "Z:%.2f  ", coordinateGetAbsAxis(Z_AXIS));
+    if(isAxisKnown(Z_AXIS)) sprintf(tempstr, "Z:%.2f  ", coordinateGetAxisActual(Z_AXIS));
+    else sprintf(tempstr,"Z:----");
+    GUI_DispString(START_X + (OFFSET + 2) * SPACE_X + (OFFSET + 2) * ICON_WIDTH, (ICON_START_Y - BYTE_HEIGHT) / 2, (uint8_t *)tempstr);
 
-  sprintf(tempstr, "Z:%.2f  ", coordinateGetAxisActual(Z_AXIS));
-  GUI_DispString(START_X + (OFFSET + 2) * SPACE_X + (OFFSET + 2) * ICON_WIDTH, (TITLE_END_Y - BYTE_HEIGHT) / 2, (uint8_t *)tempstr);
-
-  GUI_SetColor(infoSettings.font_color);
+    GUI_SetColor(infoSettings.font_color);
+  }
 }
 
-static inline void updateGantry(void)
+void updateGantry(void)
 {
   if (nextScreenUpdate(GANTRY_REFRESH_TIME))
   {
@@ -60,8 +61,6 @@ static inline void updateGantry(void)
   }
 }
 
-void menuMove(void)
-{
   MENUITEMS moveItems = {
     // title
     LABEL_MOVE,
@@ -89,9 +88,69 @@ void menuMove(void)
     }
   };
 
+void replaceMoveBack(bool replace) {
+  hadMovement = replace;
+  if (replace) {
+    // after home move is next. replace "back" with "move"
+    moveItems.items[7].icon = ICON_LEVEL_EDGE_DISTANCE;
+    moveItems.items[7].label.index = LABEL_ZERO;
+  }
+  else {
+    moveItems.items[7].icon = ICON_BACK;
+    moveItems.items[7].label.index = LABEL_BACK;
+  }
+  menuDrawPage(&moveItems);
+}
+
+void storeMoveCmd(const AXIS xyz, float amount)
+{
+  replaceMoveBack(true);
+  float dist2max = infoSettings.machine_size_max[xyz] - coordinateGetAbsAxis(xyz);
+  float dist2min = infoSettings.machine_size_min[xyz] - coordinateGetAbsAxis(xyz);
+  amount = MIN(amount, dist2max);
+  amount = MAX(amount, dist2min);
+  // if invert is true, use 'amount' multiplied by -1
+  storeCmd(xyzMoveCmd[xyz], GET_BIT(infoSettings.inverted_axis, xyz) ? -amount : amount,
+           ((xyz != Z_AXIS) ? infoSettings.xy_speed[infoSettings.move_speed] : infoSettings.z_speed[infoSettings.move_speed]));
+
+  nowAxis = xyz;  // update now axis
+}
+
+#define LASEROFFTIME  250
+#define LASERONTIME  2000
+#define LASERONSPD      2
+
+static bool laserState = false;
+static uint32_t laserUpdate = LASEROFFTIME; // 250 mS off
+void laserTest(void)
+{
+  
+  if (nextScreenUpdate(laserUpdate))
+  {
+    if( laserState )
+    { // was on, turn off
+      laserState = false;
+      laserUpdate = LASEROFFTIME;
+      laserSetSpeed(0);
+    }
+    else
+    { // was off, turn on
+      laserState = true;
+      laserUpdate = LASERONTIME;
+      laserSetSpeed(LASERONSPD);
+    }
+  }
+}
+
+void menuMove(void)
+{
+
   KEY_VALUES key_num = KEY_IDLE;
 
   float amount = moveLenSteps[item_moveLen_index];
+
+  laserState = false;
+  laserUpdate = LASEROFFTIME; // 250 mS off
 
   mustStoreCmd("G91\n");
   mustStoreCmd("M114\n");
@@ -143,9 +202,9 @@ void menuMove(void)
     switch (key_num)
     {
       #ifdef ALTERNATIVE_MOVE_MENU
-        case KEY_ICON_0: storeMoveCmd(Z_AXIS, -amount); break;  // Z move down if no invert
-        case KEY_ICON_1: storeMoveCmd(Y_AXIS, -amount); break;  // Y move decrease if no invert
-        case KEY_ICON_2: storeMoveCmd(Z_AXIS, amount); break;   // Z move up if no invert
+        case KEY_ICON_0: storeMoveCmd(Z_AXIS, -MIN(10,amount)); break;  // Z move down if no invert
+        case KEY_ICON_1: storeMoveCmd(Y_AXIS, amount); break;  // Y move decrease if no invert
+        case KEY_ICON_2: storeMoveCmd(Z_AXIS, MIN(10,amount)); break;   // Z move up if no invert
 
         case KEY_ICON_3:
           item_moveLen_index = (item_moveLen_index + 1) % ITEM_MOVE_LEN_NUM;
@@ -157,14 +216,23 @@ void menuMove(void)
           break;
 
         case KEY_ICON_4: storeMoveCmd(X_AXIS, -amount); break;  // X move decrease if no invert
-        case KEY_ICON_5: storeMoveCmd(Y_AXIS, amount); break;   // Y move increase if no invert
+        case KEY_ICON_5: storeMoveCmd(Y_AXIS, -amount); break;   // Y move increase if no invert
         case KEY_ICON_6: storeMoveCmd(X_AXIS, amount); break;   // X move increase if no invert
 
-        case KEY_ICON_7: CLOSE_MENU(); break;
+        case KEY_ICON_7:
+          laserReset();
+          laserState = false;
+          if (hadMovement) {
+            replaceMoveBack(false);
+            REPLACE_MENU(menuZero);
+          }
+          else
+            CLOSE_MENU(); 
+          break;
       #else
         case KEY_ICON_0: storeMoveCmd(X_AXIS, amount); break;   // X move increase if no invert
         case KEY_ICON_1: storeMoveCmd(Y_AXIS, amount); break;   // Y move increase if no invert
-        case KEY_ICON_2: storeMoveCmd(Z_AXIS, amount); break;   // Z move up if no invert
+        case KEY_ICON_2: storeMoveCmd(Z_AXIS, MAX(10,amount)); break;   // Z move up if no invert
 
         case KEY_ICON_3:
           item_moveLen_index = (item_moveLen_index + 1) % ITEM_MOVE_LEN_NUM;
@@ -177,7 +245,7 @@ void menuMove(void)
 
         case KEY_ICON_4: storeMoveCmd(X_AXIS, -amount); break;  // X move decrease if no invert
         case KEY_ICON_5: storeMoveCmd(Y_AXIS, -amount); break;  // Y move decrease if no invert
-        case KEY_ICON_6: storeMoveCmd(Z_AXIS, -amount); break;  // Z move down if no invert
+        case KEY_ICON_6: storeMoveCmd(Z_AXIS, -MAX(10,amount)); break;  // Z move down if no invert
 
         case KEY_ICON_7: CLOSE_MENU(); break;
       #endif
@@ -194,6 +262,8 @@ void menuMove(void)
           break;
     }
 
+    if (infoSettings.laser_mode == 1)
+      laserTest();
     loopProcess();
     updateGantry();
   }

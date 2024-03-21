@@ -40,6 +40,8 @@ bool eGetRelative(void);
 void eSetRelative(bool mode);
 bool coordinateIsKnown(void);
 void coordinateSetKnown(bool known);
+bool isAxisKnown(AXIS xyz);
+void setAxisKnown(AXIS xyz, bool known);
 float coordinateGetAxisTarget(AXIS axis);
 void coordinateSetAxisTarget(AXIS axis, float position);
 uint32_t coordinateGetFeedRate(void);
@@ -50,11 +52,17 @@ void coordinateSetExtruderActualSteps(float steps);
 float coordinateGetAxisActual(AXIS axis);
 void coordinateSetAxisActual(AXIS axis, float position);
 void coordinateGetAllActual(COORDINATE *tmp);
+void coordinateGetAbsActual(COORDINATE *tmp);
 float coordinateGetAxis(AXIS axis);
-
+float coordinateGetAbsAxis(AXIS axis);
+void cur2workSetAxis(AXIS axis, float position);
+void cur2workSetAxisSet(AXIS axis);
+void cur2workSetAxisCur(AXIS axis);
+void cur2workSetAll(COORDINATE *tmp);
 void coordinateQueryClearSendingWaiting(void);  // called in sendQueueCmd(). Clear sending waiting for coordinate query
 void coordinateQuery(uint8_t delay);            // query for coordinate
 void coordinateQueryTurnOff(void);
+float coordinateGetAxis(AXIS axis);
 
 #ifdef __cplusplus
 }

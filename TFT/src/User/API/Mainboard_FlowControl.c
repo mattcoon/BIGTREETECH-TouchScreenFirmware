@@ -63,6 +63,7 @@ void loopBackEnd(void)
 
   // fan speed monitor
   loopCheckFan();
+  loopLaser();
 
   // speed & flow monitor
   loopCheckSpeed();

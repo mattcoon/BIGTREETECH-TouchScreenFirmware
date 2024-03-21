@@ -17,7 +17,7 @@ extern "C" {
 #define MAX_TOOL_TEMP          1000  // extruder temp over this will not be parsed
 #define MAX_BED_TEMP            400  // bed temp over this will not be parsed
 #define MAX_CHAMBER_TEMP        200  // bed temp over this will not be parsed
-#define MAX_SPEED_LIMIT       12000  // speed over this will not be parsed
+#define MAX_SPEED_LIMIT       36000  // speed over this will not be parsed
 #define MAX_RUNOUT_DISTANCE      50  // runout distance over this will not be parsed
 #define MAX_DELAY_MS           1800  // time delay (ms) over this will not be parsed
 #define MAX_DELAY_SEC           100  // time delay (sec) over this will not be parsed
@@ -41,7 +41,7 @@ extern "C" {
 #define MIN_DELAY_SEC             1  // time delay (sec) less than this will not be parsed
 #define MIN_SPEED_LIMIT          10  // speed less than this will not be parsed
 #define MIN_RETRACT_LIMIT         0  // retract length less than this will not be parsed
-#define MIN_FAN_SPEED            25  // fan speed (PWM) less than this will not be parsed
+#define MIN_FAN_SPEED             0  // fan speed (PWM) less than this will not be parsed
 #define MIN_LED_COLOR_COMP        0  // (neopixel) LED color component less than this will not be parsed
 
 void resetConfig(void);

@@ -46,6 +46,8 @@ void menuFan(void)
   }
 
   menuDrawPage(&fanItems);
+  drawXYZ();
+
   fanReDraw(fan_index, true);
 
   while (MENU_IS(menuFan))
@@ -142,5 +144,6 @@ void menuFan(void)
     }
 
     loopProcess();
+    updateGantry();
   }
 }

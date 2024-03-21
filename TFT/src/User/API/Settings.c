@@ -30,6 +30,9 @@ void initSettings(void)
                                          (FILE_COMMENT_PARSING << INDEX_FILE_COMMENT_PARSING));
 
 // UI Settings
+  infoSettings.laser_mode             = LASER_MODE;
+  infoSettings.touchplate_on          = TOUCHPLATE_ON;
+  infoSettings.touchplate_height      = TOUCHPLATE_OFFSET;
   infoSettings.rotated_ui             = ROTATED_UI;
   infoSettings.language               = LANGUAGE;
   infoSettings.status_screen          = STATUS_SCREEN;
@@ -72,6 +75,7 @@ void initSettings(void)
   infoSettings.chamber_en             = HEATED_CHAMBER;
   infoSettings.ext_count              = EXTRUDER_COUNT;
   infoSettings.fan_count              = FAN_COUNT;
+  infoSettings.sysFanIndex            = SYS_FAN_INDEX;
   infoSettings.ctrl_fan_en            = CONTROLLER_FAN;
   infoSettings.min_ext_temp           = MIN_TEMP;
   infoSettings.auto_load_leveling     = AUTO_LOAD_LEVELING;

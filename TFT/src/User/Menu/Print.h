@@ -6,6 +6,7 @@ extern "C" {
 #endif
 
 void menuPrintFromSource(void);
+void menuPrintSpecial(void);
 void menuPrint(void);
 
 #ifdef __cplusplus

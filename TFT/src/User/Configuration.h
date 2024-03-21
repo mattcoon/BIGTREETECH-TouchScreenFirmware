@@ -36,7 +36,7 @@
  *                P4: [min: 0, max: 11]
  *   Options: [OFF (port disabled): 0, 2400: 1, 9600: 2, 19200: 3, 38400: 4, 57600: 5, 115200: 6, 230400: 7, 250000: 8, 500000: 9, 921600: 10, 1000000: 11]
  */
-#define SP_1 6  // Default: 6
+#define SP_1 8  // Default: 7
 #define SP_2 0  // Default: 0
 #define SP_3 0  // Default: 0
 #define SP_4 0  // Default: 0
@@ -83,7 +83,7 @@
  *
  *   Options: [disable: 0, enable: 1]
  */
-#define ADVANCED_OK 0  // Default: 0
+#define ADVANCED_OK 1  // Default: 0
 
 /**
  * Command Checksum
@@ -201,7 +201,7 @@
  *
  *   Options: [disable: 0, enable: 1]
  */
-#define STATUS_SCREEN 1  // Default: 1
+#define STATUS_SCREEN 0  // Default: 1
 
 /**
  * Touch Mode Colors
@@ -309,7 +309,7 @@
  *
  *   Options: [disable: 0, enable: 1]
  */
-#define NOTIFICATION_M117 0  // Default: 0
+#define NOTIFICATION_M117 1  // Default: 0
 
 /**
  * Progress Source
@@ -418,7 +418,7 @@
  *
  *   Options: [disable: 0, enable: 1]
  */
-#define MARLIN_FULLSCREEN 0  // Default: 0
+#define MARLIN_FULLSCREEN 1  // Default: 0
 
 /**
  * Show Marlin Mode Title
@@ -426,6 +426,17 @@
  *   Options: [disable: 0, enable: 1]
  */
 #define MARLIN_SHOW_TITLE 1  // Default: 1
+
+// Enable Laser interface instead of the fan interface (for CNC mode only).
+#define LASER_MODE true
+
+// Change this if you'd like to have a Z offset after homing Z.
+#define TOUCHPLATE_ON ENABLE
+#ifdef TOUCHPLATE_ON
+  #define TOUCHPLATE_OFFSET 0.0
+#endif
+
+
 
 /**
  * Marlin Mode Title
@@ -449,7 +460,7 @@
  * Hotend Count
  *   Value range: [min: 0, max: 6]
  */
-#define HOTEND_COUNT 1  // Default: 1
+#define HOTEND_COUNT 0  // Default: 1
 
 /**
  * Heated Bed Support
@@ -459,7 +470,7 @@
  *
  *   Options: [disable: 0, enable: 1]
  */
-#define HEATED_BED 1  // Default: 1
+#define HEATED_BED 0  // Default: 1
 
 /**
  * Heated Chamber Support
@@ -479,7 +490,7 @@
  *
  *   Value range: [min: 0, max: 6]
  */
-#define EXTRUDER_COUNT  1  // Default: 1
+#define EXTRUDER_COUNT  0  // Default: 1
 
 // For mixing extruder set to 1 (this option turns off auto detection of the number of extruders)
 #define MIXING_EXTRUDER 0  // Default: 0
@@ -488,7 +499,13 @@
  * Fan Count
  *   Value range: [min: 1, max: 6]
  */
-#define FAN_COUNT 1  // Default: 1
+#define FAN_COUNT 3  // Default: 1
+
+/**
+ * System Fan Index
+ *   Value range: [min: 0, max: 6]
+ */
+#define SYS_FAN_INDEX 0 // Default: 0
 
 /**
  * Controller Fan Support
@@ -540,9 +557,9 @@
 #define X_MIN_POS   0  // Default: 0
 #define Y_MIN_POS   0  // Default: 0
 #define Z_MIN_POS   0  // Default: 0
-#define X_MAX_POS 235  // Default: 235
-#define Y_MAX_POS 235  // Default: 235
-#define Z_MAX_POS 250  // Default: 250
+#define X_MAX_POS 1220  // Default: 235
+#define Y_MAX_POS 1200  // Default: 235
+#define Z_MAX_POS 90  // Default: 250
 
 /**
  * X & Y Move Speeds/Feedrates
@@ -606,7 +623,7 @@
  *
  *   Options: [disable: 0, enable: 1, auto-detect: 2]
  */
-#define ONBOARD_SD 2  // Default: 2
+#define ONBOARD_SD 0 // Default: 2
 
 /**
  * M27 Printing Status Refresh Time
@@ -788,9 +805,9 @@
  *                hotend temp: [min: 20, max: 1000]
  *                bed temp:    [min: 20, max: 400]
  */
-#define PREHEAT_LABELS {"PLA", "PETG", "ABS", "WOOD", "TPU", "NYLON"}  // Default: {"PLA", "PETG", "ABS", "WOOD", "TPU", "NYLON"}
-#define PREHEAT_HOTEND {200,   240,    230,   170,    220,   250}      // Default: {200,   240,    230,   170,    220,   250}
-#define PREHEAT_BED    { 60,    70,     90,    50,     50,    90}      // Default: { 60,    70,     90,    50,     50,    90}
+#define PREHEAT_LABELS { "PLA" }  // Default: {"PLA", "PETG", "ABS", "WOOD", "TPU", "NYLON"}
+#define PREHEAT_HOTEND { 200 }      // Default: {200,   240,    230,   170,    220,   250}
+#define PREHEAT_BED    { 60 }      // Default: { 60,    70,     90,    50,     50,    90}
 
 //================================================================================
 //============================ Power Supply Settings =============================
@@ -908,7 +925,7 @@
  *
  *   Options: [disable: 0, enable: 1]
  */
-#define PL_RECOVERY 1  // Default: 1
+#define PL_RECOVERY 0  // Default: 1
 
 /**
  * Power Loss Recovery Homing
@@ -1021,7 +1038,7 @@
  * Knob LED color at startup.
  *   Options: [OFF: 0, WHITE: 1, RED: 2, ORANGE: 3, YELLOW: 4, GREEN: 5, BLUE: 6, INDIGO: 7, VIOLET: 8]
  */
-#define KNOB_LED_COLOR 1  // Default: 1
+#define KNOB_LED_COLOR 2  // Default: 1
 
 // Keep the LED state in Marlin Mode
 #define KEEP_KNOB_LED_COLOR_MARLIN_MODE  // Default: uncommented (enabled)
@@ -1163,7 +1180,7 @@
  * Monitoring Debug
  * Uncomment/Enable to monitor/show system resources usage in Monitoring menu.
  */
-#define DEBUG_MONITORING  // Default: uncommented (enabled)
+//#define DEBUG_MONITORING  // Default: commented (disabled)
 
 /**
  * Generic Debug
@@ -1214,10 +1231,10 @@
  * Cooling fans have index from 0 to 5.
  * Controller fan has index 6 and 7 (Active and Idle).
  */
-#define FAN_DISPLAY_ID {"F0 ", "F1 ", "F2 ", "F3 ", "F4 ", "F5 ", "CtA", "CtI"}
+#define FAN_DISPLAY_ID {"F0   ", "F1   ", "F2   ", "F3   ", "F4   ", "F5   ", "CtA  ", "CtI  "}
 #define FAN_CMD        {"M106 P0 S%d\n", "M106 P1 S%d\n", "M106 P2 S%d\n", "M106 P3 S%d\n", "M106 P4 S%d\n", "M106 P5 S%d\n", \
                         "M710 S%d\n",    "M710 I%d\n" }
-
+#define LASER_CMD      {"M3 S%i\n"}
 // Speed/flow rate names displayed in status screen
 #define SPEED_ID {"Sp.", "Fr."}  // (speed, flow rate)
 
@@ -1248,7 +1265,7 @@
 // Home Offset limits
 #define HOME_Z_OFFSET_MIN_VALUE     -20.0f  // Default: -20.0f
 #define HOME_Z_OFFSET_MAX_VALUE      20.0f  // Default: 20.0f
-#define HOME_Z_OFFSET_DEFAULT_VALUE   0.0f  // Default: 0.0f
+#define HOME_Z_OFFSET_DEFAULT_VALUE   0.5f  // Default: 0.0f
 
 // Babystep limits
 #define BABYSTEP_MIN_VALUE     -5.0f  // Default: -5.0f
@@ -1275,7 +1292,7 @@
  *
  *   Options: [disable: 0, auto-detect: 1, ABL: 2, BBL: 3, UBL: 4, MBL: 5]
  */
-#define BED_LEVELING_TYPE 1  // Default: 1
+#define BED_LEVELING_TYPE 0  // Default: 1
 
 /**
  * MBL Settings
@@ -1298,7 +1315,7 @@
  * "FILAMENT_LOAD_UNLOAD_GCODES" option in Configuration_adv.h in Marlin fw needs to be uncommented.
  * Adds a submenu to the movement menu for selecting load and unload actions.
  */
-#define LOAD_UNLOAD_M701_M702  // Default: uncommented (enabled)
+// #define LOAD_UNLOAD_M701_M702  // Default: uncommented (enabled)
 
 /**
  * Delta Probe Type

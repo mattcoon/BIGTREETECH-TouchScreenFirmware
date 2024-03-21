@@ -5,6 +5,7 @@
 extern "C" {
 #endif
 
+void menuCNC(void);
 void menuMain(void);
 
 #ifdef __cplusplus

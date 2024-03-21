@@ -14,6 +14,7 @@
 #define CONFIG_FILE_COMMENT_PARSING   "file_comment_parsing:"
 
 //-----------------------------UI Settings
+#define CONFIG_LASER_MODE             "laser_mode:"
 #define CONFIG_ROTATED_UI             "rotated_ui:"
 #define CONFIG_LANGUAGE               "language:"
 #define CONFIG_STATUS_SCREEN          "status_screen:"
@@ -55,6 +56,7 @@
 #define CONFIG_HEATED_CHAMBER         "heated_chamber:"
 #define CONFIG_EXT_COUNT              "ext_count:"
 #define CONFIG_FAN_COUNT              "fan_count:"
+#define CONFIG_SYS_FAN_INDEX          "sys_fan_index:"
 #define CONFIG_CONTROLLER_FAN         "controller_fan:"
 #define CONFIG_MAX_TEMP               "max_temp:"
 #define CONFIG_MIN_TEMP               "min_temp:"
@@ -82,6 +84,8 @@
 #define CONFIG_PROBING_Z_RAISE        "probing_z_raise:"
 #define CONFIG_Z_STEPPERS_ALIGNMENT   "z_steppers_alignment:"
 #define CONFIG_TOUCHMI_SENSOR         "touchmi_sensor:"
+#define CONFIG_TOUCHPLATE_ON          "touchplate_on:"
+#define CONFIG_TOUCHPLATE_HEIGHT      "touchplate_height:"
 #define CONFIG_PREHEAT_NAME_1         "preheat_name_1:"
 #define CONFIG_PREHEAT_NAME_2         "preheat_name_2:"
 #define CONFIG_PREHEAT_NAME_3         "preheat_name_3:"

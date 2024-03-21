@@ -7,6 +7,9 @@ extern "C" {
 
 void menuMove(void);
 
+void drawXYZ(void);
+void updateGantry(void);
+
 #ifdef __cplusplus
 }
 #endif

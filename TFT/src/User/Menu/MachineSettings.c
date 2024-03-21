@@ -102,7 +102,7 @@ void menuMachineSettings(void)
       {ICON_GCODE,                   LABEL_TERMINAL},
       {ICON_CUSTOM,                  LABEL_CUSTOM},
       {ICON_RGB_SETTINGS,            LABEL_RGB_SETTINGS},
-      {ICON_TUNING,                  LABEL_TUNING},
+      {ICON_FAN,                     LABEL_FAN},
       #ifdef QUICK_EEPROM_BUTTON
         {ICON_EEPROM_SAVE,             LABEL_EEPROM_SETTINGS},
       #else
@@ -152,7 +152,7 @@ void menuMachineSettings(void)
         break;
 
       case KEY_ICON_4:
-        OPEN_MENU(menuTuning);
+        OPEN_MENU(menuFan);
         break;
 
       #ifdef QUICK_EEPROM_BUTTON

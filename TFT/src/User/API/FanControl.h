@@ -32,6 +32,9 @@ void loopCheckFan(void);                     // called in loopBackEnd(). Loop fo
 void ctrlFanQueryClearSendingWaiting(void);  // called in sendQueueCmd(). Clear sending waiting for controller fan query
 void ctrlFanQuery(void);                     // query for controller fan only
 
+void fanMBControlOff (void);
+void fanMBControlOn (void);;
+
 #ifdef __cplusplus
 }
 #endif

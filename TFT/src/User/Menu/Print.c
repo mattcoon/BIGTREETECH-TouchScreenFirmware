@@ -8,11 +8,11 @@
 enum
 {
   PRINT_KEY_TFT_SD,
-  #ifdef USB_FLASH_DRIVE_SUPPORT
-    PRINT_KEY_TFT_USB,
-  #endif
+  PRINT_KEY_TFT_USB,
   PRINT_KEY_ONBOARD_SD,
-  PRINT_KEY_ONBOARD_USB
+  PRINT_KEY_ONBOARD_USB,
+  PRINT_KEY_SUMMARY,
+  PRINT_KEY_PRINTSPECIAL,
 };
 
 const GUI_RECT titleRect = {10, (TITLE_END_Y - BYTE_HEIGHT) / 2, LCD_WIDTH - 10, (TITLE_END_Y - BYTE_HEIGHT) / 2 + BYTE_HEIGHT};
@@ -225,6 +225,7 @@ void menuPrintFromSource(void)
     {
       printIconItems.title.address = (uint8_t *)infoFile.path;
       menuDrawPage(&printIconItems);
+      drawXYZ();
     }
   }
   else
@@ -358,6 +359,7 @@ void menuPrintFromSource(void)
     #endif
 
     loopProcess();
+    updateGantry();
   }
 }
 
@@ -385,7 +387,7 @@ void menuPrint(void)
       {ICON_NULL,                    LABEL_NULL},
       {ICON_NULL,                    LABEL_NULL},
       {ICON_SCREEN_INFO,             LABEL_PREVIOUS_PRINT_DATA},
-      {ICON_NULL,                    LABEL_NULL},
+      {ICON_PRINT,                   LABEL_SURFACE},
       {ICON_NULL,                    LABEL_NULL},
       {ICON_BACK,                    LABEL_BACK},
     }
@@ -406,6 +408,7 @@ void menuPrint(void)
   }
 
   menuDrawPage(&sourceSelItems);
+  drawXYZ();
 
   while (MENU_IS(menuPrint))
   {
@@ -466,8 +469,10 @@ void menuPrint(void)
           }
         }
         break;
-
-      case KEY_ICON_4:
+      case PRINT_KEY_PRINTSPECIAL:
+        OPEN_MENU(menuPrintSpecial);
+        break;
+      case PRINT_KEY_SUMMARY:
         if (infoPrintSummary.name[0] != '\0')
           printSummaryPopup();
         break;
@@ -481,6 +486,7 @@ void menuPrint(void)
     }
 
     loopProcess();
+    updateGantry();
   }
 
 selectEnd:

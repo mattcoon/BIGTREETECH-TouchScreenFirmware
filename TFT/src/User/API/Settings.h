@@ -174,6 +174,9 @@ typedef struct
   uint8_t  general_settings;  // listening mode / advanced ok / emulated M600 /
                               // emulated M109-M190 / event led / file comment parsing toggles (Bit Values)
   // UI Settings
+  uint8_t  laser_mode;
+  float    touchplate_height;
+  uint8_t  touchplate_on;
   uint8_t  rotated_ui;
   uint8_t  language;
   uint8_t  status_screen;
@@ -216,6 +219,7 @@ typedef struct
   uint8_t  chamber_en;
   uint8_t  ext_count;
   uint8_t  fan_count;
+  uint8_t  sysFanIndex;
   uint8_t  ctrl_fan_en;
   uint16_t max_temp[MAX_HEATER_COUNT];  // hotends + bed + chamber
   uint16_t min_ext_temp;
@@ -234,6 +238,7 @@ typedef struct
   float    resume_purge_len;
   float    pause_pos[AXIS_NUM - 1];  // X, Y
   float    pause_z_raise;
+  float    sleep_pos[AXIS_NUM]; // X, Y, Z
   uint16_t pause_feedrate[FEEDRATE_COUNT];  // XY, Z, E
   uint8_t  level_edge;
   float    level_z_pos;

@@ -79,6 +79,7 @@
 #include "FlashStore.h"
 #include "HomeOffsetControl.h"
 #include "HW_Init.h"
+#include "LaserControl.h"
 #include "LCD_Colors.h"
 #include "LCD_Dimming.h"
 #include "LED_Colors.h"
@@ -118,6 +119,7 @@
 #include "FeatureSettings.h"
 #include "Heat.h"
 #include "Home.h"
+#include "Laser.h"
 #include "LEDColor.h"
 #include "LevelCorner.h"
 #include "Leveling.h"
@@ -154,6 +156,7 @@
 #include "Tuning.h"
 #include "UnifiedHeat.h"
 #include "UnifiedMove.h"
+#include "Zero.h"
 #include "ZOffset.h"
 
 #endif

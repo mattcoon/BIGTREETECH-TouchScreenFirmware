@@ -647,6 +647,10 @@ void parseAck(void)
     {
       speedSetCurPercent(1, ack_value());
     }
+    else if (ack_starts_with("M3"))
+    {
+      laserSetCurSpeed(ack_seen("S")? ack_value() : 100);
+    }
     // parse and store M106, fan speed
     else if (ack_starts_with("M106"))
     {
@@ -1437,6 +1441,11 @@ void parseAck(void)
 
         InfoHost_Init(false);
         initMachineSettings();
+        fanResetSpeed();
+        coordinateSetKnown(false);
+        setAxisKnown(X_AXIS,false);
+        setAxisKnown(Y_AXIS,false);
+        setAxisKnown(Z_AXIS,false);
       }
     }
 

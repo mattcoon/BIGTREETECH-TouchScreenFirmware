@@ -38,6 +38,7 @@ void Serial_Init(SERIAL_PORT_INDEX portIndex)
   if (portIndex == PORT_1 || portIndex == ALL_PORTS)  // if primary or all serial ports, initialize the primary serial port first
   {
     InfoHost_Init(false);  // initialize infoHost when disconnected
+    coordinateSetKnown(false);
 
     Serial_Config(serialPort[PORT_1].port, serialPort[PORT_1].cacheSizeRX, serialPort[PORT_1].cacheSizeTX, baudrateValues[infoSettings.serial_port[PORT_1]]);
   }

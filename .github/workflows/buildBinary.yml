@@ -1,7 +1,7 @@
 name: Build Binaries
 on:
   push:
-    branches: [ master ]
+    branches: [ master, MattCNC2024 ]
     paths-ignore:
     - .devcontainer/**
     - .github/**
@@ -14,7 +14,7 @@ on:
 jobs:
   main:
     name: Build Binaries
-    if: github.repository == 'bigtreetech/BIGTREETECH-TouchScreenFirmware'
+    if: github.repository == 'mattcoon/BIGTREETECH-TouchScreenFirmware'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository

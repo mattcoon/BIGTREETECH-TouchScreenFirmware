@@ -47,6 +47,17 @@ const ITEM itemSpeed[ITEM_SPEED_NUM] =
   {ICON_FAST_SPEED,              LABEL_FAST},
 };
 
+const ITEM itemFanCnt[MAX_FAN_COUNT+1] =
+{
+  {ICON_FAN,                     LABEL_FAN0},
+  {ICON_FAN,                     LABEL_FAN1},
+  {ICON_FAN,                     LABEL_FAN2},
+  {ICON_FAN,                     LABEL_FAN3},
+  {ICON_FAN,                     LABEL_FAN4},
+  {ICON_FAN,                     LABEL_FAN5},
+  {ICON_FAN,                     LABEL_OFF},
+};
+
 // Icons list for percent change steps
 const ITEM itemPercent[ITEM_PERCENT_STEPS_NUM] =
 {
@@ -63,15 +74,15 @@ const uint8_t percentSteps[ITEM_PERCENT_STEPS_NUM] = {1, 5, 10};
 const ITEM itemMoveLen[ITEM_MOVE_LEN_NUM] =
 {
 // icon                          label
-  {ICON_001_MM,                  LABEL_001_MM},
-  {ICON_01_MM,                   LABEL_01_MM},
-  {ICON_1_MM,                    LABEL_1_MM},
-  {ICON_10_MM,                   LABEL_10_MM},
   {ICON_100_MM,                  LABEL_100_MM},
+  {ICON_10_MM,                   LABEL_10_MM},
+  {ICON_1_MM,                    LABEL_1_MM},
+  {ICON_01_MM,                   LABEL_01_MM},
+  {ICON_001_MM,                  LABEL_001_MM},
 };
 
 // List for length/distance change steps
-const float moveLenSteps[ITEM_MOVE_LEN_NUM] = {0.01f, 0.1f, 1, 10, 100};
+const float moveLenSteps[ITEM_MOVE_LEN_NUM] = { 100, 10, 1, 0.1f, 0.01f };
 
 // Icons list for Extruder length/distance change steps
 const ITEM itemExtLenSteps[ITEM_EXT_LEN_NUM] =
@@ -231,6 +242,23 @@ void fanReDraw(uint8_t fanIndex, bool drawHeader)
     sprintf(tempstr, DUAL_VAL_FORMAT, fanGetCurPercent(fanIndex), fanGetSetPercent(fanIndex));
   else
     sprintf(tempstr, DUAL_VAL_FORMAT, fanGetCurSpeed(fanIndex), fanGetSetSpeed(fanIndex));
+
+  displayExhibitValue(tempstr);
+}
+
+void laserReDraw(bool drawHeader)
+{
+  char tempstr[20];
+
+  if (drawHeader)
+  {
+    displayExhibitHeader("laser", (infoSettings.fan_percentage == 1) ? " % " : "PWM");
+  }
+
+  if (infoSettings.fan_percentage == 1)
+    sprintf(tempstr, DUAL_VAL_FORMAT, laserGetCurPercent(), laserGetSetPercent());
+  else
+    sprintf(tempstr, DUAL_VAL_FORMAT, laserGetCurSpeed(), laserGetSetSpeed());
 
   displayExhibitValue(tempstr);
 }

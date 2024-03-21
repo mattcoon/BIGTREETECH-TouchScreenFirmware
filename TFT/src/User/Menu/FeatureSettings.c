@@ -34,6 +34,9 @@ typedef enum
   SKEY_AUTO_LOAD_LEVELING,
   SKEY_PROBING_Z_OFFSET,
   SKEY_Z_STEPPERS_ALIGNMENT,
+  SKEY_FAN_COUNT,
+  SKEY_SYS_FAN_INDEX,
+  SKEY_LASER,
 
   #ifdef PS_ON_PIN
     SKEY_PS_AUTO_SHUTDOWN,
@@ -73,7 +76,9 @@ static inline void updateFeatureSettings(uint8_t item_index)
     case SKEY_FILE_COMMENT_PARSING:
       TOGGLE_BIT(infoSettings.general_settings, ((item_index - SKEY_ADVANCED_OK) + INDEX_ADVANCED_OK));
       break;
-
+    case SKEY_LASER:
+      TOGGLE_BIT(infoSettings.laser_mode, 0);
+      break;
     case SKEY_SERIAL_ALWAYS_ON:
       TOGGLE_BIT(infoSettings.serial_always_on, 0);
       break;
@@ -93,7 +98,12 @@ static inline void updateFeatureSettings(uint8_t item_index)
     case SKEY_Z_STEPPERS_ALIGNMENT:
       TOGGLE_BIT(infoSettings.z_steppers_alignment, 0);
       break;
-
+    case SKEY_FAN_COUNT:
+      infoSettings.fan_count = (infoSettings.fan_count + 1) % MAX_FAN_COUNT;
+      break;
+    case SKEY_SYS_FAN_INDEX:
+      infoSettings.sysFanIndex = (infoSettings.sysFanIndex + 1) % MAX_FAN_COUNT;
+      break;
     #ifdef PS_ON_PIN
       case SKEY_PS_AUTO_SHUTDOWN:
         infoSettings.auto_shutdown = (infoSettings.auto_shutdown + 1) % ITEM_TOGGLE_AUTO_NUM;
@@ -149,6 +159,9 @@ void loadFeatureSettings(LISTITEM * item, uint16_t item_index, uint8_t itemPos)
         item->icon = iconToggle[GET_BIT(infoSettings.general_settings, ((item_index - SKEY_ADVANCED_OK) + INDEX_ADVANCED_OK))];
         break;
 
+      case SKEY_LASER:
+        item->icon = iconToggle[infoSettings.laser_mode];
+        break;
       case SKEY_SERIAL_ALWAYS_ON:
         item->icon = iconToggle[infoSettings.serial_always_on];
         break;
@@ -168,7 +181,12 @@ void loadFeatureSettings(LISTITEM * item, uint16_t item_index, uint8_t itemPos)
       case SKEY_Z_STEPPERS_ALIGNMENT:
         item->icon = iconToggle[infoSettings.z_steppers_alignment];
         break;
-
+      case SKEY_FAN_COUNT:
+        item->valueLabel = itemFanCnt[infoSettings.fan_count].label;
+        break;
+      case SKEY_SYS_FAN_INDEX:
+        item->valueLabel = itemFanCnt[infoSettings.sysFanIndex].label;
+        break;
       #ifdef PS_ON_PIN
         case SKEY_PS_AUTO_SHUTDOWN:
           item->valueLabel = itemToggleAuto[infoSettings.auto_shutdown];
@@ -228,7 +246,9 @@ void menuFeatureSettings(void)
     {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_AUTO_LOAD_LEVELING,     LABEL_NULL},
     {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_PROBING_Z_OFFSET,       LABEL_NULL},
     {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_Z_STEPPERS_ALIGNMENT,   LABEL_NULL},
-
+    {CHARICON_BLANK,       LIST_CUSTOMVALUE,   LABEL_FAN_COUNT,              LABEL_FAN0},
+    {CHARICON_BLANK,       LIST_CUSTOMVALUE,   LABEL_SYS_FAN_INDEX,          LABEL_FAN0},
+    {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_LASER_MODE,             LABEL_NULL}, // 10
     #ifdef PS_ON_PIN
       {CHARICON_BLANK,       LIST_CUSTOMVALUE,   LABEL_PS_AUTO_SHUTDOWN,       LABEL_OFF},
     #endif

@@ -44,6 +44,7 @@ extern const ITEM itemDegreeSteps[ITEM_DEGREE_NUM];
 extern const uint8_t degreeSteps[ITEM_DEGREE_NUM];
 
 extern const ITEM itemSpeed[ITEM_SPEED_NUM];
+extern const ITEM itemFanCnt[MAX_FAN_COUNT+1];
 
 extern const ITEM itemPercent[ITEM_PERCENT_STEPS_NUM];
 extern const uint8_t percentSteps[ITEM_PERCENT_STEPS_NUM];
@@ -80,6 +81,8 @@ void temperatureReDraw(uint8_t toolIndex, int16_t * temp, bool drawHeader);
 
 // Show/draw fan in a standard menu
 void fanReDraw(uint8_t fanIndex, bool drawHeader);
+
+void laserReDraw(bool drawHeader);
 
 // Show/draw extruder in a standard menu
 void extruderReDraw(uint8_t extruderIndex, float extrusion, bool drawHeader);
