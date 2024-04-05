@@ -818,14 +818,14 @@ void parseAck(void)
         if (ack_continue_seen("y:")) y = ack_value();
         if (ack_continue_seen("z:")) z = ack_value();
 
-        infoSettings.machine_size_min[X_AXIS] = infoSettings.machine_size_min[Y_AXIS] = infoSettings.machine_size_min[Z_AXIS] = 0.0f;
+        infoParameters.MachineMin[X_AXIS] = infoParameters.MachineMin[Y_AXIS] = infoParameters.MachineMin[Z_AXIS] = 0.0f;
       }
 
       if (ack_continue_seen("max:"))
       {
-        if (ack_continue_seen("x:")) infoSettings.machine_size_max[X_AXIS] = ack_value() - x;
-        if (ack_continue_seen("y:")) infoSettings.machine_size_max[Y_AXIS] = ack_value() - y;
-        if (ack_continue_seen("z:")) infoSettings.machine_size_max[Z_AXIS] = ack_value() - z;
+        if (ack_continue_seen("x:")) infoParameters.MachineMax[X_AXIS] = ack_value() - x;
+        if (ack_continue_seen("y:")) infoParameters.MachineMax[Y_AXIS] = ack_value() - y;
+        if (ack_continue_seen("z:")) infoParameters.MachineMax[Z_AXIS] = ack_value() - z;
       }
     }
     // parse M48, repeatability test
@@ -1356,6 +1356,10 @@ void parseAck(void)
       else if (ack_continue_seen("BABYSTEPPING:"))
       {
         infoMachineSettings.babyStepping = ack_value();
+      }
+      else if (ack_continue_seen("CUSTOM_GCODES:"))
+      {
+        infoMachineSettings.customerGcodes = true;
       }
       else if (ack_continue_seen("BUILD_PERCENT:"))  // M73 support. Required "SET_PROGRESS_MANUALLY" in Marlin
       {

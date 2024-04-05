@@ -30,7 +30,9 @@ const uint8_t parameterElementCount[PARAMETERS_COUNT] = {
   STEPPER_INDEX_COUNT,        // Stepper Motor Current (X, X2, Y, Y2, Z, Z2, Z3, Z4, E0, E1)
   STEPPER_INDEX_COUNT,        // TMC Hybrid Threshold Speed (X, X2, Y, Y2, Z, Z2, Z3, Z4, E0, E1)
   (STEPPER_INDEX_COUNT - 2),  // TMC Bump Sensitivity (X, X2, Y, Y2, Z, Z2, Z3, Z4)
-  1                           // MBL offset
+  1,                          // MBL offset
+  AXIS_INDEX_COUNT-2,         // Machine Min
+  AXIS_INDEX_COUNT-2,         // Machine Max
 };
 
 const char * const parameterCode[PARAMETERS_COUNT] = {
@@ -61,6 +63,8 @@ const char * const parameterCode[PARAMETERS_COUNT] = {
   "M913",  // TMC Hybrid Threshold Speed
   "M914",  // TMC Bump Sensitivity
   "G29",   // MBL offset
+  "C100",  // Custom Machine mins
+  "C101",  // Custom Machine max
 };
 
 const char * const parameterCmd[PARAMETERS_COUNT][MAX_ELEMENT_COUNT] = {
@@ -91,6 +95,8 @@ const char * const parameterCmd[PARAMETERS_COUNT][MAX_ELEMENT_COUNT] = {
   {"I1 X%.0f\n",         "I2 X%.0f\n",    "I1 Y%.0f\n",    "I2 Y%.0f\n",   "I1 Z%.0f\n",   "I2 Z%.0f\n",   "I3 Z%.0f\n",   "I4 Z%.0f\n",   "T0 E%.0f\n",   "T1 E%.0f\n"},   // TMC Hybrid Threshold Speed (X, X2, Y, Y2, Z, Z2, Z3, Z4, E0, E1)
   {"I1 X%.0f\n",         "I2 X%.0f\n",    "I1 Y%.0f\n",    "I2 Y%.0f\n",   "I1 Z%.0f\n",   "I2 Z%.0f\n",   "I3 Z%.0f\n",   "I4 Z%.0f\n",   NULL,           NULL},           // TMC Bump Sensitivity (X, X2, Y, Y2, Z, Z2, Z3, Z4)
   {"S4 Z%.2f\nG29 S0\n", NULL,            NULL,            NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL},           // MBL offset
+  {"X%.2f\n",            "Y%.2f\n",       "Z%.2f\n",       NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL},           // Machine Mins (X, Y, Z)
+  {"X%.2f\n",            "Y%.2f\n",       "Z%.2f\n",       NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL},           // Machine Maxs (X, Y, Z)
 };
 
 const VAL_TYPE parameterValType[PARAMETERS_COUNT][MAX_ELEMENT_COUNT] = {
@@ -125,6 +131,8 @@ const VAL_TYPE parameterValType[PARAMETERS_COUNT][MAX_ELEMENT_COUNT] = {
   {VAL_TYPE_NEG_INT,    VAL_TYPE_NEG_INT,   VAL_TYPE_NEG_INT,    VAL_TYPE_NEG_INT, VAL_TYPE_NEG_INT, // TMC Bump Sensitivity (X, X2, Y, Y2, Z, Z2, Z3, Z4)
    VAL_TYPE_NEG_INT,    VAL_TYPE_NEG_INT,   VAL_TYPE_NEG_INT},
   {VAL_TYPE_NEG_FLOAT},                                                                              // MBL offset
+  {VAL_TYPE_NEG_FLOAT,  VAL_TYPE_NEG_FLOAT, VAL_TYPE_NEG_FLOAT},                                     // Machine Min (X, Y, Z)
+  {VAL_TYPE_NEG_FLOAT,  VAL_TYPE_NEG_FLOAT, VAL_TYPE_NEG_FLOAT},                                     // Machine Max (X, Y, Z)
 };
 
 PARAMETERS infoParameters;
@@ -152,6 +160,8 @@ char * const deltaTowerAngleDisplayID[] = {"Tx", "Ty", "Tz"};
 char * const deltaDiagonalRodDisplayID[] = {"Dx", "Dy", "Dz"};
 char * const deltaEndstopDisplayID[] = {"Ex", "Ey", "Ez"};
 char * const linAdvDisplayID[] = {"K-Factor E0", "K-Factor E1"};
+char * const machineMinDislayID[] = {"MinX", "MinY", "MinZ"};
+char * const machineMaxDislayID[] = {"MaxX", "MaxY", "MaxZ"};
 
 // param attributes configurable labels
 const LABEL accelDisplayID[] = {LABEL_PRINT_ACCELERATION, LABEL_RETRACT_ACCELERATION, LABEL_TRAVEL_ACCELERATION};
@@ -312,6 +322,10 @@ float getParameter(PARAMETER_NAME name, uint8_t index)
 
     case P_MBL_OFFSET:
       return infoParameters.MblOffset[index];
+    case P_MACHINE_MIN:
+      return infoParameters.MachineMin[index];
+    case P_MACHINE_MAX:
+      return infoParameters.MachineMax[index];
 
     default:
       return 0.0f;
@@ -434,6 +448,13 @@ void setParameter(PARAMETER_NAME name, uint8_t index, float val)
 
     case P_MBL_OFFSET:
       infoParameters.MblOffset[index] = val;
+      break;
+    case P_MACHINE_MIN:
+      infoParameters.MachineMin[index] = val;
+      infoParameters.MachineMin[index] = val;
+      break;
+    case P_MACHINE_MAX:
+      infoParameters.MachineMax[index] = val;
       break;
 
     default:

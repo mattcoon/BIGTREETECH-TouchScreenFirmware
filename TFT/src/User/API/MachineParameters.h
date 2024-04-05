@@ -38,6 +38,8 @@ typedef enum
   P_HYBRID_THRESHOLD,
   P_BUMPSENSITIVITY,
   P_MBL_OFFSET,
+  P_MACHINE_MIN,
+  P_MACHINE_MAX,
   // keep below items always at the end
   PARAMETERS_COUNT,
 } PARAMETER_NAME;
@@ -112,6 +114,8 @@ typedef struct
   float HybridThreshold[STEPPER_INDEX_COUNT];
   float BumpSensitivity[STEPPER_INDEX_COUNT];
   float MblOffset[1];
+  float MachineMin[AXIS_INDEX_COUNT-2];
+  float MachineMax[AXIS_INDEX_COUNT-2];
 } PARAMETERS;
 
 extern PARAMETERS infoParameters;
@@ -133,7 +137,8 @@ extern char * const deltaTowerAngleDisplayID[];
 extern char * const deltaDiagonalRodDisplayID[];
 extern char * const deltaEndstopDisplayID[];
 extern char * const linAdvDisplayID[];
-
+extern char * const machineMinDislayID[];
+extern char * const machineMaxDislayID[];
 // param attributes configurable labels
 extern const LABEL accelDisplayID[];
 extern const LABEL junctionDeviationDisplayID[];

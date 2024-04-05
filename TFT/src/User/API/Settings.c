@@ -159,8 +159,8 @@ void initSettings(void)
 
   for (int i = 0; i < AXIS_NUM; i++)  // x, y, z
   {
-    infoSettings.machine_size_min[i]  = default_size_min[i];
-    infoSettings.machine_size_max[i]  = default_size_max[i];
+    infoParameters.MachineMin[i]  = default_size_min[i];
+    infoParameters.MachineMax[i]  = default_size_max[i];
   }
 
   for (int i = 0; i < SPEED_COUNT; i++)
@@ -220,6 +220,7 @@ void initMachineSettings(void)
   infoMachineSettings.toggleLights            = DISABLED;
   infoMachineSettings.caseLightsBrightness    = DISABLED;
   infoMachineSettings.emergencyParser         = DISABLED;
+  infoMachineSettings.customerGcodes          = DISABLED;
   infoMachineSettings.promptSupport           = DISABLED;
   infoMachineSettings.onboardSD               = DISABLED;
   infoMachineSettings.multiVolume             = DISABLED;

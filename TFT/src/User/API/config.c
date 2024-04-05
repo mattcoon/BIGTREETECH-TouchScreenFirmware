@@ -651,15 +651,15 @@ void parseConfigKey(uint16_t index)
       break;
 
     case C_INDEX_SIZE_MIN:
-      if (key_seen("X")) SET_VALID_INT_VALUE(infoSettings.machine_size_min[X_AXIS], MIN_SIZE_LIMIT, MAX_SIZE_LIMIT);
-      if (key_seen("Y")) SET_VALID_INT_VALUE(infoSettings.machine_size_min[Y_AXIS], MIN_SIZE_LIMIT, MAX_SIZE_LIMIT);
-      if (key_seen("Z")) SET_VALID_INT_VALUE(infoSettings.machine_size_min[Z_AXIS], MIN_SIZE_LIMIT, MAX_SIZE_LIMIT);
+      if (key_seen("X")) SET_VALID_INT_VALUE(infoParameters.MachineMin[X_AXIS], MIN_SIZE_LIMIT, MAX_SIZE_LIMIT);
+      if (key_seen("Y")) SET_VALID_INT_VALUE(infoParameters.MachineMin[Y_AXIS], MIN_SIZE_LIMIT, MAX_SIZE_LIMIT);
+      if (key_seen("Z")) SET_VALID_INT_VALUE(infoParameters.MachineMin[Z_AXIS], MIN_SIZE_LIMIT, MAX_SIZE_LIMIT);
       break;
 
     case C_INDEX_SIZE_MAX:
-      if (key_seen("X")) SET_VALID_INT_VALUE(infoSettings.machine_size_max[X_AXIS], MIN_SIZE_LIMIT, MAX_SIZE_LIMIT);
-      if (key_seen("Y")) SET_VALID_INT_VALUE(infoSettings.machine_size_max[Y_AXIS], MIN_SIZE_LIMIT, MAX_SIZE_LIMIT);
-      if (key_seen("Z")) SET_VALID_INT_VALUE(infoSettings.machine_size_max[Z_AXIS], MIN_SIZE_LIMIT, MAX_SIZE_LIMIT);
+      if (key_seen("X")) SET_VALID_INT_VALUE(infoParameters.MachineMax[X_AXIS], MIN_SIZE_LIMIT, MAX_SIZE_LIMIT);
+      if (key_seen("Y")) SET_VALID_INT_VALUE(infoParameters.MachineMax[Y_AXIS], MIN_SIZE_LIMIT, MAX_SIZE_LIMIT);
+      if (key_seen("Z")) SET_VALID_INT_VALUE(infoParameters.MachineMax[Z_AXIS], MIN_SIZE_LIMIT, MAX_SIZE_LIMIT);
       break;
 
     case C_INDEX_XY_SPEED:

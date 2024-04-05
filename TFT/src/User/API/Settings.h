@@ -349,6 +349,7 @@ typedef struct
   uint8_t toggleLights;
   uint8_t caseLightsBrightness;
   uint8_t emergencyParser;
+  uint8_t customerGcodes;
   uint8_t promptSupport;
   uint8_t onboardSD;
   uint8_t multiVolume;

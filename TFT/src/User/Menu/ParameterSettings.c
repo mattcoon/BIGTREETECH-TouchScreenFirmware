@@ -138,6 +138,12 @@ void loadElements(LISTITEM * parameterMainItem, uint16_t index, uint8_t itemPos)
         case P_MBL_OFFSET:
           parameterMainItem->titlelabel.address = axisDisplayID[Z_AXIS];
           break;
+        case P_MACHINE_MIN:
+          parameterMainItem->titlelabel.address = machineMinDislayID[elementIndex];
+          break;
+        case P_MACHINE_MAX:
+          parameterMainItem->titlelabel.address = machineMaxDislayID[elementIndex];
+          break;
 
         default:
           break;

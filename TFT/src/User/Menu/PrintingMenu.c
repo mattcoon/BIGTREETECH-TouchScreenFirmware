@@ -93,31 +93,6 @@ static void setLayerPosText(char * layer_height_txt, AXIS axis)
     sprintf(layer_height_txt, "%.1f", layer_height);
 }
 
-static void setLayerNumberTxt(char * layer_number_txt)
-{
-  uint16_t layerNumber = getPrintLayerNumber();
-  uint16_t layerCount = getPrintLayerCount();
-
-  if (layerNumber > 0)
-  {
-    if (layerCount > 0
-        #ifndef TFT70_V3_0
-          && layerCount < 1000  // there's no space to display layer number & count if the layer count is above 999
-        #endif
-       )
-    {
-      sprintf(layer_number_txt, " %u/%u ", layerNumber, layerCount);
-    }
-    else
-    {
-      sprintf(layer_number_txt, "%s%u%s", "  ", layerNumber, "  ");
-    }
-  }
-  else
-  {
-    strcpy(layer_number_txt, "---");
-  }
-}
 
 // initialize printing info before opening Printing menu
 static void initMenuPrinting(void)
