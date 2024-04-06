@@ -33,6 +33,9 @@ const LABEL parameterTypes[PARAMETERS_COUNT] = {
   LABEL_HYBRID_THRESHOLD,
   LABEL_BUMP_SENSITIVITY,
   LABEL_MBL_OFFSET,
+  LABEL_BED_SIZE,
+  LABEL_MACHINE_MIN,
+  LABEL_MACHINE_MAX,
 };
 
 const LISTITEM eepromItems[P_SETTINGS_COUNT] = {
@@ -138,11 +141,14 @@ void loadElements(LISTITEM * parameterMainItem, uint16_t index, uint8_t itemPos)
         case P_MBL_OFFSET:
           parameterMainItem->titlelabel.address = axisDisplayID[Z_AXIS];
           break;
+        case P_BED_SIZE:
+          parameterMainItem->titlelabel.address = BedSizeDisplayID[elementIndex];
+          break;
         case P_MACHINE_MIN:
-          parameterMainItem->titlelabel.address = machineMinDislayID[elementIndex];
+          parameterMainItem->titlelabel.address = machineMinDisplayID[elementIndex];
           break;
         case P_MACHINE_MAX:
-          parameterMainItem->titlelabel.address = machineMaxDislayID[elementIndex];
+          parameterMainItem->titlelabel.address = machineMaxDisplayID[elementIndex];
           break;
 
         default:

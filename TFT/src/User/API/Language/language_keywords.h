@@ -79,6 +79,9 @@ extern "C" {
 #define LANG_KEY_HYBRID_THRESHOLD             "label_hybrid_threshold:"
 #define LANG_KEY_BUMP_SENSITIVITY             "label_bump_sensitivity:"
 #define LANG_KEY_MBL_OFFSET                   "label_mbl_offset:"
+#define LANG_KEY_BED_SIZE                     "label_bed_size:"
+#define LANG_KEY_MACHINE_MIN                  "label_machine_min:"
+#define LANG_KEY_MACHINE_MAX                  "label_machine_max:"
 
 // Machine Parameter Settings - Param Attributes (ordered by gcode)
 #define LANG_KEY_PRINT_ACCELERATION           "label_print_acceleration:"

@@ -72,6 +72,9 @@
     #define STRING_HYBRID_THRESHOLD       "TMC HybridThreshold"
     #define STRING_BUMP_SENSITIVITY       "TMC bump sensitivity"
     #define STRING_MBL_OFFSET             "MBL Offset"
+    #define STRING_BED_SIZE               "Bed Size"
+    #define STRING_MACHINE_MIN            "Machine Min"
+    #define STRING_MACHINE_MAX            "Machine Max"
 
     // Machine Parameter Settings - Param Attributes (ordered by gcode)
     #define STRING_PRINT_ACCELERATION     "Print Acceleration"

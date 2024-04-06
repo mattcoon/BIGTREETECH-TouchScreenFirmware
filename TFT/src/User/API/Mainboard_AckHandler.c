@@ -814,19 +814,22 @@ void parseAck(void)
 
       if (ack_continue_seen("min:"))
       {
-        if (ack_continue_seen("x:")) x = ack_value();
-        if (ack_continue_seen("y:")) y = ack_value();
-        if (ack_continue_seen("z:")) z = ack_value();
+        if (ack_continue_seen("x:")) setParameter(P_MACHINE_MIN, X_AXIS, x);
+        if (ack_continue_seen("y:")) setParameter(P_MACHINE_MIN, Y_AXIS, y);
+        if (ack_continue_seen("z:")) setParameter(P_MACHINE_MIN, Z_AXIS, z);
 
         infoParameters.MachineMin[X_AXIS] = infoParameters.MachineMin[Y_AXIS] = infoParameters.MachineMin[Z_AXIS] = 0.0f;
       }
 
       if (ack_continue_seen("max:"))
       {
-        if (ack_continue_seen("x:")) infoParameters.MachineMax[X_AXIS] = ack_value() - x;
-        if (ack_continue_seen("y:")) infoParameters.MachineMax[Y_AXIS] = ack_value() - y;
-        if (ack_continue_seen("z:")) infoParameters.MachineMax[Z_AXIS] = ack_value() - z;
+        if (ack_continue_seen("x:")) setParameter(P_MACHINE_MAX, X_AXIS, ack_value() - x); 
+        if (ack_continue_seen("y:")) setParameter(P_MACHINE_MAX, Y_AXIS, ack_value() - y);
+        if (ack_continue_seen("z:")) setParameter(P_MACHINE_MAX, Z_AXIS, ack_value() - z);
       }
+      setParameter(P_BED_SIZE, X_AXIS, infoParameters.MachineMax[X_AXIS]-infoParameters.MachineMin[X_AXIS]);
+      setParameter(P_BED_SIZE, Y_AXIS, infoParameters.MachineMax[Y_AXIS]-infoParameters.MachineMin[Y_AXIS]);
+      setParameter(P_BED_SIZE, Z_AXIS, infoParameters.MachineMax[Z_AXIS]-infoParameters.MachineMin[Z_AXIS]);
     }
     // parse M48, repeatability test
     else if (ack_starts_with("Mean:"))

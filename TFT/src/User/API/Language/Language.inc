@@ -79,6 +79,9 @@ X_WORD (CURRENT_SETTING)      // M906
 X_WORD (HYBRID_THRESHOLD)     // M913
 X_WORD (BUMP_SENSITIVITY)     // M914
 X_WORD (MBL_OFFSET)           // G29
+X_WORD (MACHINE_MIN)          // C100
+X_WORD (MACHINE_MAX)          // C101
+X_WORD (BED_SIZE)             // C102   
 
 // Machine Parameter Settings - Param Attributes (ordered by gcode)
 X_WORD (PRINT_ACCELERATION)     // M204

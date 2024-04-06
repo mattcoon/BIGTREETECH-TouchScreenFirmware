@@ -1577,7 +1577,27 @@ void sendQueueCmd(void)
         }
       }
       break;  // end parsing G-codes
+    case 'C':
+      switch (cmd_value())
+      {
+        case 100:  // C100
+          if (cmd_seen('X')) infoParameters.MachineMin[X_AXIS] = cmd_float();
+          if (cmd_seen('Y')) infoParameters.MachineMin[Y_AXIS] = cmd_float();
+          if (cmd_seen('Z')) infoParameters.MachineMin[Z_AXIS] = cmd_float();
+          break;
+        case 101:  // C101
+          if (cmd_seen('X')) infoParameters.MachineMax[X_AXIS] = cmd_float();
+          if (cmd_seen('Y')) infoParameters.MachineMax[Y_AXIS] = cmd_float();
+          if (cmd_seen('Z')) infoParameters.MachineMax[Z_AXIS] = cmd_float();
+          break;
+        case 102:  // C102
+          if (cmd_seen('X')) infoParameters.BedSize[X_AXIS] = cmd_float();
+          if (cmd_seen('Y')) infoParameters.BedSize[Y_AXIS] = cmd_float();
+          if (cmd_seen('Z')) infoParameters.BedSize[Z_AXIS] = cmd_float();
+          break;
 
+      }
+      break;
     case 'T':
       heatSetToolIndex(cmd_value());
       break;
