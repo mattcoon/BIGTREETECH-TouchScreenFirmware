@@ -1,11 +1,7 @@
 #include "ParameterSettings.h"
 #include "includes.h"
 
-static uint16_t psCurPage = 0;
-static uint8_t curParameter = 0;
-bool parametersChanged = false;
-
-const LABEL parameterTypes[PARAMETERS_COUNT] = {
+static const LABEL parameterTypes[PARAMETERS_COUNT] = {
   LABEL_STEPS_SETTING,
   LABEL_FILAMENT_SETTING,
   LABEL_MAXACCELERATION,
@@ -38,15 +34,19 @@ const LABEL parameterTypes[PARAMETERS_COUNT] = {
   LABEL_MACHINE_MAX,
 };
 
-const LISTITEM eepromItems[P_SETTINGS_COUNT] = {
+static const LISTITEM eepromItems[P_SETTINGS_COUNT] = {
 // icon            item type   item title              item value text(only for custom value)
   {CHARICON_SAVE,  LIST_LABEL, LABEL_SETTINGS_SAVE,    LABEL_NULL},
   {CHARICON_UNDO,  LIST_LABEL, LABEL_SETTINGS_RESTORE, LABEL_NULL},
   {CHARICON_RESET, LIST_LABEL, LABEL_SETTINGS_RESET,   LABEL_NULL},
 };
 
+static uint16_t psCurPage = 0;
+static uint8_t curParameter = 0;
+static bool parametersChanged = false;
+
 // Load elements for selected parameter
-void loadElements(LISTITEM * parameterMainItem, uint16_t index, uint8_t itemPos)
+static void loadElements(LISTITEM * parameterMainItem, uint16_t index, uint8_t itemPos)
 {
   uint8_t enabledElementCount = getEnabledElementCount(curParameter);
 
@@ -167,7 +167,7 @@ void loadElements(LISTITEM * parameterMainItem, uint16_t index, uint8_t itemPos)
 }
 
 // Show menu for selected parameter type
-void menuShowParameter(void)
+static void menuShowParameter(void)
 {
   uint8_t enabledElementCount = getEnabledElementCount(curParameter);
   float oldval[enabledElementCount];
@@ -235,7 +235,7 @@ void menuShowParameter(void)
 }
 
 // Load main parameter list page
-void loadParameters(LISTITEM * parameterMainItem, uint16_t index, uint8_t itemPos)
+static void loadParameters(LISTITEM * parameterMainItem, uint16_t index, uint8_t itemPos)
 {
   uint8_t enabledParameterCount = getEnabledParameterCount();
   uint8_t totalItems = (infoMachineSettings.EEPROM == 1) ? (enabledParameterCount + P_SETTINGS_COUNT) : enabledParameterCount;

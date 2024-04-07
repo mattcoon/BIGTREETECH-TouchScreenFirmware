@@ -3,7 +3,7 @@
 
 #define MAX_ELEMENT_COUNT 10
 
-const uint8_t parameterElementCount[PARAMETERS_COUNT] = {
+static const uint8_t parameterElementCount[PARAMETERS_COUNT] = {
   AXIS_INDEX_COUNT,           // Steps/mm (X, Y, Z, E0, E1)
   3,                          // Filament Diameter (Enable, E0, E1)
   AXIS_INDEX_COUNT,           // MaxAcceleration (X, Y, Z, E0, E1)
@@ -36,7 +36,7 @@ const uint8_t parameterElementCount[PARAMETERS_COUNT] = {
   AXIS_INDEX_COUNT-2,         // Machine Max
 };
 
-const char * const parameterCode[PARAMETERS_COUNT] = {
+static const char * const parameterCode[PARAMETERS_COUNT] = {
   "M92",   // Steps/mm
   "M200",  // Filament Diameter
   "M201",  // MaxAcceleration
@@ -69,7 +69,7 @@ const char * const parameterCode[PARAMETERS_COUNT] = {
   "C101",  // Custom Machine max
 };
 
-const char * const parameterCmd[PARAMETERS_COUNT][MAX_ELEMENT_COUNT] = {
+static const char * const parameterCmd[PARAMETERS_COUNT][MAX_ELEMENT_COUNT] = {
   {"X%.4f\n",            "Y%.4f\n",       "Z%.2f\n",       "T0 E%.2f\n",   "T1 E%.2f\n",   NULL,           NULL,           NULL,           NULL,           NULL},           // Steps/mm (X, Y, Z, E0, E1)
   {"S%.0f\n",            "S1 T0 D%.2f\n", "S1 T1 D%.2f\n", NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL},           // Filament Diameter (Enable, E0, E1)
   {"X%.0f\n",            "Y%.0f\n",       "Z%.0f\n",       "T0 E%.0f\n",   "T1 E%.0f\n",   NULL,           NULL,           NULL,           NULL,           NULL},           // MaxAcceleration (X, Y, Z, E0, E1)
@@ -102,7 +102,7 @@ const char * const parameterCmd[PARAMETERS_COUNT][MAX_ELEMENT_COUNT] = {
   {"X%.2f\n",            "Y%.2f\n",       "Z%.2f\n",       NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL},           // Machine Maxs (X, Y, Z)
 };
 
-const VAL_TYPE parameterValType[PARAMETERS_COUNT][MAX_ELEMENT_COUNT] = {
+static const VAL_TYPE parameterValType[PARAMETERS_COUNT][MAX_ELEMENT_COUNT] = {
   {VAL_TYPE_FLOAT,      VAL_TYPE_FLOAT,     VAL_TYPE_FLOAT,      VAL_TYPE_FLOAT,   VAL_TYPE_FLOAT},  // Steps/mm (X, Y, Z, E0, E1)
   {VAL_TYPE_INT,        VAL_TYPE_FLOAT,     VAL_TYPE_FLOAT},                                         // Filament Diameter (Enable, E0, E1)
   {VAL_TYPE_INT,        VAL_TYPE_INT,       VAL_TYPE_INT,        VAL_TYPE_INT,     VAL_TYPE_INT},    // MaxAcceleration (X, Y, Z, E0, E1)
@@ -139,15 +139,16 @@ const VAL_TYPE parameterValType[PARAMETERS_COUNT][MAX_ELEMENT_COUNT] = {
   {VAL_TYPE_NEG_FLOAT,  VAL_TYPE_NEG_FLOAT, VAL_TYPE_NEG_FLOAT},                                     // Machine Max (X, Y, Z)
 };
 
-PARAMETERS infoParameters;
-uint32_t parametersEnabled = 0;
-uint16_t elementEnabled[PARAMETERS_COUNT];  // parameterElementCount must be less than 16
+static uint32_t parametersEnabled = 0;
+static uint16_t elementEnabled[PARAMETERS_COUNT];  // parameterElementCount must be less than 16
 
-#define ONOFF_DISPLAY_ID "1=ON 0=OFF"
+PARAMETERS infoParameters;
 
 // param attributes multi purpose hard coded labels
 char * const axisDisplayID[AXIS_INDEX_COUNT] = AXIS_DISPLAY_ID;
 char * const stepperDisplayID[STEPPER_INDEX_COUNT] = STEPPER_DISPLAY_ID;
+
+#define ONOFF_DISPLAY_ID "1=ON 0=OFF"
 
 // param attributes hard coded labels
 char * const filamentDiaDisplayID[] = {"S " ONOFF_DISPLAY_ID, "T0 Ø Filament", "T1 Ø Filament"};
@@ -187,7 +188,12 @@ static inline uint8_t getElementStatus(PARAMETER_NAME name, uint8_t element)
 uint8_t getEnabledElementCount(PARAMETER_NAME name)
 {
   uint8_t count = 0;
-  for (uint8_t i = 0; i < parameterElementCount[name]; i++) { count += GET_BIT(elementEnabled[name], i); }
+
+  for (uint8_t i = 0; i < parameterElementCount[name]; i++)
+  {
+    count += GET_BIT(elementEnabled[name], i);
+  }
+
   return count;
 }
 
@@ -204,6 +210,7 @@ uint8_t getEnabledElement(PARAMETER_NAME name, uint8_t index)
     if (state && count == (index + 1))
       return i;
   }
+
   return parameterElementCount[name];
 }
 
@@ -220,7 +227,12 @@ static inline uint8_t getParameterStatus(PARAMETER_NAME name)
 uint8_t getEnabledParameterCount(void)
 {
   uint8_t count = 0;
-  for (uint8_t i = 0; i < PARAMETERS_COUNT; i++) { count += GET_BIT(parametersEnabled, i); }
+
+  for (uint8_t i = 0; i < PARAMETERS_COUNT; i++)
+  {
+    count += GET_BIT(parametersEnabled, i);
+  }
+
   return count;
 }
 
@@ -237,6 +249,7 @@ PARAMETER_NAME getEnabledParameter(uint8_t index)
     if (state && count == (index + 1))
       return i;
   }
+
   return PARAMETERS_COUNT;
 }
 

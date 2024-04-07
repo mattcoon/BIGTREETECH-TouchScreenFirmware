@@ -1,6 +1,9 @@
 #include "vfs.h"
 #include "includes.h"
 
+static bool volumeSrcStatus[FF_VOLUMES]             = {false, false};  // volume exist detect
+static uint8_t (* volumeInserted[FF_VOLUMES])(void) = {SD_CD_Inserted, USBH_USR_Inserted};
+
 MYFILE infoFile = {FS_TFT_SD, BOARD_SD, "?:", {0}, {0}, {0}, {0}, 0, 0, 0, 0, false};
 
 void setPrintModelIcon(bool exist)
@@ -123,7 +126,7 @@ void resetInfoFile(void)
 }
 
 // skip path information, if any
-char * getPathTail(void)
+static char * getPathTail(void)
 {
   // examples:
   //
@@ -175,7 +178,7 @@ bool isRootFolder(void)
 }
 
 // check if filename provides a supported filename extension
-char * isSupportedFile(const char * filename)
+static char * isSupportedFile(const char * filename)
 {
   if (filename[0] == '.') // file is hidden
     return NULL;
@@ -277,7 +280,7 @@ const char * getFilename(uint8_t index)
     return infoFile.file[index];
 }
 
-const char * hideExtension(const char * filename)
+static const char * hideExtension(const char * filename)
 {
   // if filename extension feature is disabled and extension is not already hidden
   if (infoSettings.filename_extension == 0 && strchr(filename, '\0')[1] == '\0')
@@ -292,7 +295,7 @@ const char * hideExtension(const char * filename)
   return filename;
 }
 
-const char * restoreExtension(const char * filename)
+static const char * restoreExtension(const char * filename)
 {
   if (infoSettings.filename_extension == 0)  // if filename extension feature is disabled
   {
@@ -353,9 +356,6 @@ bool getPrintTitle(char * buf, uint8_t len)
   return true;
 }
 
-// volume exist detect
-static bool volumeSrcStatus[FF_VOLUMES] = {false, false};
-
 bool volumeExists(uint8_t src)
 {
   if (src >= FF_VOLUMES)
@@ -363,8 +363,6 @@ bool volumeExists(uint8_t src)
 
   return volumeSrcStatus[src];
 }
-
-uint8_t (* volumeInserted[FF_VOLUMES])(void) = {SD_CD_Inserted, USBH_USR_Inserted};
 
 void loopVolumeSource(void)
 {

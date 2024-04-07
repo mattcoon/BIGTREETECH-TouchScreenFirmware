@@ -18,14 +18,20 @@
   #define OFFSET 1
 #endif
 
-const char *const xyzMoveCmd[] = {X_MOVE_GCODE, Y_MOVE_GCODE, Z_MOVE_GCODE};
+static const char * const xyzMoveCmd[] = {X_MOVE_GCODE, Y_MOVE_GCODE, Z_MOVE_GCODE};
+
 static uint8_t item_moveLen_index = 0;
-AXIS nowAxis = X_AXIS;
+static AXIS nowAxis = X_AXIS;
 bool hadMovement = false;
 
+static void storeMoveCmd(const AXIS xyz, const float amount)
+{
+  // if invert is true, use 'amount' multiplied by -1
+  storeCmd(xyzMoveCmd[xyz], GET_BIT(infoSettings.inverted_axis, xyz) ? -amount : amount,
+           xyz != Z_AXIS ? infoSettings.xy_speed[infoSettings.move_speed] : infoSettings.z_speed[infoSettings.move_speed]);
 
 
-void drawXYZ(void)
+static void drawXYZ(void)
 {
   if (getReminderStatus() != SYS_STATUS_IDLE || toastRunning()) return;
 
