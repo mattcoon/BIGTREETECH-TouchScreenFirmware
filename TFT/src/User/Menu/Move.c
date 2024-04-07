@@ -24,14 +24,7 @@ static uint8_t item_moveLen_index = 0;
 static AXIS nowAxis = X_AXIS;
 bool hadMovement = false;
 
-static void storeMoveCmd(const AXIS xyz, const float amount)
-{
-  // if invert is true, use 'amount' multiplied by -1
-  storeCmd(xyzMoveCmd[xyz], GET_BIT(infoSettings.inverted_axis, xyz) ? -amount : amount,
-           xyz != Z_AXIS ? infoSettings.xy_speed[infoSettings.move_speed] : infoSettings.z_speed[infoSettings.move_speed]);
-
-
-static void drawXYZ(void)
+void drawXYZ(void)
 {
   if (getReminderStatus() != SYS_STATUS_IDLE || toastRunning()) return;
 

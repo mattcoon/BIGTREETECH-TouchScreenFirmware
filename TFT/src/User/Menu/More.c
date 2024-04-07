@@ -21,18 +21,6 @@ static const MENUITEMS moreItems = {
   }
 };
 
-static void isPauseExtrude(void)
-{
-  if (pausePrint(true, PAUSE_NORMAL))
-    REPLACE_MENU(menuExtrude);
-}
-
-static void isPauseLoadUnload(void)
-{
-  if (pausePrint(true, PAUSE_NORMAL))
-    REPLACE_MENU(menuLoadUnload);
-}
-
 void menuMore(void)
 {
   KEY_VALUES key_num = KEY_IDLE;

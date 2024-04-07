@@ -85,17 +85,6 @@ static const GUI_RECT printingInfo_rect[6] = {
   {PS_ICON_VAL_X, PS_ICON_VAL_Y, PS_ICON_VAL_SM_EX, PS_ICON_VAL_Y + BYTE_HEIGHT}
 };
 
-static const uint8_t printingIcon[] = {ICON_PRINTING_NOZZLE, ICON_PRINTING_BED,    ICON_PRINTING_FAN,
-                                       ICON_PRINTING_TIMER,  ICON_PRINTING_ZLAYER, ICON_PRINTING_SPEED};
-
-static const uint8_t printingIcon2nd[] = {ICON_PRINTING_CHAMBER, ICON_PRINTING_FLOW};
-
-static const char * const speedId[2] = {"Speed", "Flow "};
-
-static PROGRESS_DISPLAY progDisplayType;
-static LAYER_TYPE layerDisplayType;
-static char title[MAX_TITLE_LEN];
-
 static inline void setPauseResumeIcon(MENUITEMS * curmenu, bool paused)
 {
   curmenu->items[KEY_ICON_4].icon = paused ? ICON_RESUME : ICON_PAUSE;
