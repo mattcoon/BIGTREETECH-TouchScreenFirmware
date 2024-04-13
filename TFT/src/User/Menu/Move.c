@@ -115,29 +115,17 @@ void storeMoveCmd(const AXIS xyz, float amount)
   nowAxis = xyz;  // update now axis
 }
 
-#define LASEROFFTIME  250
-#define LASERONTIME  2000
-#define LASERONSPD      2
+#define LASERTIME  500
+#define LASERONSPD      1
 
-static bool laserState = false;
-static uint32_t laserUpdate = LASEROFFTIME; // 250 mS off
+static laserDuty = 0;
 void laserTest(void)
 {
   
-  if (nextScreenUpdate(laserUpdate))
+  if (nextScreenUpdate(LASERTIME))
   {
-    if( laserState )
-    { // was on, turn off
-      laserState = false;
-      laserUpdate = LASEROFFTIME;
-      laserSetSpeed(0);
-    }
-    else
-    { // was off, turn on
-      laserState = true;
-      laserUpdate = LASERONTIME;
-      laserSetSpeed(LASERONSPD);
-    }
+      laserDuty = LASERONSPD - laserDuty;
+      laserSetSpeed(laserDuty);
   }
 }
 
@@ -147,9 +135,6 @@ void menuMove(void)
   KEY_VALUES key_num = KEY_IDLE;
 
   float amount = moveLenSteps[item_moveLen_index];
-
-  laserState = false;
-  laserUpdate = LASEROFFTIME; // 250 mS off
 
   mustStoreCmd("G91\n");
   mustStoreCmd("M114\n");
@@ -220,7 +205,6 @@ void menuMove(void)
 
         case KEY_ICON_7:
           laserReset();
-          laserState = false;
           if (hadMovement) {
             replaceMoveBack(false);
             REPLACE_MENU(menuZero);
