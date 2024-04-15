@@ -220,6 +220,7 @@
 
     #define STRING_BLTOUCH                "BLTouch"
     #define STRING_TOUCHMI                "TouchMi"
+    #define STRING_ENDSTOPS               "Endstops"
 
     // Values
     #define STRING_1_DEGREE               "1℃"

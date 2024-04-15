@@ -14,7 +14,7 @@ float targetY = 0; // used for next command Y
 float targetZ = 0; // used for next command Z
 
 
-  LABEL title = {LABEL_SURFACE};
+  LABEL printSpecialTitle = {LABEL_SURFACE};
 
   LISTITEM listPrintSpecial[] = {
     // icon            item type           item title          item value text(only for custom value)
@@ -113,7 +113,7 @@ void menuPrintSpecial (void) {
   const uint8_t parameterCount = getSurfaceParameterCount();
   uint16_t curIndex = KEY_IDLE;
 
-  listViewCreate(title, NULL, parameterCount, NULL, false, NULL, loadRoutineElements);
+  listViewCreate(printSpecialTitle, NULL, parameterCount, NULL, false, NULL, loadRoutineElements);
 
   while (MENU_IS(menuPrintSpecial))
   {

@@ -227,6 +227,7 @@ extern "C" {
 
 #define LANG_KEY_BLTOUCH                      "label_bltouch:"
 #define LANG_KEY_TOUCHMI                      "label_touchmi:"
+#define LANG_KEY_ENDSTOPS                     "label_endstops:"
 
 // Values
 #define LANG_KEY_1_DEGREE                     "label_1_degree:"

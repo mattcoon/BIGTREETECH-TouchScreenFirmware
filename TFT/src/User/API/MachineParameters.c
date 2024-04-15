@@ -143,6 +143,7 @@ static uint32_t parametersEnabled = 0;
 static uint16_t elementEnabled[PARAMETERS_COUNT];  // parameterElementCount must be less than 16
 
 PARAMETERS infoParameters;
+uint16_t endStopValue[6];  // x, y, y2, z, z2, z_probe
 
 // param attributes multi purpose hard coded labels
 char * const axisDisplayID[AXIS_INDEX_COUNT] = AXIS_DISPLAY_ID;

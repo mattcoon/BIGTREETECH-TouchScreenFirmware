@@ -1,27 +1,32 @@
 #include "Print.h"
 #include "includes.h"
 
-#if 0
-  LABEL title = {LABEL_ENDSTOPS};
+LABEL EndstopsTitle = {LABEL_ENDSTOPS};
 
-  LISTITEM listEndStops[] = {
-    // icon            item type           item title          item value text(only for custom value)
-    {CHARICON_SETTING1, LIST_CUSTOMVALUE,   LABEL_ITEM_Y_DEPTH, LABEL_CUSTOM_VALUE}, // Y_depth
-    {CHARICON_SETTING1, LIST_CUSTOMVALUE,   LABEL_ITEM_X_WIDTH, LABEL_CUSTOM_VALUE}, // X_width
-    {CHARICON_SETTING1, LIST_CUSTOMVALUE,   LABEL_STEPOVER,     LABEL_CUSTOM_VALUE}, // stepOver
-    {CHARICON_SETTING1, LIST_CUSTOMVALUE,   LABEL_STEPDOWN,     LABEL_CUSTOM_VALUE}, // stepDown
-    {CHARICON_PRINT,    LIST_LABEL,         LABEL_SURFACE,      LABEL_NULL},
-  };
+// x, y, y2, z, z2, z_probe
+char * const EndstopsDisplayID[] = {"Endstop X", "Endstop Y", "Endstop Y2", "Endstop Z", "Endstop Z2", "Z Probe"};
 
-  VAL_TYPE typeEndStops[] = {
-    VAL_TYPE_FLOAT, // Y_depth
-    VAL_TYPE_FLOAT, // X_width
-    VAL_TYPE_FLOAT, // stepOver
-    VAL_TYPE_FLOAT, // stepDown
-  };
+LISTITEM listEndStops[] = {
+  // icon            item type           item title          item value text(only for custom value)
+  {CHARICON_BLANK, LIST_CUSTOMVALUE,   LABEL_CUSTOM_VALUE, LABEL_CUSTOM_VALUE}, // EndStop X
+  {CHARICON_BLANK, LIST_CUSTOMVALUE,   LABEL_CUSTOM_VALUE, LABEL_CUSTOM_VALUE}, // EndStop Y
+  {CHARICON_BLANK, LIST_CUSTOMVALUE,   LABEL_CUSTOM_VALUE, LABEL_CUSTOM_VALUE}, // EndStop Y2
+  {CHARICON_BLANK, LIST_CUSTOMVALUE,   LABEL_CUSTOM_VALUE, LABEL_CUSTOM_VALUE}, // EndStop Z
+  {CHARICON_BLANK, LIST_CUSTOMVALUE,   LABEL_CUSTOM_VALUE, LABEL_CUSTOM_VALUE}, // EndStop Z2
+  {CHARICON_BLANK, LIST_CUSTOMVALUE,   LABEL_CUSTOM_VALUE, LABEL_CUSTOM_VALUE}, // EndStop Z Probe
+};
+
+VAL_TYPE typeEndStops[] = {
+  VAL_TYPE_INT, // EndStop X
+  VAL_TYPE_INT, // EndStop Y
+  VAL_TYPE_INT, // EndStop Y2
+  VAL_TYPE_INT, // EndStop Z
+  VAL_TYPE_INT, // EndStop Z2
+  VAL_TYPE_INT, // EndStop Z Probe
+};
 
 inline int16_t getEndStopCount(void) {
-  return 5;
+  return 6;
 }
  
 float getEndStop(uint8_t index) {
@@ -40,20 +45,18 @@ void loadEndStopElements(LISTITEM * parameterMainItem, uint16_t index, uint8_t i
     parameterMainItem->icon = listEndStops[elementIndex].icon;
     parameterMainItem->itemType = listEndStops[elementIndex].itemType;
     parameterMainItem->titlelabel.index = listEndStops[elementIndex].titlelabel.index;
-    parameterMainItem->titlelabel.address = listEndStops[elementIndex].titlelabel.address;
+    parameterMainItem->titlelabel.address = EndstopsDisplayID[elementIndex];
     parameterMainItem->valueLabel.index = LABEL_CUSTOM_VALUE;
 
     // load value
     setDynamicValue(itemPos, getEndStop(elementIndex));
 
   }
-  else
-  {
-    parameterMainItem->icon = CHARICON_NULL;
-  }
 }
 
-#define ENDSTOP_REFRESH_TIME 250
+#define ENDSTOP_REFRESH_TIME 500
+
+static uint16_t oldendStopValue[6];  // x, y, z, y2, z2
 
 void updateEndStop(void)
 {
@@ -63,16 +66,27 @@ void updateEndStop(void)
   }
 }
 
+bool isEndStopUpdated(void)
+{
+  for(uint8_t i = 0; i < getEndStopCount(); i++)
+  {
+    if (endStopValue[i] != oldendStopValue[i])
+    {
+      oldendStopValue[i] = endStopValue[i];
+      return true;
+    }
+  }
+  return false;
+}
 
-void menuEndStop (void) {
+void menuEndStops (void) {
 
-  static bool isPrinting = false;
   const uint8_t parameterCount = getEndStopCount();
   uint16_t curIndex = KEY_IDLE;
 
-  listViewCreate(title, NULL, parameterCount, NULL, false, NULL, loadEndStopElements);
+  listViewCreate(EndstopsTitle, NULL, parameterCount, NULL, true, NULL, loadEndStopElements);
 
-  while (MENU_IS(menuPrintSpecial))
+  while (MENU_IS(menuEndStops))
   {
     curIndex = listViewGetSelectedIndex();
 
@@ -81,28 +95,16 @@ void menuEndStop (void) {
       case KEY_BACK:
         CLOSE_MENU();
         break;
-
       default:
-        if (curIndex < parameterCount-1)
-        {
-          float val = getEndStop(curIndex);
-          val = numPadFloat(NULL, val, val, false);  // parameter is a decimal number
-          setSurfaceParameter(curIndex, val);
-          setDynamicValue(curIndex, val);
+        if (isEndStopUpdated()) {
           listViewRefreshMenu();
-        }
-        else if (curIndex == parameterCount-1)
-        {
-          isPrinting = true;
         }
         break;
     }
 
-    if (isPrinting) isPrinting = printSurface();
+    updateEndStop();
 
-    loopProcess();
+    loopProcess();    
   }
 
 }
-
-#endif

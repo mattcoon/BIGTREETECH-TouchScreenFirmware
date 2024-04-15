@@ -121,6 +121,7 @@ typedef struct
 } PARAMETERS;
 
 extern PARAMETERS infoParameters;
+extern uint16_t endStopValue[6];  // x, y, y2, z, z2, z probe
 
 // param attributes multi purpose hard coded labels
 extern char * const axisDisplayID[AXIS_INDEX_COUNT];

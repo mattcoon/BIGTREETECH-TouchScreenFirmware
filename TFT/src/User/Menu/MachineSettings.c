@@ -109,7 +109,7 @@ void menuMachineSettings(void)
       #else
         {ICON_NULL,                    LABEL_NULL},
       #endif
-      {ICON_NULL,                    LABEL_NULL},
+      {ICON_PERCENTAGE,              LABEL_ENDSTOPS},
       {ICON_BACK,                    LABEL_BACK},
     }
   };
@@ -164,8 +164,7 @@ void menuMachineSettings(void)
       #endif
 
       case KEY_ICON_6:
-        if (infoMachineSettings.caseLightsBrightness == ENABLED)
-          OPEN_MENU(menuCaseLight);
+        OPEN_MENU(menuEndStops);
         break;
 
       case KEY_ICON_7:

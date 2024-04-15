@@ -28,11 +28,6 @@ void menuMain(void)
     mainPageItems.items[7].icon = ICON_BACK;
     mainPageItems.items[7].label.index = LABEL_BACK;
   }
-  // else
-  // {
-  //   mainPageItems.items[7].icon = ICON_NULL;
-  //   mainPageItems.items[7].label.index = LABEL_ENDSTOPS;
-  // }
   if (infoSettings.laser_mode == 1)
   {
     mainPageItems.items[6].icon = ICON_LASER;
@@ -78,8 +73,6 @@ void menuMain(void)
       case KEY_ICON_7:
         if (infoSettings.status_screen == 1)
           CLOSE_MENU();
-        // else
-          // OPEN_MENU(menuEndStops);
         break;
 
       default:
