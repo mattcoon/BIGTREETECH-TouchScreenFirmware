@@ -97,6 +97,9 @@ void menuEndStops (void) {
         break;
       default:
         if (isEndStopUpdated()) {
+          for (uint8_t i = 0; i < parameterCount; i++) {
+            setDynamicValue(i, getEndStop(i));
+          }
           listViewRefreshMenu();
         }
         break;

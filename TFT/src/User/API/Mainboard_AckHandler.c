@@ -659,24 +659,7 @@ void parseAck(void)
     {
       fanSetCurSpeed(ack_continue_seen("P") ? ack_value() : 0, ack_seen("S") ? ack_value() : 100);
     }
-    else if (ack_starts_with("M119"))
-    {
-      if (ack_seen("Reporting endstop status"))
-      {
-        if (ack_seen("x_min:"))
-          endStopValue[0]= ack_continue_seen("open") ? false : true;
-        if (ack_seen("y_min:"))
-          endStopValue[1] =  ack_continue_seen("open") ? false : true;
-        if (ack_seen("y2_min:"))
-          endStopValue[2] =  ack_continue_seen("open") ? false : true;
-        if (ack_seen("z_max:"))
-          endStopValue[3] =  ack_continue_seen("open") ? false : true;
-        if (ack_seen("z2_max:"))
-          endStopValue[4] =  ack_continue_seen("open") ? false : true;
-        if (ack_seen("z2_probe:"))
-          endStopValue[5] =  ack_continue_seen("open") ? false : true;
-      }
-    }
+
     #ifdef BUZZER_PIN
       // parse M300 sound coming from mainboard, play on TFT
       else if (ack_seen("M300"))
@@ -1396,6 +1379,19 @@ void parseAck(void)
         infoSettings.chamber_en = ack_value();
       }
     }
+    // M119 capture endstop states
+    if (ack_starts_with("x_min:"))
+      endStopValue[0]= ack_continue_seen("open") ? false : true;
+    else if (ack_starts_with("y_min:"))
+      endStopValue[1] =  ack_continue_seen("open") ? false : true;
+    else if (ack_starts_with("y2_min:"))
+      endStopValue[2] =  ack_continue_seen("open") ? false : true;
+    else if (ack_starts_with("z_max:"))
+      endStopValue[3] =  ack_continue_seen("open") ? false : true;
+    else if (ack_starts_with("z2_max:"))
+      endStopValue[4] =  ack_continue_seen("open") ? false : true;
+    else if (ack_starts_with("z2_probe:"))
+      endStopValue[5] =  ack_continue_seen("open") ? false : true;
 
     //----------------------------------------
     // Error / echo parsed responses
