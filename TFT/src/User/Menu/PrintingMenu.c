@@ -267,8 +267,9 @@ static void reDrawPrintingValue(uint8_t icon_pos, uint8_t draw_type)
   }
 
   RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
+
   showLiveInfo(icon_pos, &lvIcon, draw_type & LIVE_INFO_ICON);
-}  // reDrawPrintingValue
+} // reDrawPrintingValue
 
 static inline void toggleInfo(void)
 {
@@ -282,6 +283,7 @@ static inline void toggleInfo(void)
     }
 
     TOGGLE_BIT(currentSpeedID, 0);
+
     reDrawPrintingValue(ICON_POS_SPD, LIVE_INFO_ICON | LIVE_INFO_TOP_ROW | LIVE_INFO_BOTTOM_ROW);
 
     speedQuery();
@@ -339,8 +341,8 @@ static inline void drawLiveInfo(void)
   // progress
   GUI_SetColor(PB_BORDER);
   GUI_DrawRect(progressBar.x0 - 1, progressBar.y0 - 1, progressBar.x1 + 1, progressBar.y1 + 1);  // draw progress bar border
-  reDrawProgressBar(0, 100, PB_BCKG, PB_STRIPE_REMAINING);  // draw progress bar
-  reDrawProgress(0);  // draw progress
+  reDrawProgressBar(0, 100, PB_BCKG, PB_STRIPE_REMAINING);                                       // draw progress bar
+  reDrawProgress(0);                                                                             // draw progress
   GUI_RestoreColorDefault();
 }
 
@@ -529,6 +531,7 @@ void menuPrinting(void)
     if (oldProgress != updatePrintProgress())
     {
       reDrawProgress(oldProgress);
+
       oldProgress = getPrintProgress();
     }
 
@@ -545,6 +548,7 @@ void menuPrinting(void)
         if (layerDrawEnabled == true)
         {
           usedLayerHeight = curLayerHeight;
+
           reDrawPrintingValue(ICON_POS_Z, (layerDisplayType == SHOW_LAYER_BOTH) ? LIVE_INFO_TOP_ROW : LIVE_INFO_BOTTOM_ROW);
         }
 
@@ -562,6 +566,7 @@ void menuPrinting(void)
       if (curLayerNumber != prevLayerNumber)
       {
         prevLayerNumber = curLayerNumber;
+
         reDrawPrintingValue(ICON_POS_Z, LIVE_INFO_BOTTOM_ROW);
       }
     }
@@ -570,6 +575,7 @@ void menuPrinting(void)
     if (curspeed[currentSpeedID] != speedGetCurPercent(currentSpeedID))
     {
       curspeed[currentSpeedID] = speedGetCurPercent(currentSpeedID);
+
       reDrawPrintingValue(ICON_POS_SPD, LIVE_INFO_BOTTOM_ROW);
     }
 
@@ -578,6 +584,7 @@ void menuPrinting(void)
     {
       lastPause = isPaused();
       setPauseResumeIcon(&printingItems, lastPause);
+
       menuDrawItem(&printingItems.items[KEY_ICON_4], KEY_ICON_4);
     }
 
@@ -603,18 +610,9 @@ void menuPrinting(void)
       case PS_KEY_0:
       case PS_KEY_1:
       case PS_KEY_2:
-        layerDisplayType++;  // trigger cleaning previous values
+        OPEN_MENU(menuFan);
+        break;
 
-        if (layerDisplayType != CLEAN_LAYER_HEIGHT)
-          reDrawPrintingValue(ICON_POS_Z, LIVE_INFO_TOP_ROW);
-
-        layerDisplayType = (layerDisplayType + 1) % 6;  // iterate layerDisplayType
-
-        if (layerDisplayType != SHOW_LAYER_NUMBER)  // upper row content changes
-          reDrawPrintingValue(ICON_POS_Z, LIVE_INFO_TOP_ROW);
-
-		break;
-		
       case PS_KEY_3:
         progDisplayType = (progDisplayType + 1) % 3;
         reDrawPrintingValue(ICON_POS_TIM, LIVE_INFO_TOP_ROW | LIVE_INFO_BOTTOM_ROW);

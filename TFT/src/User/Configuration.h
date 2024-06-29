@@ -425,7 +425,7 @@
  * Show banner text at the top of the TFT in Marlin Mode.
  *   Options: [disable: 0, enable: 1]
  */
-#define MARLIN_SHOW_TITLE 1  // Default: 1
+#define MARLIN_SHOW_TITLE 0  // Default: 0
 
 // Enable Laser interface instead of the fan interface (for CNC mode only).
 #define LASER_MODE true
@@ -1239,8 +1239,8 @@
 #define SPEED_ID {"Sp.", "Fr."}  // (speed, flow rate)
 
 // Axes names displayed in Parameter Settings menu
-#define AXIS_DISPLAY_ID    {"X", "Y", "Z", "E0", "E1"}                                // (X, Y, Z, E0, E1)
-#define STEPPER_DISPLAY_ID {"X", "X2", "Y", "Y2", "Z", "Z2", "Z3", "Z4", "E0", "E1"}  // (X, X2, Y, Y2, Z, Z2, Z3, Z4, E0, E1)
+#define AXIS_DISPLAY_ID    {"X", "Y", "Z", "E0", "E1", "E2"}                                // (X, Y, Z, E0, E1)
+#define STEPPER_DISPLAY_ID {"X", "X2", "Y", "Y2", "Z", "Z2", "Z3", "Z4", "E0", "E1", "E2"}  // (X, X2, Y, Y2, Z, Z2, Z3, Z4, E0, E1, E2)
 
 // Manual Leveling
 // Move to four corner points to Leveling manually (Point 1, Point 2, Point 3, Point 4).
@@ -1359,7 +1359,7 @@
  * In case LCD Encoder's sliding buttons (pin LCD_ENCA_PIN and LCD_ENCB_PIN) don't produce
  * any movement on menu, try to increase the delay (in MilliSeconds) (e.g. 64).
  */
-#ifdef MKS_TFT
+#if defined(MKS_TFT)
   #define LCD_ENC_DELAY           40  // in ms. Default: 8
   #define LCD_ENC_PULSES_PER_STEP  2  // Default: 4
   #define LCD_ENC_BUTTON_INTERVAL 20  // in ms. Default: 20

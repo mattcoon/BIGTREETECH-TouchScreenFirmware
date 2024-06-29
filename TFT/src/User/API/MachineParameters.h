@@ -60,6 +60,7 @@ typedef enum
   AXIS_INDEX_Z,
   AXIS_INDEX_E0,
   AXIS_INDEX_E1,
+  AXIS_INDEX_E2,
   AXIS_INDEX_COUNT
 } AXIS_INDEX;
 
@@ -75,6 +76,7 @@ typedef enum
   STEPPER_INDEX_Z4,
   STEPPER_INDEX_E0,
   STEPPER_INDEX_E1,
+  STEPPER_INDEX_E2,
   STEPPER_INDEX_COUNT
 } STEPPER_INDEX;
 
@@ -148,6 +150,9 @@ extern const LABEL accelDisplayID[];
 extern const LABEL junctionDeviationDisplayID[];
 extern const LABEL retractDisplayID[];
 extern const LABEL recoverDisplayID[];
+
+void infoParametersRefreshBackup(void);
+bool infoParametersHasChange(void);
 
 // get enable element count for the parameter
 uint8_t getEnabledElementCount(PARAMETER_NAME name);

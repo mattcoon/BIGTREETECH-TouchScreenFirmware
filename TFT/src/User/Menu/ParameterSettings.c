@@ -45,7 +45,7 @@ static uint16_t psCurPage = 0;
 static uint8_t curParameter = 0;
 static bool parametersChanged = false;
 
-// Load elements for selected parameter
+// load elements for selected parameter
 static void loadElements(LISTITEM * parameterMainItem, uint16_t index, uint8_t itemPos)
 {
   uint8_t enabledElementCount = getEnabledElementCount(curParameter);
@@ -166,7 +166,7 @@ static void loadElements(LISTITEM * parameterMainItem, uint16_t index, uint8_t i
   }
 }
 
-// Show menu for selected parameter type
+// show menu for selected parameter type
 static void menuShowParameter(void)
 {
   uint8_t enabledElementCount = getEnabledElementCount(curParameter);
@@ -234,7 +234,7 @@ static void menuShowParameter(void)
   }
 }
 
-// Load main parameter list page
+// load main parameter list page
 static void loadParameters(LISTITEM * parameterMainItem, uint16_t index, uint8_t itemPos)
 {
   uint8_t enabledParameterCount = getEnabledParameterCount();
@@ -264,7 +264,7 @@ static void loadParameters(LISTITEM * parameterMainItem, uint16_t index, uint8_t
   }
 }
 
-// Main parameter menu
+// main parameter menu
 void menuParameterSettings(void)
 {
   uint8_t enabledParameterCount = getEnabledParameterCount();
@@ -307,7 +307,6 @@ void menuParameterSettings(void)
 
             OPEN_MENU(menuShowParameter);
           }
-          break;
         }
         // perform EEPROM task
         else if (infoMachineSettings.EEPROM == 1 && curIndex < totalItems)
@@ -319,19 +318,17 @@ void menuParameterSettings(void)
             parametersChanged = false;
 
             popupDialog(DIALOG_TYPE_ALERT, title.index, LABEL_EEPROM_SAVE_INFO, LABEL_CONFIRM, LABEL_CANCEL, saveEepromSettings, NULL, NULL);
-            break;
           }
           else if (curIndex_e == P_RESET_SETTINGS)
           {
             popupDialog(DIALOG_TYPE_ALERT, LABEL_SETTINGS_RESET, LABEL_SETTINGS_RESET_INFO, LABEL_CONFIRM, LABEL_CANCEL, resetEepromSettings, NULL, NULL);
-            break;
           }
           else if (curIndex_e == P_RESTORE_SETTINGS)
           {
             popupDialog(DIALOG_TYPE_ALERT, LABEL_SETTINGS_RESTORE, LABEL_EEPROM_RESTORE_INFO, LABEL_CONFIRM, LABEL_CANCEL, restoreEepromSettings, NULL, NULL);
-            break;
           }
         }
+        break;
     }
 
     loopProcess();
