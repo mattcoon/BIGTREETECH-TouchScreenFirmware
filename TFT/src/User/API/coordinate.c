@@ -140,12 +140,14 @@ float coordinateGetAbsAxis(AXIS axis) {
 }
 
 void cur2workSetAxis(AXIS axis, float position) {
-  cur2workPosition.axis[axis] = position;
+  if (Z_AXIS != axis)  //TODO: probe causes issue with move limits
+    cur2workPosition.axis[axis] = position;
 }
 
 // to be called on setting of axis to zero
 void cur2workSetAxisSet(AXIS axis) {
-  cur2workPosition.axis[axis] = curPosition.axis[axis];
+  if (Z_AXIS != axis)  //TODO: probe causes issue with move limits
+    cur2workPosition.axis[axis] = curPosition.axis[axis];
 }
 
 void cur2workSetAxisCur(AXIS axis){

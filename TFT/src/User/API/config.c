@@ -84,8 +84,8 @@
 #define CONFIG_PROBING_Z_RAISE       "probing_z_raise:"
 #define CONFIG_Z_STEPPERS_ALIGNMENT  "z_steppers_alignment:"
 #define CONFIG_TOUCHMI_SENSOR        "touchmi_sensor:"
-#define CONFIG_TOUCHPLATE_ON          "touchplate_on:"
-#define CONFIG_TOUCHPLATE_HEIGHT      "touchplate_height:"
+#define CONFIG_TOUCHPLATE_ON         "touchplate_on:"
+#define CONFIG_TOUCHPLATE_HEIGHT     "touchplate_height:"
 #define CONFIG_PREHEAT_NAME_1        "preheat_name_1:"
 #define CONFIG_PREHEAT_NAME_2        "preheat_name_2:"
 #define CONFIG_PREHEAT_NAME_3        "preheat_name_3:"
@@ -773,6 +773,9 @@ static void parseConfigKey(uint16_t index)
     case C_INDEX_TOUCHMI_SENSOR:
       infoSettings.touchmi_sensor = getOnOff();
       break;
+
+    case C_INDEX_TOUCHPLATE_HEIGHT:
+      SET_VALID_FLOAT_VALUE(infoSettings.touchplate_height, MIN_Z_POS_LIMIT, MAX_SIZE_LIMIT);
 
     case C_INDEX_PREHEAT_NAME_1:
     case C_INDEX_PREHEAT_NAME_2:

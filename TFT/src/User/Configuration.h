@@ -433,7 +433,7 @@
 // Change this if you'd like to have a Z offset after homing Z.
 #define TOUCHPLATE_ON ENABLE
 #ifdef TOUCHPLATE_ON
-  #define TOUCHPLATE_OFFSET 0.0
+  #define TOUCHPLATE_HEIGHT 0.5
 #endif
 
 

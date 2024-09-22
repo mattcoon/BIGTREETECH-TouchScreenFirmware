@@ -80,7 +80,6 @@ void menuHome(void)
         {
           storeCmd("G38.3 Z-90\n"); // probe down
           setPosition(Z_AXIS,infoSettings.touchplate_height);
-          // storeCmd("G92 Z%.3f\n", infoSettings.touchplate_height); // set height position to touchplate
           storeCmd("G0 Z10\n"); // lift off of probe
         }
         break;

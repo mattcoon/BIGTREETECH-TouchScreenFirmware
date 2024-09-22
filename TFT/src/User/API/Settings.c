@@ -32,7 +32,7 @@ void initSettings(void)
 // UI Settings
   infoSettings.laser_mode             = LASER_MODE;
   infoSettings.touchplate_on          = TOUCHPLATE_ON;
-  infoSettings.touchplate_height      = TOUCHPLATE_OFFSET;
+  infoSettings.touchplate_height      = TOUCHPLATE_HEIGHT;
   infoSettings.rotated_ui             = ROTATED_UI;
   infoSettings.language               = LANGUAGE;
   infoSettings.status_screen          = STATUS_SCREEN;
