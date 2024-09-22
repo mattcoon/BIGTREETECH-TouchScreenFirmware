@@ -77,7 +77,7 @@ const ITEM itemMoveLen[ITEM_MOVE_LEN_NUM] = {
 };
 
 // list for length/distance change steps
-const float moveLenSteps[ITEM_MOVE_LEN_NUM] = {0.01f, 0.1f, 1, 10, 100};
+const float moveLenSteps[ITEM_MOVE_LEN_NUM] = {100, 10, 1, 0.1f, 0.02f};
 
 // icons list for Extruder length/distance change steps
 const ITEM itemExtLenSteps[ITEM_EXT_LEN_NUM] = {

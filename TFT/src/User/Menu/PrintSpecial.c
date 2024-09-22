@@ -6,8 +6,8 @@
 
 float Y_depth = 0;
 float X_width = 0;
-float stepOver = 0;
-float stepDown = 0;
+float stepOver = 20;
+float stepDown = 2;
 
 float targetX = 0; // used for next command X
 float targetY = 0; // used for next command Y
@@ -49,7 +49,10 @@ bool printSurface( void ) {
 
   // check if first layer is done
   if (targetX > (X_width+stepOver)) {
-    return false;
+    targetX = 0; // reset target location for next run
+    targetY = 0; 
+    targetZ = 0; 
+    return false; // done
   }
   // still working
   return true;
