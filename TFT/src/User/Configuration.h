@@ -1255,7 +1255,7 @@
 // Z Fade limits
 #define Z_FADE_MIN_VALUE      0.0f  // Default: 0.0f
 #define Z_FADE_MAX_VALUE     20.0f  // Default: 20.0f
-#define Z_FADE_DEFAULT_VALUE 10.0f  // Default: 10.0f
+#define Z_FADE_DEFAULT_VALUE 0.0f  // Default: 10.0f
 
 // Probe Offset limits
 #define PROBE_Z_OFFSET_MIN_VALUE     -20.0f  // Default: -20.0f
@@ -1494,7 +1494,7 @@
  * Uncomment to enable a progress bar with 10% markers.
  * Comment to enable a standard progress bar.
  */
-//#define MARKED_PROGRESS_BAR  // Default: commented (disabled)
+#define MARKED_PROGRESS_BAR  // Default: commented (disabled)
 
 /**
  * Live Text Common Color Layout (Status Screen menu)
@@ -1525,6 +1525,6 @@
  *                    require dedicated post-processing of gcode files for most slicers.
  *                    "RGB565 bitmap" and "Classic" are used as fallback.
  */
-#define THUMBNAIL_PARSER 0  // Default: 0
+#define THUMBNAIL_PARSER 2  // Default: 0
 
 #endif
