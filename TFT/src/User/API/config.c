@@ -56,7 +56,6 @@
 #define CONFIG_HEATED_CHAMBER        "heated_chamber:"
 #define CONFIG_EXT_COUNT             "ext_count:"
 #define CONFIG_FAN_COUNT             "fan_count:"
-#define CONFIG_SYS_FAN_INDEX          "sys_fan_index:"
 #define CONFIG_CONTROLLER_FAN        "controller_fan:"
 #define CONFIG_MAX_TEMP              "max_temp:"
 #define CONFIG_MIN_TEMP              "min_temp:"

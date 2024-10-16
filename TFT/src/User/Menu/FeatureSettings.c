@@ -16,7 +16,6 @@ typedef enum
   SKEY_PROBING_Z_OFFSET,
   SKEY_Z_STEPPERS_ALIGNMENT,
   SKEY_FAN_COUNT,
-  SKEY_SYS_FAN_INDEX,
   SKEY_LASER,
 
   #ifdef PS_ON_PIN
@@ -104,9 +103,6 @@ static inline void updateFeatureSettings(uint8_t item_index)
     case SKEY_FAN_COUNT:
       infoSettings.fan_count = (infoSettings.fan_count + 1) % MAX_FAN_COUNT;
       break;
-    case SKEY_SYS_FAN_INDEX:
-      infoSettings.sysFanIndex = (infoSettings.sysFanIndex + 1) % MAX_FAN_COUNT;
-      break;
     #ifdef PS_ON_PIN
       case SKEY_PS_AUTO_SHUTDOWN:
         infoSettings.auto_shutdown = (infoSettings.auto_shutdown + 1) % ITEM_TOGGLE_AUTO_NUM;
@@ -187,9 +183,6 @@ static void loadFeatureSettings(LISTITEM * item, uint16_t item_index, uint8_t it
       case SKEY_FAN_COUNT:
         item->valueLabel = itemFanCnt[infoSettings.fan_count].label;
         break;
-      case SKEY_SYS_FAN_INDEX:
-        item->valueLabel = itemFanCnt[infoSettings.sysFanIndex].label;
-        break;
       #ifdef PS_ON_PIN
         case SKEY_PS_AUTO_SHUTDOWN:
           item->valueLabel = itemToggleAuto[infoSettings.auto_shutdown];
@@ -251,7 +244,6 @@ void menuFeatureSettings(void)
     {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_PROBING_Z_OFFSET,       LABEL_NULL},
     {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_Z_STEPPERS_ALIGNMENT,   LABEL_NULL},
     {CHARICON_BLANK,       LIST_CUSTOMVALUE,   LABEL_FAN_COUNT,              LABEL_FAN0},
-    {CHARICON_BLANK,       LIST_CUSTOMVALUE,   LABEL_SYS_FAN_INDEX,          LABEL_FAN0},
     {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_LASER_MODE,             LABEL_NULL}, // 10
     #ifdef PS_ON_PIN
       {CHARICON_BLANK,       LIST_CUSTOMVALUE,   LABEL_PS_AUTO_SHUTDOWN,       LABEL_OFF},

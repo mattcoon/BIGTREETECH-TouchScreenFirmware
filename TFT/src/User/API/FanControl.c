@@ -102,14 +102,4 @@ void ctrlFanQuery(void)
     ctrlFanSendingWaiting = storeCmd("M710\n");
 }
 
-void fanMBControlOff (void) 
-{
-  if (infoSettings.sysFanIndex < infoSettings.fan_count)
-    fanSetSpeed(infoSettings.sysFanIndex,0);
-}
-void fanMBControlOn (void)
-{
-  if (infoSettings.sysFanIndex < infoSettings.fan_count)
-    fanSetSpeed(infoSettings.sysFanIndex,240);
-}
 

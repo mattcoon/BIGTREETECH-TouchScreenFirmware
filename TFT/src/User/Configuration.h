@@ -502,18 +502,12 @@
 #define FAN_COUNT 3  // Default: 1
 
 /**
- * System Fan Index
- *   Value range: [min: 0, max: 6]
- */
-#define SYS_FAN_INDEX 0 // Default: 0
-
-/**
  * Controller Fan Support
  * Enable/disable controller fan speed control for Active and Idle cooling if Marlin
  * firmware supports controller fan (M710).
  *   Options: [disable: 0, enable: 1]
  */
-#define CONTROLLER_FAN 0  // Default: 0
+#define CONTROLLER_FAN 1  // Default: 0
 
 /**
  * Bed / Extruder / Chamber Maximum Temperatures

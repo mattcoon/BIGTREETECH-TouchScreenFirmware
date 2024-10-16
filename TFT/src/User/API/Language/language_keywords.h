@@ -216,7 +216,6 @@ extern "C" {
 #define LANG_KEY_BED                    "label_bed:"
 #define LANG_KEY_CHAMBER                "label_chamber:"
 #define LANG_KEY_FAN_COUNT              "fan_count:"
-#define LANG_KEY_SYS_FAN_INDEX          "sys_fan_index:"
 #define LANG_KEY_FAN                    "label_fan:"
 #define LANG_KEY_FAN0                   "label_fan0:"
 #define LANG_KEY_FAN1                   "label_fan1:"
