@@ -617,7 +617,7 @@
  *
  *   Options: [disable: 0, enable: 1, auto-detect: 2]
  */
-#define ONBOARD_SD 0 // Default: 2
+#define ONBOARD_SD 2 // Default: 2
 
 /**
  * M27 Printing Status Refresh Time
