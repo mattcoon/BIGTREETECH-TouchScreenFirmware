@@ -7,7 +7,7 @@
   LABEL_HOME,
   // icon                          label
   {
-    {ICON_NULL,                    LABEL_NULL},
+    {ICON_MOVE,                    LABEL_MOVE},
     {ICON_LEVEL_EDGE_DISTANCE,     LABEL_SET_POSITION},
     {ICON_ZERO_X,                  LABEL_ZERO_X},
     {ICON_ZERO_Y,                  LABEL_ZERO_Y},
@@ -46,7 +46,8 @@ void menuZero(void)
     key_num = menuKeyGetValue();
     switch(key_num)
     {
-      case KEY_ICON_0: 
+      case KEY_ICON_0:
+        REPLACE_MENU(menuJog);
         break;
       case KEY_ICON_1: 
         setPosition(X_AXIS,0); 
