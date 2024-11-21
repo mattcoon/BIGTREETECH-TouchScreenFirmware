@@ -91,27 +91,27 @@ int16_t drawTemperatureStatus(void)
   { // global hotend
     if (infoSettings.hotend_count == 2 && !infoSettings.chamber_en)  // dual hotend
     {
-      tmpIcon[tmpIndex] = ICON_GLOBAL_NOZZLE;
+      tmpIcon[tmpIndex] = ICON_NULL;
       tmpHeater[tmpIndex++] = NOZZLE0;
-      tmpIcon[tmpIndex] = ICON_GLOBAL_NOZZLE;
+      tmpIcon[tmpIndex] = ICON_NULL;
       tmpHeater[tmpIndex++] = NOZZLE1;
     }
     else  // single or mixing hotend
     {
-      tmpIcon[tmpIndex] = ICON_GLOBAL_NOZZLE;
+      tmpIcon[tmpIndex] = ICON_NULL;
       tmpHeater[tmpIndex++] = heatGetCurrentHotend();
     }
   }
 
   if (infoSettings.bed_en)
   { // global bed
-    tmpIcon[tmpIndex] = ICON_GLOBAL_BED;
+    tmpIcon[tmpIndex] = ICON_NULL;
     tmpHeater[tmpIndex++] = BED;
   }
 
   if (infoSettings.chamber_en)
   { // global chamber
-    tmpIcon[tmpIndex] = ICON_GLOBAL_CHAMBER;
+    tmpIcon[tmpIndex] = ICON_NULL;
     tmpHeater[tmpIndex++] = CHAMBER;
   }
 

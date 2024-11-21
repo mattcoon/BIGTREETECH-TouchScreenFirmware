@@ -43,7 +43,7 @@ void menuCaseLight(void)
       {ICON_NULL,                    LABEL_NULL},
       {ICON_NULL,                    LABEL_NULL},
       {ICON_INC,                     LABEL_INC},
-      {ICON_E_5_PERCENT,             LABEL_5_PERCENT},
+      {ICON_NULL,                    LABEL_5_PERCENT},
       {ICON_RGB_WHITE,               LABEL_ON},
       {ICON_NULL,                    LABEL_NULL},
       {ICON_BACK,                    LABEL_BACK},

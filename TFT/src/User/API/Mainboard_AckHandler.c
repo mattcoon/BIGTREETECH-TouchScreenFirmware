@@ -876,34 +876,34 @@ void parseAck(void)
         addToast(DIALOG_TYPE_INFO, ack_cache);
     }
     // parse M303, PID autotune finished message
-    else if (ack_starts_with("PID Autotune finished"))
-    {
-      pidUpdateStatus(PID_SUCCESS);
-    }
+    // else if (ack_starts_with("PID Autotune finished"))
+    // {
+    //   pidUpdateStatus(PID_SUCCESS);
+    // }
     // parse M303, PID autotune failed message
-    else if (ack_starts_with("PID Autotune failed"))
-    {
-      pidUpdateStatus(PID_FAILED);
-    }
+    // else if (ack_starts_with("PID Autotune failed"))
+    // {
+    //   pidUpdateStatus(PID_FAILED);
+    // }
     // parse M303, PID autotune finished message in case of Smoothieware
-    else if ((infoMachineSettings.firmwareType == FW_SMOOTHIEWARE) && ack_seen("PID Autotune Complete!"))
-    {
-      //ack_index += 84; -> need length check
-      pidUpdateStatus(PID_SUCCESS);
-    }
+    // else if ((infoMachineSettings.firmwareType == FW_SMOOTHIEWARE) && ack_seen("PID Autotune Complete!"))
+    // {
+    //   //ack_index += 84; -> need length check
+    //   pidUpdateStatus(PID_SUCCESS);
+    // }
     // parse M303, PID autotune failed message in case of Smoothieware
-    else if ((infoMachineSettings.firmwareType == FW_SMOOTHIEWARE) && ack_seen("// WARNING: Autopid did not resolve within"))
-    {
-      pidUpdateStatus(PID_FAILED);
-    }
+    // else if ((infoMachineSettings.firmwareType == FW_SMOOTHIEWARE) && ack_seen("// WARNING: Autopid did not resolve within"))
+    // {
+    //   pidUpdateStatus(PID_FAILED);
+    // }
     // parse M306, model predictive temperature control tuning end message (interrupted or finished)
-    else if (ack_seen("MPC Autotune"))
-    {
-      if (ack_continue_seen("finished"))
-        setMpcTuningResult(FINISHED);
-      else if (ack_continue_seen("interrupted"))
-        setMpcTuningResult(INTERRUPTED);
-    }
+    // else if (ack_seen("MPC Autotune"))
+    // {
+    //   if (ack_continue_seen("finished"))
+    //     setMpcTuningResult(FINISHED);
+    //   else if (ack_continue_seen("interrupted"))
+    //     setMpcTuningResult(INTERRUPTED);
+    // }
     // parse and store M355, case light message
     else if (ack_seen("Case light:"))
     {
@@ -923,10 +923,10 @@ void parseAck(void)
     //            1) echo:Bed Leveling
     //            2) mesh. Z offset:
     //
-    else if (meshIsWaitingData())
-    {
-      meshUpdateData(ack_cache);  // update mesh data
-    }
+    // else if (meshIsWaitingData())
+    // {
+    //   meshUpdateData(ack_cache);  // update mesh data
+    // }
     // parse and store M420 V1 T1 or M420 Sxx, ABL state (e.g. from Bed Leveling menu)
     else if (ack_starts_with("echo:Bed Leveling"))
     {
@@ -950,15 +950,15 @@ void parseAck(void)
       if (ack_seen("Z") || (ack_seen("Z:"))) setParameter(P_PROBE_OFFSET, AXIS_INDEX_Z, ack_value());
     }
     // parse G29 (ABL) + M118, ABL completed message (ABL, BBL, UBL) (e.g. from ABL menu)
-    else if (ack_starts_with("ABL Completed"))
-    {
-      ablUpdateStatus(true);
-    }
+    // else if (ack_starts_with("ABL Completed"))
+    // {
+    //   ablUpdateStatus(true);
+    // }
     // parse G29 (MBL), MBL completed message (e.g. from MBL menu)
-    else if (ack_seen("Mesh probing done"))
-    {
-      mblUpdateStatus(true);
-    }
+    // else if (ack_seen("Mesh probing done"))
+    // {
+    //   mblUpdateStatus(true);
+    // }
     // parse G30, feedback to get the 4 corners Z value returned by Marlin for LevelCorner menu
     else if (ack_seen("Bed X:"))
     {
@@ -1091,19 +1091,19 @@ void parseAck(void)
       if (ack_seen("D")) setParameter(param, 2, ack_value());
     }
     // parse and store model predictive temperature control (only for Marlin)
-    else if (ack_starts_with("M306") && infoMachineSettings.firmwareType == FW_MARLIN)
-    {
-      if (ack_continue_seen("E"))
-      {
-        uint8_t index = ack_value();
+    // else if (ack_starts_with("M306") && infoMachineSettings.firmwareType == FW_MARLIN)
+    // {
+    //   if (ack_continue_seen("E"))
+    //   {
+    //     uint8_t index = ack_value();
 
-        if (ack_continue_seen("P"))
-          setMpcHeaterPower(index, ack_value());
+    //     if (ack_continue_seen("P"))
+    //       setMpcHeaterPower(index, ack_value());
 
-        if (ack_continue_seen("H"))
-          setMpcFilHeatCapacity(index, ack_value());
-      }
-    }
+    //     if (ack_continue_seen("H"))
+    //       setMpcFilHeatCapacity(index, ack_value());
+    //   }
+    // }
     // parse and store input shaping parameters (only for Marlin)
     else if (ack_starts_with("M593") && infoMachineSettings.firmwareType == FW_MARLIN)
     {
@@ -1426,16 +1426,17 @@ void parseAck(void)
     else if (ack_starts_with(magic_echo))
     {
       // parse and store M401 H, BLTouch HighSpeed mode
-      if (ack_continue_seen("BLTouch HS mode"))
-      {
-        setHSmode(ack_continue_seen("ON") ? HS_ON : HS_OFF);
-      }
+      // if (ack_continue_seen("BLTouch HS mode"))
+      // {
+      //   setHSmode(ack_continue_seen("ON") ? HS_ON : HS_OFF);
+      // }
       // newer Marlin (e.g. 2.0.9.3) returns this ACK for M900 command
-      else if (ack_continue_seen("Advance K="))
-      {
-        setParameter(P_LIN_ADV, heatGetToolIndex(), ack_value());
-      }
-      else if (!processKnownEcho())  // if no known echo was found and processed, then popup the echo message
+      // else if (ack_continue_seen("Advance K="))
+      // {
+      //   setParameter(P_LIN_ADV, heatGetToolIndex(), ack_value());
+      // }
+      // else 
+      if (!processKnownEcho())  // if no known echo was found and processed, then popup the echo message
       {
         ackPopupInfo(magic_echo);
       }

@@ -45,7 +45,7 @@ enum
 const uint8_t printingIcon[] = {ICON_PRINTING_XPOS, ICON_PRINTING_YPOS,    ICON_PRINTING_ZPOS,
                                 ICON_PRINTING_TIMER,  ICON_PRINTING_FAN, ICON_PRINTING_SPEED};
 
-const uint8_t printingIcon2nd[] = {ICON_PRINTING_CHAMBER, ICON_PRINTING_FLOW};
+const uint8_t printingIcon2nd[] = {ICON_NULL, ICON_PRINTING_FLOW};
 
 const char * const speedId[2] = {"Speed", "Flow "};
 const char * const laserId = "Laser";
@@ -643,7 +643,7 @@ void menuPrinting(void)
         break;
 
       case PS_KEY_7:
-        OPEN_MENU(menuBabystep);
+        // OPEN_MENU(menuBabystep);
         break;
 
       case PS_KEY_8:

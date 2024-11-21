@@ -124,7 +124,7 @@ void menuMachineSettings(void)
 
   if (infoMachineSettings.caseLightsBrightness == ENABLED)
   {
-    machineSettingsItems.items[KEY_ICON_6].icon = ICON_CASE_LIGHT;
+    machineSettingsItems.items[KEY_ICON_6].icon = ICON_NULL;
     machineSettingsItems.items[KEY_ICON_6].label.index = LABEL_CASE_LIGHT;
   }
 

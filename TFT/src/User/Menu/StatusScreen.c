@@ -47,8 +47,8 @@ static const MENUITEMS statusItems = {
   LABEL_READY,
   // icon                          label
   {
-    {ICON_STATUS_NOZZLE,           LABEL_NULL},
-    {ICON_STATUS_BED,              LABEL_NULL},
+    {ICON_NULL,           LABEL_NULL},
+    {ICON_NULL,              LABEL_NULL},
     {ICON_STATUS_FAN,              LABEL_NULL},
     {ICON_STATUS_SPEED,            LABEL_NULL},
     #ifdef TFT70_V3_0
@@ -63,7 +63,7 @@ static const MENUITEMS statusItems = {
   }
 };
 
-static const uint8_t bedIcons[2]     = {ICON_STATUS_BED, ICON_STATUS_CHAMBER};
+static const uint8_t bedIcons[2]     = {ICON_NULL, ICON_NULL};
 #ifndef TFT70_V3_0
   static const uint8_t speedIcons[2] = {ICON_STATUS_SPEED, ICON_STATUS_FLOW};
 #endif
@@ -154,7 +154,7 @@ static void statusDraw(void)
     lvIcon.enabled[2] = false;
   #else
     // TOOL / EXT
-    lvIcon.iconIndex = ICON_STATUS_NOZZLE;
+    lvIcon.iconIndex = ICON_NULL;
     lvIcon.lines[0].text = (uint8_t *)heatShortID[currentTool];
     sprintf(tempstr, "%3d/%-3d", heatGetCurrentTemp(currentTool), heatGetTargetTemp(currentTool));
     lvIcon.lines[1].text = (uint8_t *)tempstr;

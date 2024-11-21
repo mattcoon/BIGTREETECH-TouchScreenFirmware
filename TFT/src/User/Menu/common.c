@@ -80,14 +80,14 @@ const ITEM itemMoveLen[ITEM_MOVE_LEN_NUM] = {
 const float moveLenSteps[ITEM_MOVE_LEN_NUM] = {100, 10, 1, 0.1f, 0.01f};
 
 // icons list for Extruder length/distance change steps
-const ITEM itemExtLenSteps[ITEM_EXT_LEN_NUM] = {
-// icon                          label
-  {ICON_E_1_MM,                  LABEL_1_MM},
-  {ICON_E_5_MM,                  LABEL_5_MM},
-  {ICON_E_10_MM,                 LABEL_10_MM},
-  {ICON_E_100_MM,                LABEL_100_MM},
-  {ICON_E_200_MM,                LABEL_200_MM},
-};
+// const ITEM itemExtLenSteps[ITEM_EXT_LEN_NUM] = {
+// // icon                          label
+//   {ICON_E_1_MM,                  LABEL_1_MM},
+//   {ICON_E_5_MM,                  LABEL_5_MM},
+//   {ICON_E_10_MM,                 LABEL_10_MM},
+//   {ICON_E_100_MM,                LABEL_100_MM},
+//   {ICON_E_200_MM,                LABEL_200_MM},
+// };
 
 // list for extruder length/distance change steps
 const float extlenSteps[ITEM_EXT_LEN_NUM] = {1.0f, 5.0f, 10.0f, 100.0f, 200.0f};

@@ -246,14 +246,14 @@ void ParseACKJsonParser::value(const char * value)
         string_end = strstr(string_start, (char *)"/");
         setPrintProgressData(atoi(string_start + 14), atoi(string_end + 1));
       }
-      else if (strstr(value, (char *)"Auto tuning heater") && strstr(value, (char *)"completed"))
-      {
-        pidUpdateStatus(PID_SUCCESS);
-      }
-      else if (strstr(value, (char *)"Error: M303") || (strstr(value, (char *)"Auto tune of heater") && strstr(value, (char *)"failed")))
-      {
-        pidUpdateStatus(PID_FAILED);
-      }
+      // else if (strstr(value, (char *)"Auto tuning heater") && strstr(value, (char *)"completed"))
+      // {
+      //   pidUpdateStatus(PID_SUCCESS);
+      // }
+      // else if (strstr(value, (char *)"Error: M303") || (strstr(value, (char *)"Auto tune of heater") && strstr(value, (char *)"failed")))
+      // {
+      //   pidUpdateStatus(PID_FAILED);
+      // }
       break;
 
     case result:

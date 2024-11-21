@@ -43,7 +43,7 @@ void menuSpeed(void)
       {ICON_NULL,                    LABEL_NULL},
       {ICON_INC,                     LABEL_INC},
       {ICON_MOVE,                    LABEL_PERCENTAGE_SPEED},
-      {ICON_E_5_PERCENT,             LABEL_5_PERCENT},
+      {ICON_NULL,                    LABEL_5_PERCENT},
       {ICON_NORMAL_SPEED,            LABEL_NORMAL},
       {ICON_BACK,                    LABEL_BACK},
     }
