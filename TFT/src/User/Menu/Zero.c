@@ -65,12 +65,7 @@ void menuZero(void)
         break;
       case KEY_ICON_5: 
         if(infoSettings.touchplate_on == 1)
-        {
-          storeCmd("G38.3 Z-90\n"); // probe down
-          // setPosition(Z_AXIS,infoSettings.touchplate_height);
-          setPosition(Z_AXIS,0.5);
-          storeCmd("G0 Z10\n"); // lift off of probe
-        }
+          ProbeTouchPlate();
         break;
       case KEY_ICON_6: setPosition(Z_AXIS,0); break;
       case KEY_ICON_7: 

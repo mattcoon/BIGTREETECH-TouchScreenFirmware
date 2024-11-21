@@ -10,6 +10,8 @@ void menuMove(void);
 void drawXYZ(void);
 void updateGantry(void);
 
+void laserTest(void);
+
 #ifdef __cplusplus
 }
 #endif

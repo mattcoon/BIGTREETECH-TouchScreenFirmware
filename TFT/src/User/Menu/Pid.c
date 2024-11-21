@@ -138,7 +138,7 @@ void menuPid(void)
       {ICON_NULL,                    LABEL_NULL},
       {ICON_INC,                     LABEL_INC},
       {ICON_NOZZLE,                  LABEL_NOZZLE},
-      {ICON_5_DEGREE,                LABEL_5_DEGREE},
+      {ICON_NULL,                    LABEL_NULL},
       {ICON_RESUME,                  LABEL_START},
       {ICON_BACK,                    LABEL_BACK},
     }

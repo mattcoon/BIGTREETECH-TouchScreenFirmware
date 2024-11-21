@@ -28,9 +28,9 @@ const ITEM itemTool[MAX_HEATER_COUNT] = {
 // icons list for Temperature step change
 const ITEM itemDegreeSteps[ITEM_DEGREE_NUM] = {
 // icon                          label
-  {ICON_1_DEGREE,                LABEL_1_DEGREE},
-  {ICON_5_DEGREE,                LABEL_5_DEGREE},
-  {ICON_10_DEGREE,               LABEL_10_DEGREE},
+  {ICON_NULL,                LABEL_NULL},
+  {ICON_NULL,                LABEL_NULL},
+  {ICON_NULL,                LABEL_NULL},
 };
 
 // list for temperature step change
@@ -77,7 +77,7 @@ const ITEM itemMoveLen[ITEM_MOVE_LEN_NUM] = {
 };
 
 // list for length/distance change steps
-const float moveLenSteps[ITEM_MOVE_LEN_NUM] = {100, 10, 1, 0.1f, 0.02f};
+const float moveLenSteps[ITEM_MOVE_LEN_NUM] = {100, 10, 1, 0.1f, 0.01f};
 
 // icons list for Extruder length/distance change steps
 const ITEM itemExtLenSteps[ITEM_EXT_LEN_NUM] = {

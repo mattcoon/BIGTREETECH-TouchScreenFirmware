@@ -119,6 +119,7 @@
 #include "FeatureSettings.h"
 #include "Heat.h"
 #include "Home.h"
+#include "Jog.h"
 #include "Laser.h"
 #include "LEDColor.h"
 #include "LevelCorner.h"

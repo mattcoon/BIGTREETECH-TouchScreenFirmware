@@ -11,7 +11,7 @@ void menuMain(void)
     // icon                          label
     {
       {ICON_HOME,                    LABEL_HOME},
-      {ICON_MOVE,                    LABEL_MOVE},
+      {ICON_MOVE,                    LABEL_UNIFIEDMOVE},
       {ICON_LEVEL_EDGE_DISTANCE,     LABEL_ZERO},
       {ICON_PRINT,                   LABEL_CUT},
       {ICON_SETTINGS,                LABEL_SETTINGS},
@@ -53,7 +53,7 @@ void menuMain(void)
       case KEY_ICON_1:  
         if (infoSettings.laser_mode == 1)
           laserReset();
-        OPEN_MENU(menuMove);
+        OPEN_MENU(menuUnifiedMove);
         break;
 
       case KEY_ICON_2:  OPEN_MENU(menuZero);    break;

@@ -17,11 +17,11 @@ void menuBLTouch(void)
     LABEL_BLTOUCH,
     // icon                          label
     {
-      {ICON_BLTOUCH_RESET,           LABEL_RESET},
-      {ICON_BLTOUCH_TEST,            LABEL_TEST},
-      {ICON_BLTOUCH_DEPLOY,          LABEL_DEPLOY},
-      {ICON_BLTOUCH_STOW,            LABEL_STOW},
-      {ICON_BLTOUCH_REPEAT,          LABEL_REPEAT},
+      {ICON_NULL,                    LABEL_NULL},
+      {ICON_NULL,                    LABEL_NULL},
+      {ICON_NULL,                    LABEL_NULL},
+      {ICON_NULL,                    LABEL_NULL},
+      {ICON_NULL,                    LABEL_NULL},
       {ICON_NULL,                    LABEL_NULL},
       {ICON_NULL,                    LABEL_NULL},
       {ICON_BACK,                    LABEL_BACK},

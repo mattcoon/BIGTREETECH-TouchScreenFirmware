@@ -276,6 +276,7 @@ extern "C" {
 // Menus
 #define LANG_KEY_HEAT                   "label_heat:"
 #define LANG_KEY_MOVE                   "label_move:"
+#define LANG_KEY_JOG                    "label_jog:"
 #define LANG_KEY_HOME                   "label_home:"
 #define LANG_KEY_PRINT                  "label_print:"
 #define LANG_KEY_EXTRUDE                "label_extrude:"

@@ -9,6 +9,8 @@ extern "C" {
 
 void menuHome(void);
 
+void ProbeTouchPlate(void);
+
 void setPosition(AXIS axis, float position);
 
 #ifdef __cplusplus

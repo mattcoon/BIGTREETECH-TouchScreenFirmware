@@ -16,6 +16,7 @@ static bool temperatureStatusValid(void)
   if (MENU_IS(menuPrinting)) return false;
   if (MENU_IS(menuStatus)) return false;
   if (MENU_IS(menuMove)) return false;
+  if (MENU_IS(menuJog)) return false;
   if (MENU_IS(menuInfo)) return false;
   if (MENU_IS(menuNotification)) return false;
 

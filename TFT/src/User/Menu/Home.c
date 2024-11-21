@@ -21,6 +21,13 @@ bool hadHome = false;
   }
 };
 
+void ProbeTouchPlate(void)
+{
+  storeCmd("G38.3 Z-90\n"); // probe down
+  setPosition(Z_AXIS,infoSettings.touchplate_height);
+  storeCmd("G0 Z10\n"); // lift off of probe
+}
+
 void setPosition(AXIS axis, float position) {
   // cur2work based on current absolute - position used to reset
   cur2workSetAxis(axis, coordinateGetAbsAxis(axis)-position);
@@ -77,18 +84,14 @@ void menuHome(void)
       case KEY_ICON_4: storeCmd("G28 Z\n"); cur2workSetAxis(Z_AXIS,0);   replaceHomeBack(true); break;
       case KEY_ICON_5: 
         if(infoSettings.touchplate_on == 1)
-        {
-          storeCmd("G38.3 Z-90\n"); // probe down
-          setPosition(Z_AXIS,infoSettings.touchplate_height);
-          storeCmd("G0 Z10\n"); // lift off of probe
-        }
+          ProbeTouchPlate();
         break;
       case KEY_ICON_6: setPosition(Z_AXIS,0); break;
       case KEY_ICON_7: 
         inhibitHome = false;
         if (hadHome){
           replaceHomeBack(false);
-          REPLACE_MENU(menuMove);
+          REPLACE_MENU(menuJog);
         }
         else {
           CLOSE_MENU();

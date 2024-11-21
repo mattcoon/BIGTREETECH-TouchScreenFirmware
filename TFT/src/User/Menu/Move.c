@@ -23,7 +23,7 @@ static const char * const xyzMoveCmd[] = {X_MOVE_GCODE, Y_MOVE_GCODE, Z_MOVE_GCO
 
 static uint8_t item_moveLen_index = 0;
 static AXIS nowAxis = X_AXIS;
-bool hadMovement = false;
+static bool hadMovement = false;
 
 void drawXYZ(void)
 {
@@ -105,7 +105,6 @@ void replaceMoveBack(bool replace) {
 
 void storeMoveCmd(const AXIS xyz, float amount)
 {
-  replaceMoveBack(true);
   // don't limit Z due to probing issue limiting movement
   if (xyz != Z_AXIS) {
     float dist2max = infoParameters.MachineMax[xyz] - coordinateGetAbsAxis(xyz);
@@ -117,13 +116,12 @@ void storeMoveCmd(const AXIS xyz, float amount)
   storeCmd(xyzMoveCmd[xyz], GET_BIT(infoSettings.inverted_axis, xyz) ? -amount : amount,
            ((xyz != Z_AXIS) ? infoSettings.xy_speed[infoSettings.move_speed] : infoSettings.z_speed[infoSettings.move_speed]));
 
-  nowAxis = xyz;  // update now axis
 }
 
 #define LASERTIME  500
 #define LASERONSPD      1
 
-static laserDuty = 0;
+static uint8_t laserDuty = 0;
 void laserTest(void)
 {
   
@@ -136,7 +134,7 @@ void laserTest(void)
 
 void menuMove(void)
 {
-
+  hadMovement = false;
   KEY_VALUES key_num = KEY_IDLE;
 
   float amount = moveLenSteps[item_moveLen_index];
@@ -191,9 +189,21 @@ void menuMove(void)
     switch (key_num)
     {
       #ifdef ALTERNATIVE_MOVE_MENU
-        case KEY_ICON_0: storeMoveCmd(Z_AXIS, -MIN(10,amount)); break;  // Z move down if no invert
-        case KEY_ICON_1: storeMoveCmd(Y_AXIS, amount); break;  // Y move decrease if no invert
-        case KEY_ICON_2: storeMoveCmd(Z_AXIS, MIN(10,amount)); break;   // Z move up if no invert
+        case KEY_ICON_0:   
+          nowAxis = Z_AXIS;  // update now axis
+          storeMoveCmd(nowAxis, -MIN(10,amount));
+          replaceMoveBack(true);
+          break;  // Z move down if no invert
+        case KEY_ICON_1: 
+          nowAxis = Y_AXIS;  // update now axis
+          storeMoveCmd(nowAxis, amount); 
+          replaceMoveBack(true);
+          break;  // Y move decrease if no invert
+        case KEY_ICON_2: 
+          nowAxis = Z_AXIS;  // update now axis
+          storeMoveCmd(nowAxis, MIN(10,amount)); 
+          replaceMoveBack(true);
+          break;   // Z move up if no invert
 
         case KEY_ICON_3:
           item_moveLen_index = (item_moveLen_index + 1) % ITEM_MOVE_LEN_NUM;
@@ -204,9 +214,21 @@ void menuMove(void)
           amount = moveLenSteps[item_moveLen_index];
           break;
 
-        case KEY_ICON_4: storeMoveCmd(X_AXIS, -amount); break;  // X move decrease if no invert
-        case KEY_ICON_5: storeMoveCmd(Y_AXIS, -amount); break;   // Y move increase if no invert
-        case KEY_ICON_6: storeMoveCmd(X_AXIS, amount); break;   // X move increase if no invert
+        case KEY_ICON_4: 
+          nowAxis = X_AXIS;
+          storeMoveCmd(nowAxis, -amount); 
+          replaceMoveBack(true);
+          break;  // X move decrease if no invert
+        case KEY_ICON_5: 
+          nowAxis = Y_AXIS;
+          storeMoveCmd(nowAxis, -amount); 
+          replaceMoveBack(true);
+          break;   // Y move increase if no invert
+        case KEY_ICON_6: 
+          nowAxis = X_AXIS;
+          storeMoveCmd(nowAxis, amount); 
+          replaceMoveBack(true);
+          break;   // X move increase if no invert
 
         case KEY_ICON_7:
           laserReset();

@@ -409,5 +409,6 @@
 #define STRING_STEPOVER               "Stepover"
 #define STRING_STEPDOWN               "Stepdown"
 #define STRING_SURFACE                "Surface"
+#define STRING_JOG                    "Jog"
 
 #endif

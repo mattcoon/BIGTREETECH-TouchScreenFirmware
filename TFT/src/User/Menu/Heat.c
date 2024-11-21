@@ -22,7 +22,7 @@ void menuHeat(void)
       {ICON_NULL,                    LABEL_NULL},
       {ICON_INC,                     LABEL_INC},
       {ICON_NOZZLE,                  LABEL_NOZZLE},
-      {ICON_5_DEGREE,                LABEL_5_DEGREE},
+      {ICON_NULL,                    ICON_NULL},
       {ICON_STOP,                    LABEL_STOP},
       {ICON_BACK,                    LABEL_BACK},
     }
