@@ -94,6 +94,7 @@ void setMenuJog(KEY_VALUES key)
   }
   if (hadJog)
     jogItems.items[7].icon = ICON_LEVEL_EDGE_DISTANCE;
+    jogItems.items[7].label.index = LABEL_ZERO;
   menuDrawPage(&jogItems);
 }
 
@@ -155,16 +156,12 @@ void menuJog(void)
         break;
 
       case KEY_INCREASE:
-        if (!hadJog) {
-          hadJog = true;
-        }
+        hadJog = true;
         storeMoveCmd(nowAxis, amount);
         break;
 
       case KEY_DECREASE:
-        if (!hadJog) {
-          hadJog = true;
-        }
+        hadJog = true;
         storeMoveCmd(nowAxis, -amount);
         break;
 
