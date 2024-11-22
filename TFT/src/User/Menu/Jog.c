@@ -92,9 +92,10 @@ void setMenuJog(KEY_VALUES key)
     }
     jogItems.items[lastTopKey].icon = selectIcon[lastTopKey];
   }
-  if (hadJog)
+  if (hadJog) {
     jogItems.items[7].icon = ICON_LEVEL_EDGE_DISTANCE;
     jogItems.items[7].label.index = LABEL_ZERO;
+  }
   menuDrawPage(&jogItems);
 }
 
