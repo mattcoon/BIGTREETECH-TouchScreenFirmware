@@ -158,11 +158,13 @@ void menuJog(void)
 
       case KEY_INCREASE:
         hadJog = true;
+        setMenuJog(key_num);
         storeMoveCmd(nowAxis, amount);
         break;
 
       case KEY_DECREASE:
         hadJog = true;
+        setMenuJog(key_num);
         storeMoveCmd(nowAxis, -amount);
         break;
 
