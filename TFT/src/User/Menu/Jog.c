@@ -28,8 +28,12 @@ static float amount;
 static KEY_VALUES lastTopKey = KEY_100_MM;
 static KEY_VALUES lastBottomKey = KEY_X;
 
-const uint16_t unSelectIcon[8] = {ICON_NOT_100_MM, ICON_NOT_10_MM, ICON_NOT_1_MM, ICON_NOT_01_MM, ICON_NOT_X, ICON_NOT_Y, ICON_NOT_Z, ICON_BACK};
-const uint16_t selectIcon[8] = {ICON_100_MM, ICON_10_MM, ICON_1_MM, ICON_01_MM, ICON_ZERO_X, ICON_ZERO_Y, ICON_ZERO_Z, ICON_BACK};
+const uint16_t unSelectTZIcon[4]= { ICON_NOT_10_MM, ICON_NOT_1_MM, ICON_NOT_01_MM, ICON_PROBE_OFFSET };
+const uint16_t selectTZIcon[4]  = { ICON_10_MM, ICON_1_MM, ICON_01_MM, ICON_PROBE_OFFSET} ;
+const uint16_t unSelectTIcon[4] = { ICON_NOT_100_MM, ICON_NOT_10_MM, ICON_NOT_1_MM, ICON_NOT_01_MM };
+const uint16_t selectTIcon[4]   = { ICON_100_MM, ICON_10_MM, ICON_1_MM, ICON_01_MM } ;
+const uint16_t unSelectBIcon[4] = { ICON_NOT_X, ICON_NOT_Y, ICON_NOT_Z, ICON_BACK };
+const uint16_t selectBIcon[4]   = { ICON_ZERO_X, ICON_ZERO_Y, ICON_ZERO_Z, ICON_BACK };
 
 MENUITEMS jogItems = {
   // title
@@ -50,47 +54,62 @@ MENUITEMS jogItems = {
 void resetMenuJog(void)
 {
   // copy icons from unSelectIcon to jogItems
-  for (uint8_t i = 0; i < 8; i++)
-    jogItems.items[i].icon = unSelectIcon[i];
+  for (uint8_t i = 0; i < 4; i++)
+    jogItems.items[i].icon = unSelectTIcon[i];
+  for (uint8_t i = 0; i < 4; i++)
+    jogItems.items[i].icon = unSelectBIcon[i];
   menuDrawPage(&jogItems);
 }
 
 void setMenuJog(KEY_VALUES key)
 {
-  if (key < 4) {
-    jogItems.items[lastTopKey].icon = unSelectIcon[lastTopKey];
-    jogItems.items[key].icon = selectIcon[key];
-    if (nowAxis == Z_AXIS)
+  if (key < 4) { // 0 to 3 meaning distance
+    if (nowAxis == Z_AXIS) {
+      jogItems.items[lastTopKey].icon = unSelectTZIcon[lastTopKey];
+      jogItems.items[key].icon = selectTZIcon[key];
       amount = moveLenSteps[key+1];
-    else
+    }
+    else {
+      jogItems.items[lastTopKey].icon = unSelectTIcon[lastTopKey];
+      jogItems.items[key].icon = selectTIcon[key];
       amount = moveLenSteps[key];
+    }
   
     lastTopKey = key;
   }
-  else if (key < 8) {
-    jogItems.items[lastBottomKey].icon = unSelectIcon[lastBottomKey];
-    jogItems.items[key].icon = selectIcon[key];
-    lastBottomKey = key;
+  else if (key < 8) { // 4 to 7 meaning axis
+    jogItems.items[lastBottomKey+4].icon = unSelectBIcon[lastBottomKey];
+    jogItems.items[key].icon = selectBIcon[key-4];
+    lastBottomKey = key-4;
     if (key == KEY_Z)
     {
-      jogItems.items[0].icon = ICON_NOT_10_MM;
-      jogItems.items[1].icon = ICON_NOT_1_MM;
-      jogItems.items[2].icon = ICON_NOT_01_MM;
-      jogItems.items[3].icon = ICON_PROBE_OFFSET;
-      nowAxis = Z_AXIS;
+      // update jogItems icons for Z axis by interating through the items
+      for (uint8_t i = 0; i < 4; i++) 
+        jogItems.items[i].icon = unSelectTZIcon[i];
+      if (nowAxis != Z_AXIS) {
+        amount = moveLenSteps[1]; // 10mm
+        jogItems.items[0].icon = selectTZIcon[0];
+        nowAxis = Z_AXIS;
+      }
+      else {
+        jogItems.items[lastTopKey].icon = selectTZIcon[lastTopKey];
+      }
     }
     else if (key == KEY_X || key == KEY_Y)
     {
-      jogItems.items[0].icon = ICON_NOT_100_MM;
-      jogItems.items[1].icon = ICON_NOT_10_MM;
-      jogItems.items[2].icon = ICON_NOT_1_MM;
-      jogItems.items[3].icon = ICON_NOT_01_MM;
+      for (uint8_t i = 0; i < 4; i++) 
+        jogItems.items[i].icon = unSelectTIcon[i];
+      if (nowAxis == Z_AXIS) {
+        lastTopKey = 0;
+        amount = moveLenSteps[lastTopKey]; // 100mm
+      }
+      jogItems.items[lastTopKey].icon = selectTIcon[lastTopKey];
+
       if (key == KEY_X)
         nowAxis = X_AXIS;
       else
         nowAxis = Y_AXIS;
     }
-    jogItems.items[lastTopKey].icon = selectIcon[lastTopKey];
   }
   if (hadJog) {
     jogItems.items[7].icon = ICON_LEVEL_EDGE_DISTANCE;
@@ -129,8 +148,6 @@ void menuJog(void)
       case KEY_X:
       case KEY_Y:
       case KEY_Z:
-        setMenuJog(key_num);
-        break;
       // amount set in setMenuJog along with icons
       case KEY_100_MM: // 100mm or if Z axis, 10mm
       case KEY_10_MM:
