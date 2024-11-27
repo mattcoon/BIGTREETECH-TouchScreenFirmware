@@ -627,14 +627,23 @@ void parseAck(void)
     else if (ack_starts_with("X:") || ack_seen("C: X:"))  // Smoothieware axis position starts with "C: X:"
     {
       coordinateSetAxisActual(X_AXIS, ack_value());
+      if (coordinateIsKnown())
+        setAxisKnown(X_AXIS, true);
 
       if (ack_continue_seen("Y:"))
       {
         coordinateSetAxisActual(Y_AXIS, ack_value());
+        if (coordinateIsKnown())
+          setAxisKnown(Y_AXIS, true);
 
         if (ack_continue_seen("Z:"))
         {
           coordinateSetAxisActual(Z_AXIS, ack_value());
+          if (coordinateIsKnown())
+            setAxisKnown(Z_AXIS, true);
+          // check if Z axis is at Z max position
+          if (coordinateGetAxisActual(Z_AXIS) >= Z_MAX_POS)
+            coordinateSetKnown(true);
 
           if (ack_continue_seen("E:"))
             coordinateSetAxisActual(E_AXIS, ack_value());

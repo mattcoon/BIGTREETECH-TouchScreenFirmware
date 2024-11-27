@@ -553,7 +553,7 @@
 #define Z_MIN_POS   0  // Default: 0
 #define X_MAX_POS 1220  // Default: 235
 #define Y_MAX_POS 1200  // Default: 235
-#define Z_MAX_POS 90  // Default: 250
+#define Z_MAX_POS 100  // Default: 250
 
 /**
  * X & Y Move Speeds/Feedrates
