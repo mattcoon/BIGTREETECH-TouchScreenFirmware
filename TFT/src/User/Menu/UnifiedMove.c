@@ -21,7 +21,7 @@ void menuUnifiedMove(void)
       {ICON_MOVE,                    LABEL_MOVE},
       {ICON_NULL,                    LABEL_NULL},
       {ICON_NULL,                    LABEL_NULL},
-      {ICON_NULL,                    LABEL_NULL},
+      {ICON_POINT_1,                 LABEL_ZERO},
       {ICON_NULL,                    LABEL_NULL},
       {ICON_NULL,                    LABEL_NULL},
       {ICON_BACK,                    LABEL_BACK},
@@ -47,13 +47,13 @@ void menuUnifiedMove(void)
         break;
 
       case KEY_ICON_2:
-        // OPEN_MENU(menuGo);
         break;
 
       case KEY_ICON_3:
         break;
 
       case KEY_ICON_4:
+        storeCmd("G0 X0 Y0\n");
         break;
 
       case KEY_ICON_5:
