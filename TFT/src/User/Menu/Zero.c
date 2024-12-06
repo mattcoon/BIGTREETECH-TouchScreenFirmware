@@ -47,7 +47,10 @@ void menuZero(void)
     switch(key_num)
     {
       case KEY_ICON_0:
-        REPLACE_MENU(menuJog);
+        if (infoSettings.jog == 1)
+          REPLACE_MENU(menuJog);
+        else
+          REPLACE_MENU(menuMove);
         break;
       case KEY_ICON_1: 
         setPosition(X_AXIS,0); 

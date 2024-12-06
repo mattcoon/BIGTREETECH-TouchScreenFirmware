@@ -280,7 +280,7 @@ typedef struct
   uint8_t  knob_led_color;
   uint8_t  knob_led_idle;
   uint8_t  neopixel_pixels;
-
+  uint8_t  jog;
   // Start, End & Cancel G-code Commands
   uint8_t  send_gcodes;  // send printing gcodes toggles (Bit Values)
 } SETTINGS;

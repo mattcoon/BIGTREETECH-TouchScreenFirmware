@@ -1409,6 +1409,8 @@
  */
 #define ALTERNATIVE_MOVE_MENU  // Default: uncommented (enabled)
 
+#define JOG_STATUS true;  // Default: true
+
 /**
  * Friendly Z Offset Language
  * Replace decrease/increase and "-" & "+" icons with down/up and friendly icons.

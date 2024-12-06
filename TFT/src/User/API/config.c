@@ -164,7 +164,7 @@
 #define CONFIG_START_GCODE           "start_gcode:"
 #define CONFIG_END_GCODE             "end_gcode:"
 #define CONFIG_CANCEL_GCODE          "cancel_gcode:"
-
+#define CONFIG_JOG                   "jog:"
 // this list is Auto-Generated. Please add new config in config.inc only
 enum
 {
@@ -1006,7 +1006,9 @@ static void parseConfigKey(uint16_t index)
     case C_INDEX_CANCEL_GCODE_ENABLED:
       SET_BIT_VALUE(infoSettings.send_gcodes, (index - C_INDEX_START_GCODE_ENABLED), getOnOff());
       break;
-
+    case C_INDEX_JOG:
+      SET_BIT_VALUE(infoSettings.jog, 0, getOnOff());
+      break;
     case C_INDEX_START_GCODE:
     {
       char * pchr = strchr(cur_line, ':') + 1;

@@ -32,6 +32,7 @@ typedef enum
   SKEY_START_GCODE_ENABLED,
   SKEY_END_GCODE_ENABLED,
   SKEY_CANCEL_GCODE_ENABLED,
+  SKEY_JOG,
   SKEY_RESET_SETTINGS,        // keep reset always at the bottom of the settings menu list
   SKEY_COUNT                  // keep this always at the end
 } SKEY_LIST;
@@ -132,7 +133,9 @@ static inline void updateFeatureSettings(uint8_t item_index)
     case SKEY_CANCEL_GCODE_ENABLED:
       TOGGLE_BIT(infoSettings.send_gcodes, (item_index - SKEY_START_GCODE_ENABLED));
       break;
-
+    case SKEY_JOG:
+      TOGGLE_BIT(infoSettings.jog,0);
+      break;
     case SKEY_RESET_SETTINGS:
       popupDialog(DIALOG_TYPE_ALERT, LABEL_SETTINGS_RESET, LABEL_SETTINGS_RESET_INFO, LABEL_CONFIRM, LABEL_CANCEL, resetSettings, NULL, NULL);
       break;
@@ -216,7 +219,9 @@ static void loadFeatureSettings(LISTITEM * item, uint16_t item_index, uint8_t it
       case SKEY_CANCEL_GCODE_ENABLED:
         item->icon = iconToggle[GET_BIT(infoSettings.send_gcodes, (item_index - SKEY_START_GCODE_ENABLED))];
         break;
-
+      case SKEY_JOG:
+        item->icon = iconToggle[infoSettings.jog];
+        break;
       case SKEY_RESET_SETTINGS:
         break;
 
@@ -259,6 +264,7 @@ void menuFeatureSettings(void)
     {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_START_GCODE_ENABLED,    LABEL_NULL},
     {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_END_GCODE_ENABLED,      LABEL_NULL},
     {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_CANCEL_GCODE_ENABLED,   LABEL_NULL},
+    {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_JOG,                    LABEL_NULL},
     // keep reset settings always at the bottom of the settings menu list
     {CHARICON_BLANK,       LIST_MOREBUTTON,    LABEL_SETTINGS_RESET,         LABEL_NULL}
   };

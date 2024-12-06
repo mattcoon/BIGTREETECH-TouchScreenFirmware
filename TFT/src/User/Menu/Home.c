@@ -91,7 +91,10 @@ void menuHome(void)
         inhibitHome = false;
         if (hadHome){
           replaceHomeBack(false);
-          REPLACE_MENU(menuJog);
+          if (infoSettings.jog == 1)
+            REPLACE_MENU(menuJog);
+          else
+            REPLACE_MENU(menuMove);
         }
         else {
           CLOSE_MENU();

@@ -135,7 +135,7 @@ void initSettings(void)
   #else
     infoSettings.neopixel_pixels      = 0;
   #endif
-
+  infoSettings.jog                    = JOG_STATUS;
 // Start, End & Cancel G-code Commands
   infoSettings.send_gcodes            = ((START_GCODE_ENABLED << SEND_GCODES_START_PRINT) | (END_GCODE_ENABLED << SEND_GCODES_END_PRINT) |
                                          (CANCEL_GCODE_ENABLED << SEND_GCODES_CANCEL_PRINT));
