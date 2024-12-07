@@ -18,7 +18,7 @@
 #define KEY_Y      KEY_ICON_5
 #define KEY_Z      KEY_ICON_6
 #define KEY_Back   KEY_ICON_7
-
+#define MENUSWITCHLIMIT 500
 void storeMoveCmd(const AXIS xyz, float amount);  // defined in Move.c
 
 static AXIS nowAxis;
@@ -120,6 +120,7 @@ void setMenuJog(KEY_VALUES key)
 
 void menuJog(void)
 {
+  bool encButtonReset = !LCD_Enc_ReadBtn(LCD_ENC_BUTTON_INTERVAL);
   hadJog = false;
   nowAxis = X_AXIS;
   amount = 100.0;
@@ -186,6 +187,12 @@ void menuJog(void)
         break;
 
       default:
+          if (encButtonReset) {
+            if (LCD_Enc_ReadBtn(MENUSWITCHLIMIT))
+            REPLACE_MENU(menuMove);
+          }
+          if (!LCD_Enc_ReadBtn(MENUSWITCHLIMIT))
+              encButtonReset = true;
         break;
     }
 

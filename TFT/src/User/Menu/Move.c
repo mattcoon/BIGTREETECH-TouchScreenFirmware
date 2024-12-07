@@ -12,7 +12,7 @@
 #define Y_MOVE_GCODE        "G0 Y%.2f F%d\n"  // Y axis gcode
 #define Z_MOVE_GCODE        "G0 Z%.2f F%d\n"  // Z axis gcode
 #define GANTRY_REFRESH_TIME 500               // 1 second is 1000
-
+#define MENUSWITCHLIMIT 500
 #ifdef PORTRAIT_MODE
   #define OFFSET 0
 #else
@@ -134,6 +134,7 @@ void laserTest(void)
 
 void menuMove(void)
 {
+  bool encButtonReset = !LCD_Enc_ReadBtn(LCD_ENC_BUTTON_INTERVAL);
   hadMovement = false;
   KEY_VALUES key_num = KEY_IDLE;
 
@@ -269,6 +270,12 @@ void menuMove(void)
           break;
 
         default:
+          if (encButtonReset) {
+            if (LCD_Enc_ReadBtn(MENUSWITCHLIMIT))
+              REPLACE_MENU(menuJog);
+          }
+          if (!LCD_Enc_ReadBtn(MENUSWITCHLIMIT))
+              encButtonReset = true;
           break;
     }
 
