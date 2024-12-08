@@ -53,9 +53,7 @@ void menuZero(void)
           REPLACE_MENU(menuMove);
         break;
       case KEY_ICON_1: 
-        setPosition(X_AXIS,0); 
-        setPosition(Y_AXIS,0); 
-        setPosition(Z_AXIS,0); 
+        setPositionA(0,0,0);
         break;
       case KEY_ICON_2: setPosition(X_AXIS,0); break;
       case KEY_ICON_3: setPosition(Y_AXIS,0); break;
@@ -65,6 +63,8 @@ void menuZero(void)
           setPosition(X_AXIS,infoParameters.ProbeOffset[X_AXIS]); 
           setPosition(Y_AXIS,infoParameters.ProbeOffset[Y_AXIS]); 
           laserSetSpeed(0);
+          // go to zero position
+          storeCmd("G0 X0 Y0\n");
         }
         break;
       case KEY_ICON_5: 

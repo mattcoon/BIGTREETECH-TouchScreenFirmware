@@ -12,6 +12,7 @@ void menuHome(void);
 void ProbeTouchPlate(void);
 
 void setPosition(AXIS axis, float position);
+void setPositionA(float x, float y, float z);
 
 #ifdef __cplusplus
 }

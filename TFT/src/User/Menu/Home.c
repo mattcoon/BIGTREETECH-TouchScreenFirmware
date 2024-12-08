@@ -34,6 +34,12 @@ void setPosition(AXIS axis, float position) {
   storeCmd("G92 %c%.3f\n",axis_id[axis],position);
 }
 
+void setPositionA(float x, float y, float z) {
+  setPosition(X_AXIS,x);
+  setPosition(Y_AXIS,y);
+  setPosition(Z_AXIS,z);
+}
+
 void replaceHomeBack(bool replace){
   hadHome = replace;
   if (replace) {

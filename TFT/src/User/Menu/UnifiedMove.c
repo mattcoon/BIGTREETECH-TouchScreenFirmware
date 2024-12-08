@@ -53,11 +53,11 @@ void menuUnifiedMove(void)
         break;
 
       case KEY_ICON_4:
+        // go to zero position
         storeCmd("G0 X0 Y0\n");
         break;
 
       case KEY_ICON_5:
-            // popupDialog(DIALOG_TYPE_ALERT, LABEL_WARNING, LABEL_CONNECT_PROBE, LABEL_CONTINUE, LABEL_CANCEL, deltaCalibration, NULL, NULL);
         break;
 
       case KEY_ICON_6:
