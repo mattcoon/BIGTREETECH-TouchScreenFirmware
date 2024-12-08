@@ -134,7 +134,9 @@ void laserTest(void)
 
 void menuMove(void)
 {
-  bool encButtonReset = !LCD_Enc_ReadBtn(LCD_ENC_BUTTON_INTERVAL);
+  #if LCD_ENCODER_SUPPORT
+    bool encButtonReset = !LCD_Enc_ReadBtn(LCD_ENC_BUTTON_INTERVAL);
+  #endif
   hadMovement = false;
   KEY_VALUES key_num = KEY_IDLE;
 
@@ -270,12 +272,14 @@ void menuMove(void)
           break;
 
         default:
+        #if LCD_ENCODER_SUPPORT
           if (encButtonReset) {
             if (LCD_Enc_ReadBtn(MENUSWITCHLIMIT))
               REPLACE_MENU(menuJog);
           }
           if (!LCD_Enc_ReadBtn(MENUSWITCHLIMIT))
               encButtonReset = true;
+        #endif
           break;
     }
 

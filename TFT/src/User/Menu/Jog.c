@@ -120,7 +120,9 @@ void setMenuJog(KEY_VALUES key)
 
 void menuJog(void)
 {
-  bool encButtonReset = !LCD_Enc_ReadBtn(LCD_ENC_BUTTON_INTERVAL);
+  #if LCD_ENCODER_SUPPORT
+    bool encButtonReset = !LCD_Enc_ReadBtn(LCD_ENC_BUTTON_INTERVAL);
+  #endif
   hadJog = false;
   nowAxis = X_AXIS;
   amount = 100.0;
@@ -187,12 +189,14 @@ void menuJog(void)
         break;
 
       default:
+        #if LCD_ENCODER_SUPPORT
           if (encButtonReset) {
             if (LCD_Enc_ReadBtn(MENUSWITCHLIMIT))
             REPLACE_MENU(menuMove);
           }
           if (!LCD_Enc_ReadBtn(MENUSWITCHLIMIT))
               encButtonReset = true;
+        #endif
         break;
     }
 
