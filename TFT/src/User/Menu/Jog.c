@@ -119,7 +119,6 @@ void resetMenuJog(void)
     jogItems.items[i].icon = unSelectTIcon[i];
   for (uint8_t i = 0; i < 4; i++)
     jogItems.items[i].icon = unSelectBIcon[i];
-  menuDrawPage(&jogItems);
   setMenuJog(KEY_100_MM);
   setMenuJog(KEY_X);
 }
@@ -138,7 +137,8 @@ void menuJog(void)
   mustStoreCmd("M114\n");
 
   resetMenuJog();
-  
+  menuDrawPage(&jogItems);
+
   drawXYZ();
 
   while (MENU_IS(menuJog))
