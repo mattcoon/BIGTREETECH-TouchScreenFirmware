@@ -25,15 +25,15 @@ static AXIS nowAxis;
 static bool hadJog;
 static float amount;
 
-static KEY_VALUES lastTopKey = KEY_100_MM;
-static KEY_VALUES lastBottomKey = KEY_X;
+static KEY_VALUES lastTopKey;
+static KEY_VALUES lastBottomKey;
 
-const uint16_t unSelectTZIcon[4]= { ICON_NOT_10_MM, ICON_NOT_1_MM, ICON_NOT_01_MM, ICON_PROBE_OFFSET };
-const uint16_t selectTZIcon[4]  = { ICON_10_MM, ICON_1_MM, ICON_01_MM, ICON_PROBE_OFFSET} ;
-const uint16_t unSelectTIcon[4] = { ICON_NOT_100_MM, ICON_NOT_10_MM, ICON_NOT_1_MM, ICON_NOT_01_MM };
-const uint16_t selectTIcon[4]   = { ICON_100_MM, ICON_10_MM, ICON_1_MM, ICON_01_MM } ;
-const uint16_t unSelectBIcon[4] = { ICON_NOT_X, ICON_NOT_Y, ICON_NOT_Z, ICON_BACK };
-const uint16_t selectBIcon[4]   = { ICON_ZERO_X, ICON_ZERO_Y, ICON_ZERO_Z, ICON_BACK };
+const uint16_t unSelectTZIcon[4]= { ICON_NOT_10_MM, ICON_NOT_1_MM,  ICON_NOT_01_MM, ICON_PROBE_OFFSET };
+const uint16_t selectTZIcon[4]  = { ICON_10_MM,     ICON_1_MM,      ICON_01_MM,     ICON_PROBE_OFFSET} ;
+const uint16_t unSelectTIcon[4] = { ICON_NOT_100_MM,ICON_NOT_10_MM, ICON_NOT_1_MM,  ICON_NOT_01_MM };
+const uint16_t selectTIcon[4]   = { ICON_100_MM,    ICON_10_MM,     ICON_1_MM,      ICON_01_MM } ;
+const uint16_t unSelectBIcon[4] = { ICON_NOT_X,     ICON_NOT_Y,     ICON_NOT_Z,     ICON_BACK };
+const uint16_t selectBIcon[4]   = { ICON_ZERO_X,    ICON_ZERO_Y,    ICON_ZERO_Z,    ICON_BACK };
 
 MENUITEMS jogItems = {
   // title
@@ -50,16 +50,6 @@ MENUITEMS jogItems = {
       {ICON_BACK,                    LABEL_BACK},
   }
 };
-
-void resetMenuJog(void)
-{
-  // copy icons from unSelectIcon to jogItems
-  for (uint8_t i = 0; i < 4; i++)
-    jogItems.items[i].icon = unSelectTIcon[i];
-  for (uint8_t i = 0; i < 4; i++)
-    jogItems.items[i].icon = unSelectBIcon[i];
-  menuDrawPage(&jogItems);
-}
 
 void setMenuJog(KEY_VALUES key)
 {
@@ -115,7 +105,23 @@ void setMenuJog(KEY_VALUES key)
     jogItems.items[7].icon = ICON_LEVEL_EDGE_DISTANCE;
     jogItems.items[7].label.index = LABEL_ZERO;
   }
+  else {
+    jogItems.items[7].icon = ICON_BACK;
+    jogItems.items[7].label.index = LABEL_BACK;
+  }
   menuDrawPage(&jogItems);
+}
+
+void resetMenuJog(void)
+{
+  // copy icons from unSelectIcon to jogItems
+  for (uint8_t i = 0; i < 4; i++)
+    jogItems.items[i].icon = unSelectTIcon[i];
+  for (uint8_t i = 0; i < 4; i++)
+    jogItems.items[i].icon = unSelectBIcon[i];
+  menuDrawPage(&jogItems);
+  setMenuJog(KEY_100_MM);
+  setMenuJog(KEY_X);
 }
 
 void menuJog(void)
@@ -124,20 +130,14 @@ void menuJog(void)
     bool encButtonReset = !LCD_Enc_ReadBtn(LCD_ENC_BUTTON_INTERVAL);
   #endif
   hadJog = false;
-  nowAxis = X_AXIS;
-  amount = 100.0;
-
-
+  setMenuJog(KEY_100_MM);
+  setMenuJog(KEY_X);
   KEY_VALUES key_num = KEY_IDLE;
 
   mustStoreCmd("G91\n");
   mustStoreCmd("M114\n");
 
-  menuDrawPage(&jogItems);
-  lastTopKey = KEY_100_MM;
-  lastBottomKey = KEY_X;
-  setMenuJog(lastBottomKey);
-  setMenuJog(lastTopKey);
+  resetMenuJog();
   
   drawXYZ();
 
