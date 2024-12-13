@@ -212,20 +212,188 @@ In order to use the Marlin Mode (emulation mode) on your screen:
 
 ## Themes
 
-|                      Unified Menu Theme                      | The Round Miracle Theme by **[Acenotass](https://github.com/Acenotass)** |
-| :----------------------------------------------------------: | :----------------------------------------------------------: |
-| ![Unified Material Main Screen](https://user-images.githubusercontent.com/54359396/98742038-03cd4d00-23ae-11eb-9552-36dc02fe66f4.png) | ![Round Miracle Main Screen](https://user-images.githubusercontent.com/54359396/99251566-d77e5a00-280d-11eb-9c7a-0e7c0111eedd.png) |
-| Use firmware, icons, and fonts from the [`Copy to SD Card root directory to update - Unified Menu Material theme`](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update/THEME_Unified%20Menu%20Material%20theme) folder | Use firmware, icons, and fonts from the [`Copy to SD Card root directory to update - The Round Miracle theme`](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update/THEME_The%20Round%20Miracle%20Menu%20Material%20theme) folder |
+|                      Unified Menu Theme                      | 
+| :----------------------------------------------------------: | 
+| ![Unified Material Main Screen](https://user-images.githubusercontent.com/54359396/98742038-03cd4d00-23ae-11eb-9552-36dc02fe66f4.png) | 
+| Use firmware, icons, and fonts from the [`Copy to SD Card root directory to update - Unified Menu Material theme`](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update/THEME_Unified%20Menu%20Material%20theme) folder | 
 
-| Hybrid Red Material Theme by **[AntoszHUN](https://github.com/AntoszHUN)** | Hybrid Mono Material Theme by **[bepstein111](https://github.com/bepstein111)** |
-| :----------------------------------------------------------: | :----------------------------------------------------------: |
-| ![Hybrid Red Menu Material Mainscreen](https://user-images.githubusercontent.com/54359396/98869176-a995c000-2471-11eb-94da-a0bc41abf3e9.png) | ![Monochrome TFT35](https://user-images.githubusercontent.com/54359396/110254523-d5dccb80-7f8f-11eb-86a5-2d52ecd7ca4d.png) |
-| Use firmware, icons, and fonts from the [`Copy to SD Card root directory to update - Hybrid Red Menu Material theme`](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update/THEME_Hybrid%20Red%20Menu%20Material%20theme) folder | Use firmware, icons, and fonts from the [`Copy to SD Card root directory to update - Hybrid Mono Menu Material theme`](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update/THEME_Hybrid%20Mono%20Menu%20Material%20theme) folder |
+## Navigation and Features
 
-| Rep Rap Firmware Dark  Theme by **[xPew](https://github.com/xPew)** |                                                              |
-| :----------------------------------------------------------: | ------------------------------------------------------------ |
-| ![Mainscreen-Rep Rap FW Dark](https://user-images.githubusercontent.com/54359396/132403911-067d5cba-942e-496a-9f24-c4b1c9be99d5.png) | ![Mainscreen](https://user-images.githubusercontent.com/54359396/132404369-948e7677-6d17-4a9a-ad7e-25ebc46b3fdb.png) |
-| Use firmware, icons, and fonts from the [`Copy to SD Card root directory to update - Rep Rap Firmware Dark theme`](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update/THEME_Rep%20Rap%20Firmware%20Dark%20theme) folder |                                                              |
+### Main Menu
+defined in `MainPage.c`<br>
+<img src="Readme/Photos/MainMenu.jpeg" title="Main Menu" width="300" height="200" /> <br>
+**Home**
+: Starting point to run CNC<br>
+**Unified Move**
+: Moves tool to target location<br>
+**Zero**
+: Sets workpiece coordinates<br>
+**Cut**
+: Start milling process by loading gcode file<br>
+**Settings**
+: Configure machine and advance features<br>
+**Disable All**
+: Releases stepper motors. Requires homing afterwards<br>
+**Laser**
+: Laser power control<br>
+
+### Home Menu
+defined in `Home.c`<br>
+<img src="Readme/Photos/Home.jpeg" title="Home" width="300" height="200" /> <br>
+This Menu primarily used to square machine and set location of the machine using Endstops. <br>
+**Home XY**
+: moves X then Y to endstops to find 0. if Z axis is unknown, will Home Z toward top first to avoid damaging or dragging tool<br>
+**Set Position**
+: sets current X and Y position to 0<br>
+**Zero X**
+: Set current X position to 0<br>
+**Zero Y**
+: Set current Y position to 0<br>
+**Home Z**
+: moves gantry up until it hits endstop to set maximum height<br>
+**Touchplate**
+: lowers gantry until touchplate is touched. ensure you have the ground strap attached to tool before procedure. after touching it will set Z position to 0 and then raise gantry 10mm<br>
+**Zero Z**
+: Set currnet Z position to 0<br>
+**Back**
+: returns to main menu. after homing, this button is replaced by a move button<br>
+**Move**
+: after homing, move button appears where back button was. this is to help streamline setting up for milling. when pressed will switch to either **JOG** or **MOVE** menus based on if `jog:` is enabled `1` by `config.ini` or in the setting\features<br>
+
+### Unified Move Menu
+defined in `UnifiedMove.c`<br>
+<img src="Readme/Photos/UnifiedMove.jpeg" title="Unified Move" width="300" height="200" /> <br>
+Menu used to select between Jog or button movement.<br>
+**Jog**
+: opens menu to move using encoder dial<br>
+**Move**
+: opens menu to move using directional buttons<br>
+**Zero**
+: moves tool to known zero position for X and Y. Z is not moved. if position not set after homing, it will return to absolute 0 position. otherwise, it will move the tool to the new set set by the user.
+**Back**
+: return to main menu
+
+### Jog Menu
+defined in `Jog.c`<br>
+<img src="Readme/Photos/Jog.jpeg" title="Jog Move" width="300" height="200" /> <br>
+This Menu is used to move the tool. It uses the encoder dial to jog the tool to a location and buttons define which axis or distances to jog. No movement is possible until machine has been Homed<br>
+**100 10 1 0.1**
+: The upper row defines how far the tool will move when jogging. for X and Y the range is from 0.1mm to 100mm; for Z the range is limited from 0.1mm to 10mm <br>
+**Touchplate**
+: when Z axis is selected the touchplate button appears to allow you to probe to the touchplate<br>
+**X Y Z**
+: The lower row buttons select which axis is moved on jogging<br>
+**Back**
+: returns to previous menu, normally Unified Move. if any movement was made, this button is replace with a Zero button<br>
+**Zero**
+: after any movement this button appears to simplify setting up CNC for milling as normally after positioning tool to your workpiece the next step is set coordinates to zero<br>
+**Encoder dial clockwise**
+: reduce currently selected axis on bottom row by the amount selected in the top row. For X: move left, Y: move forward, Z: move down<br>
+**Encoder dial anticlockwise**
+: increase currently selected axis on bottom row by amount in top row. for X: move right, Y: move back, Z: move up<br>
+
+### Move Menu
+defined in `Move.c`<br>
+<img src="Readme/Photos/Move.jpeg" title="Move" width="300" height="200" /> <br>
+This Menu is used to move the tool. It uses the button or encoder dial to move the tool to a location. No movement is possible until machine has been Homed<br>
+**100 / 10 / 1 / 0.1**
+: The button in the upper row defines how far the tool will move. The range is from 0.1mm to 100mm<br>
+**RED arrows**
+: move left or right (X) the amount in the top row<br>
+**GREEN arrows**
+: move forward or back (Y) the amount in the top row<br>
+**BLUE arrows**
+: move up or down (Z) the amount in the top row<br>
+**Back**
+: returns to previous menu, normally Unified Move. if any movement was made, this button is replace with a Zero button<br>
+**Zero**
+: after any movement this button appears to simplify setting up CNC for milling as normally after positioning tool to your workpiece the next step is set coordinates to zero<br>
+**Encoder dial clockwise**
+: reduce recently selected axis by the amount selected in the top row. For X: move left, Y: move forward, Z: move down<br>
+**Encoder dial anticlockwise**
+: increase recently selected axis on bottom row by amount in top row. for X: move right, Y: move back, Z: move up<br>
+
+### Zero Menu
+defined in `Zero.c`<br>
+<img src="Readme/Photos/Zero.jpeg" title="Zero" width="300" height="200" /> <br>
+Zero menu allows user to set current location after moving. used to set reference point on workpiece normally setting X, Y, and/or Z to 0<br>
+**Move**
+: quickly return to Move Menu. with other by standard move or jog move menu.<br>
+**Set Position**
+: sets current X, Y and Z position to zero. Used to set current workspace reference.<br>
+**Zero X**
+: set current X position to zero. other axis positions are unaffected<br>
+**Zero Y**
+: set current Y position to zero. other axis positions are unaffected<br>
+**Zero Z**
+: set current Z position to zero. other axis positions are unaffected<br>
+**Touchplate**
+: probe Z axis toward workspace. ensure to connect ground clip to tool bit and place touchplate on reference surface. This will set Z to zero in reference to surface.<br>
+**Probe Offset**
+: set current position to zero relative to laser. useful when using laser to get precise reference on workpiece. This button will use known probe offset to have mill tool zero line up with where laser points.<br>
+** Back **
+: return to main menu<br>
+
+### Cut Menu
+defined in `Print.c`<br>
+<img src="Readme/Photos/Cut.jpeg" title="Cut" width="300" height="200" /> <br>
+Used to start cutting or burning material by loading a Gcode file from SD card.<br>
+**TFT SD**
+: open files from SD card inserted in the touchscreen to print a selected file<br>
+**TFT USB**
+: open files from USB memory inserted in the touchscreen to print a selected file<br>
+**Onboard SD**
+: open files from microSD card inserted in the base motherboard to print a selected file<br>
+**Surface**
+: takes input from user to run a pattern to move the tool covering area defined for purposes of surfacing a workpiece<br>
+**Brief**
+: <br>
+
+### Settings
+defined in `SettingsMenu.c`<br>
+<img src="Readme/Photos/Settings.jpeg" title="Settings" width="300" height="200" /> <br>
+Menu contains settings and parameters for the machine, communication, features, and advanced items. Many of these are also available directly in `config.ini` but can be modified interactively<br>
+**Screen**
+: setting related to screen and touch<br>
+**Machine**
+: Machine setting submenu. see Machine Settings below<br>
+**Feature**
+: Enable and disables features as part of the firmware configuration<br>
+**Info**
+: Firmware information report out<br>
+**Connection**
+: Set communication speed of ports<br>
+**Custom**
+: define and use custom GCodes<br>
+**Terminal**
+: open interactive terminal to manually send GCode or monitor communications<br>
+**Back**
+: return to Main Menu<br>
+
+### Machine Settings
+defined in `MachineSettings.c`<br>
+<img src="Readme/Photos/Machine Settings.jpeg" title="Machine Settings" width="300" height="200" /> <br>
+**Settings**
+: set parameters which help control or limit CNC<br>
+**Terminal**
+: open interactive terminal to manually send GCode or monitor communications<br>
+**Custom**
+: define and use custom Gcodes. same found in Setting Menu<br>
+**LED Color**
+: customize color settings<br>
+**Fan**
+: Control Fan speeds. mostly for debugging<br>
+**EEPROM**
+: Load, Store, or Reset EEPROM settings<br>
+**Endstops**
+: allows user to view endstop switch states for debugging<br>
+**Back**
+: return to Setting sub menu<br>
+
+### Parameter Settings
+defined in `ParameterSettings.c`<br>
+<img src="Readme/Photos/Parameters.jpeg" title="Parameters" width="300" height="200" /> <br>
+This menu found under Settings displays the area which can be modified. touching a setting opens up addition details which can then be customized. Use extreme caution as a wrong setting can result in machine or personal injury
 
 ## Firmware Update
 
